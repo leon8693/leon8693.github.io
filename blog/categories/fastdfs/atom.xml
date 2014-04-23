@@ -4,7 +4,7 @@
   <title><![CDATA[Category: FastDFS | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/fastdfs/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-23T15:38:59+08:00</updated>
+  <updated>2014-04-23T17:20:40+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -188,7 +188,7 @@ server {</p>
 
 <h5>图片其他信息</h5>
 
-<p><img src="http://image01.leonbb.com/info.png" alt="png_info" /></p>
+<p><img src="/images/blog_img/info.png" alt="png_info" /></p>
 
 <h5>测试方式</h5>
 
@@ -215,7 +215,7 @@ ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.
 CPU load average: 2.35, 0.53, 0.18 <br/>
 MEM 8706M  <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gd1.png" alt="gd1" /></p>
+<img src="/images/blog_img/gd1.png" alt="gd1" /></p>
 
 <p><code>
 ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg!t300x300.jpg'   
@@ -223,7 +223,7 @@ ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.
 CPU load average: 3.30, 0.88, 0.35 <br/>
 MEM 8689M  <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gd5.png" alt="gd5" /></p>
+<img src="/images/blog_img/gd5.png" alt="gd5" /></p>
 
 <p><code>
 ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg!t300x300.jpg'  
@@ -231,7 +231,7 @@ ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.
 CPU load average: 3.61, 1.21, 0.54 <br/>
 MEM 8743M <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gd10.png" alt="gd10" /></p>
+<img src="/images/blog_img/gd10.png" alt="gd10" /></p>
 
 <h3>lua graphicsmagick测试</h3>
 
@@ -241,7 +241,7 @@ ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.
 CPU load average: 1.54, 0.33, 0.11 <br/>
 MEM 3M  <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gm1.png" alt="gm1" /></p>
+<img src="/images/blog_img/gm1.png" alt="gm1" /></p>
 
 <p><code>
 ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg.300x300.jpg'  
@@ -249,7 +249,7 @@ ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.
 CPU load average: 3.66, 0.91, 0.35  <br/>
 MEM 1M  <br/>
 ab 详细信息  <br/>
-<img src="http://image01.leonbb.com/gm5.png" alt="gm5" /></p>
+<img src="/images/blog_img/gm5.png" alt="gm5" /></p>
 
 <p><code>
 ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg.300x300.jpg'   
@@ -257,7 +257,7 @@ ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.
 CPU load average: 3.76, 1.35, 0.58  <br/>
 MEM 1M  <br/>
 ab 详细信息 <br/>
-<img src="http://image01.leonbb.com/gm10.png" alt="gm10" /></p>
+<img src="/images/blog_img/gm10.png" alt="gm10" /></p>
 
 <h3>性能测试总结</h3>
 
@@ -384,10 +384,10 @@ server {</p>
 <h3>测试</h3>
 
 <p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a> <br/>
-<img src="http://image01.leonbb.com/huonan.jpg" alt="huonan test" /></p>
+<img src="/images/blog_img/huonan.jpg" alt="huonan test" /></p>
 
 <p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg</a> <br/>
-<img src="http://image01.leonbb.com/huonan2.jpg" alt="huonan2 test" /></p>
+<img src="/images/blog_img/huonan2.jpg" alt="huonan2 test" /></p>
 
 <h3>参数说明</h3>
 
@@ -672,7 +672,7 @@ http://172.16.3.213/g1/M00/00/00/rBAD1FJwzuaAAIXoAAAAB-kMomQ310.txt
 
 <h5>访问正常即可</h5>
 
-<p><img src="http://image01.leonbb.com/fastdfs.png" alt="fastdfs test" /></p>
+<p><img src="/images/blog_img/fastdfs.png" alt="fastdfs test" /></p>
 
 <hr />
 

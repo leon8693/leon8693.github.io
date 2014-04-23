@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Other | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/other/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-23T15:38:59+08:00</updated>
+  <updated>2014-04-23T17:20:40+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -43,29 +43,29 @@ yum install php curl -y #安装需要的软件包
 <h4>百度网盘申请应用</h4>
 
 <p>地址:<a href="http://developer.baidu.com/dev#/create  ">http://developer.baidu.com/dev#/create  </a>
-<img src="http://image01.leonbb.com/api3.png" alt="申请百度应用" /></p>
+<img src="/images/blog_img/api3.png" alt="申请百度应用" /></p>
 
 <p>这个链接可以看到你有多少应用<br/>
 <a href="http://developer.baidu.com/console#app">http://developer.baidu.com/console#app</a>
-<img src="http://image01.leonbb.com/api4.png" alt="查看应用" /></p>
+<img src="/images/blog_img/api4.png" alt="查看应用" /></p>
 
 <p>点击API管理<br/>
-<img src="http://image01.leonbb.com/api5.png" alt="API管理" /></p>
+<img src="/images/blog_img/api5.png" alt="API管理" /></p>
 
 <p>打开PCS API<br/>
-<img src="http://image01.leonbb.com/api6.png" alt="API PCS" /></p>
+<img src="/images/blog_img/api6.png" alt="API PCS" /></p>
 
 <p>设置目录  <br/>
-<img src="http://image01.leonbb.com/api7.png" alt="API FILE" /></p>
+<img src="/images/blog_img/api7.png" alt="API FILE" /></p>
 
 <p>记录KEY <br/>
-<img src="http://image01.leonbb.com/api8.png" alt="API KEY" /></p>
+<img src="/images/blog_img/api8.png" alt="API KEY" /></p>
 
 <p>运行bpcs_uploader.php <br/>
 <code>bash
 ./bpcs_uploader.php init #初始化
 </code>
-<img src="http://image01.leonbb.com/api.png" alt="bpcs init" />
+<img src="/images/blog_img/api.png" alt="bpcs init" />
 1. 初始化选择Y  <br/>
 2. 输入你前面API KEY值 <br/>
 3. 输入你前面API SECRET值 <br/>
@@ -78,12 +78,12 @@ yum install php curl -y #安装需要的软件包
 <p><code>bash
 /root/scripts/bpcs_uploader/bpcs_uploader.php upload  /tmp/test.html /test/test.html
 </code>
-<img src="http://image01.leonbb.com/api10.png" alt="bpcs_uploader upload" /></p>
+<img src="/images/blog_img/api10.png" alt="bpcs_uploader upload" /></p>
 
 <h4>查看网盘</h4>
 
 <p>登入自己的网盘发现居然有那个文件了！以此类推，就可以在linux下备份数据到百度网盘了。NICE！<br/>
-<img src="http://image01.leonbb.com/api11.png" alt="bpcs_uploader upload" /></p>
+<img src="/images/blog_img/api11.png" alt="bpcs_uploader upload" /></p>
 
 <h3>bpcs_uploader基本命令</h3>
 
@@ -114,10 +114,10 @@ bpcs_uploader/_bpcs_files_/config
 
 <p>进入自己的网盘找到需要下载的文件<br/>
 创建分享链接<br/>
-<img src="http://image01.leonbb.com/wget1.png" alt="linke" /><br/>
-<img src="http://image01.leonbb.com/wget2.png" alt="linke" /> <br/>
+<img src="/images/blog_img/wget1.png" alt="linke" /><br/>
+<img src="/images/blog_img/wget2.png" alt="linke" /> <br/>
 查看链接，firebug等工具查看<br/>
-<img src="http://image01.leonbb.com/wget3.png" alt="find" /></p>
+<img src="/images/blog_img/wget3.png" alt="find" /></p>
 
 <p><code>bash
 wget -c -O leon.png "http://d.pcs.baidu.com/thumbnail/be04f0e3e6e96e2102ff9c376778915b?fid=1191379893-250528-3966810088&amp;time=1385030781&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-6tGvvJKsVQd%2FKXr5mscLmcGSFyQ%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=unknown&amp;r=984765212&amp;size=c710_u500&amp;quality=100"
@@ -159,10 +159,10 @@ rpm -ivh axel-2.4-1.el6.rf.i686.rpm</p>
 -q #静默模式</p>
 
 <p>```
-<img src="http://image01.leonbb.com/axel1.png" alt="axel" /></p>
+<img src="/images/blog_img/axel1.png" alt="axel" /></p>
 
 <p>再看看单线程的wget <br/>
-<img src="http://image01.leonbb.com/wget4.png" alt="wget" /></p>
+<img src="/images/blog_img/wget4.png" alt="wget" /></p>
 
 <p>还是很大的差距的，但是建议不要用axel开太多的进程，控制在100以内。</p>
 ]]></content>

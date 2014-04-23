@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-23T15:38:59+08:00</updated>
+  <updated>2014-04-23T17:20:40+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -291,7 +291,7 @@
 
 <h5>图片其他信息</h5>
 
-<p><img src="http://image01.leonbb.com/info.png" alt="png_info" /></p>
+<p><img src="http://leon8693.github.io/images/blog_img/info.png" alt="png_info" /></p>
 
 <h5>测试方式</h5>
 
@@ -320,7 +320,7 @@ MEM 32G</p>
 <p>CPU load average: 2.35, 0.53, 0.18 <br/>
 MEM 8706M  <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gd1.png" alt="gd1" /></p>
+<img src="http://leon8693.github.io/images/blog_img/gd1.png" alt="gd1" /></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg!t300x300.jpg&#39;</span>
@@ -330,7 +330,7 @@ ab详细信息 <br/>
 <p>CPU load average: 3.30, 0.88, 0.35 <br/>
 MEM 8689M  <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gd5.png" alt="gd5" /></p>
+<img src="http://leon8693.github.io/images/blog_img/gd5.png" alt="gd5" /></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg!t300x300.jpg&#39;</span>
@@ -340,7 +340,7 @@ ab详细信息 <br/>
 <p>CPU load average: 3.61, 1.21, 0.54 <br/>
 MEM 8743M <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gd10.png" alt="gd10" /></p>
+<img src="http://leon8693.github.io/images/blog_img/gd10.png" alt="gd10" /></p>
 
 <h3>lua graphicsmagick测试</h3>
 
@@ -352,7 +352,7 @@ ab详细信息 <br/>
 <p>CPU load average: 1.54, 0.33, 0.11 <br/>
 MEM 3M  <br/>
 ab详细信息 <br/>
-<img src="http://image01.leonbb.com/gm1.png" alt="gm1" /></p>
+<img src="http://leon8693.github.io/images/blog_img/gm1.png" alt="gm1" /></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg.300x300.jpg&#39;</span>
@@ -362,7 +362,7 @@ ab详细信息 <br/>
 <p>CPU load average: 3.66, 0.91, 0.35  <br/>
 MEM 1M  <br/>
 ab 详细信息  <br/>
-<img src="http://image01.leonbb.com/gm5.png" alt="gm5" /></p>
+<img src="http://leon8693.github.io/images/blog_img/gm5.png" alt="gm5" /></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg.300x300.jpg&#39;</span>
@@ -372,7 +372,7 @@ ab 详细信息  <br/>
 <p>CPU load average: 3.76, 1.35, 0.58  <br/>
 MEM 1M  <br/>
 ab 详细信息 <br/>
-<img src="http://image01.leonbb.com/gm10.png" alt="gm10" /></p>
+<img src="http://leon8693.github.io/images/blog_img/gm10.png" alt="gm10" /></p>
 
 <h3>性能测试总结</h3>
 
@@ -566,10 +566,10 @@ ab 详细信息 <br/>
 <h3>测试</h3>
 
 <p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a> <br/>
-<img src="http://image01.leonbb.com/huonan.jpg" alt="huonan test" /></p>
+<img src="http://leon8693.github.io/images/blog_img/huonan.jpg" alt="huonan test" /></p>
 
 <p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg</a> <br/>
-<img src="http://image01.leonbb.com/huonan2.jpg" alt="huonan2 test" /></p>
+<img src="http://leon8693.github.io/images/blog_img/huonan2.jpg" alt="huonan2 test" /></p>
 
 <h3>参数说明</h3>
 
@@ -695,23 +695,23 @@ ab 详细信息 <br/>
 <h4>百度网盘申请应用</h4>
 
 <p>地址:<a href="http://developer.baidu.com/dev#/create  ">http://developer.baidu.com/dev#/create  </a>
-<img src="http://image01.leonbb.com/api3.png" alt="申请百度应用" /></p>
+<img src="http://leon8693.github.io/images/blog_img/api3.png" alt="申请百度应用" /></p>
 
 <p>这个链接可以看到你有多少应用<br/>
 <a href="http://developer.baidu.com/console#app">http://developer.baidu.com/console#app</a>
-<img src="http://image01.leonbb.com/api4.png" alt="查看应用" /></p>
+<img src="http://leon8693.github.io/images/blog_img/api4.png" alt="查看应用" /></p>
 
 <p>点击API管理<br/>
-<img src="http://image01.leonbb.com/api5.png" alt="API管理" /></p>
+<img src="http://leon8693.github.io/images/blog_img/api5.png" alt="API管理" /></p>
 
 <p>打开PCS API<br/>
-<img src="http://image01.leonbb.com/api6.png" alt="API PCS" /></p>
+<img src="http://leon8693.github.io/images/blog_img/api6.png" alt="API PCS" /></p>
 
 <p>设置目录  <br/>
-<img src="http://image01.leonbb.com/api7.png" alt="API FILE" /></p>
+<img src="http://leon8693.github.io/images/blog_img/api7.png" alt="API FILE" /></p>
 
 <p>记录KEY <br/>
-<img src="http://image01.leonbb.com/api8.png" alt="API KEY" /></p>
+<img src="http://leon8693.github.io/images/blog_img/api8.png" alt="API KEY" /></p>
 
 <p>运行bpcs_uploader.php</p>
 
@@ -720,7 +720,7 @@ ab 详细信息 <br/>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="http://image01.leonbb.com/api.png" alt="bpcs init" />
+<p><img src="http://leon8693.github.io/images/blog_img/api.png" alt="bpcs init" />
 1. 初始化选择Y  <br/>
 2. 输入你前面API KEY值 <br/>
 3. 输入你前面API SECRET值 <br/>
@@ -735,12 +735,12 @@ ab 详细信息 <br/>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="http://image01.leonbb.com/api10.png" alt="bpcs_uploader upload" /></p>
+<p><img src="http://leon8693.github.io/images/blog_img/api10.png" alt="bpcs_uploader upload" /></p>
 
 <h4>查看网盘</h4>
 
 <p>登入自己的网盘发现居然有那个文件了！以此类推，就可以在linux下备份数据到百度网盘了。NICE！<br/>
-<img src="http://image01.leonbb.com/api11.png" alt="bpcs_uploader upload" /></p>
+<img src="http://leon8693.github.io/images/blog_img/api11.png" alt="bpcs_uploader upload" /></p>
 
 <h3>bpcs_uploader基本命令</h3>
 
@@ -786,10 +786,10 @@ ab 详细信息 <br/>
 
 <p>进入自己的网盘找到需要下载的文件<br/>
 创建分享链接<br/>
-<img src="http://image01.leonbb.com/wget1.png" alt="linke" /><br/>
-<img src="http://image01.leonbb.com/wget2.png" alt="linke" /> <br/>
+<img src="http://leon8693.github.io/images/blog_img/wget1.png" alt="linke" /><br/>
+<img src="http://leon8693.github.io/images/blog_img/wget2.png" alt="linke" /> <br/>
 查看链接，firebug等工具查看<br/>
-<img src="http://image01.leonbb.com/wget3.png" alt="find" /></p>
+<img src="http://leon8693.github.io/images/blog_img/wget3.png" alt="find" /></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -845,10 +845,10 @@ Axel下载</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="http://image01.leonbb.com/axel1.png" alt="axel" /></p>
+<p><img src="http://leon8693.github.io/images/blog_img/axel1.png" alt="axel" /></p>
 
 <p>再看看单线程的wget <br/>
-<img src="http://image01.leonbb.com/wget4.png" alt="wget" /></p>
+<img src="http://leon8693.github.io/images/blog_img/wget4.png" alt="wget" /></p>
 
 <p>还是很大的差距的，但是建议不要用axel开太多的进程，控制在100以内。</p>
 ]]></content>
@@ -2173,7 +2173,7 @@ TARGET_CONF_PATH=/etc/fdfs #配置文件目录</p>
 
 <h5>访问正常即可</h5>
 
-<p><img src="http://image01.leonbb.com/fastdfs.png" alt="fastdfs test" /></p>
+<p><img src="http://leon8693.github.io/images/blog_img/fastdfs.png" alt="fastdfs test" /></p>
 
 <hr />
 
