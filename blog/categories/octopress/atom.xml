@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Octopress | 唯一的真理]]></title>
+  <link href="http://leon8693.github.io/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://leon8693.github.io/"/>
+  <updated>2014-04-23T15:38:59+08:00</updated>
+  <id>http://leon8693.github.io/</id>
+  <author>
+    <name><![CDATA[leon]]></name>
+    <email><![CDATA[bolatuleon@hotmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress样式修改]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/19/octopressyang-shi-xiu-gai/"/>
+    <updated>2013-11-19T14:39:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/19/octopressyang-shi-xiu-gai</id>
+    <content type="html"><![CDATA[<h3>样式修改</h3>
+
+<p>添加或修改控制样式，需编辑<code>sass/custom/_styles.scss</code>，博客的所有颜色控制在<code>/sass/base/_theme.scss</code>中进行设置。定制自己的配色，编辑<code>sass/custom/_colors.scss</code>。查看<a href="http://hslpicker.com/#e1ff00">HSL COLOR PICKER</a>，帮你挑选喜欢的颜色。 <br/>
+修改布局，需要编辑<code>sass/base/_layout.scss</code>，可以修改各部分的宽度等。</p>
+
+<h3>添加背景图片</h3>
+
+<p>在<code>sass/custom/_styles.scss</code>中添加 <br/>
+```bash
+html {</p>
+
+<pre><code>    background: #555555 url("/images/lol.jpg");
+    //background: #555555;
+</code></pre>
+
+<p>}</p>
+
+<p>body > div {</p>
+
+<pre><code>    background-image: none;
+    //background: #F5F5D5
+</code></pre>
+
+<p>} //侧边栏</p>
+
+<p>body > div > div { //文章内容</p>
+
+<pre><code>    background-image: none;
+    //background: #F5F5D5;
+    //background: url("/images/bg.jpg");
+</code></pre>
+
+<p>}
+```</p>
+
+<p>将背景图片放入<code>source/images/</code>中，修改上述代码中的路径指向想要的图片，即可 更改博客、侧边栏或文章的背景图片。博客使用背景图片后，与Header区不太和谐，所以我在<code>/sass/base/_theme.scss</code>中将<code>header-bg</code>设置成透明色了。
+<code>bash
+$header-bg: hsla(0, 0%, 15%, 0)  !default;
+</code></p>
+
+<!-- more -->
+
+
+<h3>LOGO图片</h3>
+
+<p>LOGO图片我所说的logo图片有两种，一个是打开一个网页时，标签栏上显示的小图片。还有一个 是标题栏主标题旁的图片。 <br/>
+首先针对于第一种可以选择你喜欢的图片（大小适中），替换source目录下的 favicon.png即可。<br/>
+或者将logo图片放入<code>source/images</code>中，然后修改<code>source/_includes/head.html</code>，找到favicon.png，修改其路径指向你的图片即可。<br/>
+对于主标题旁的图片需要在<code>sass/custom/_styles.scss</code>中填入如下语句:</p>
+
+<p>```bash
+//Blog logo pic
+@media only screen and (min-width: 550px) {</p>
+
+<pre><code>    body &gt; header h1{
+            background: url("/images/logo1.png") no-repeat 0 1px;
+            padding-left: 65px;
+    }
+
+    body &gt; header h2 { padding-left: 65px; }
+</code></pre>
+
+<p>}
+```</p>
+
+<p>根据自己情况进行修改即可。</p>
+
+<h3>导航栏倒圆角</h3>
+
+<p>我设置的header区背景色透明，所以导航栏的直角有些尖锐，在<code>sass/custom/_styles.scss</code>中添加如下语句，将其修改为圆角:</p>
+
+<p>```bash
+//倒圆角
+@media only screen and (min-width: 1040px) {</p>
+
+<pre><code>    body &gt; nav {
+            @include border-top-radius(.4em);
+    }
+
+    body &gt; footer {
+            @include border-bottom-radius(.4em);
+    }
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h3>滑动返回顶部按钮</h3>
+
+<p>当文章较长，通常希望有一个返回顶部的按钮，如下方法实现了在页面右下方添加一个 返回顶部的图片按钮，点击后可以滑动的返回顶部。
+首先创建<code>source/javascripts/top.js</code>，实现滑动返回顶部效果，添加如下代码：
+```bash
+function goTop(acceleration, time)
+{</p>
+
+<pre><code>    acceleration = acceleration || 0.1;
+    time = time || 16;
+
+    var x1 = 0;
+    var y1 = 0;
+    var x2 = 0;
+    var y2 = 0;
+    var x3 = 0;
+    var y3 = 0;
+
+    if (document.documentElement)
+    {
+            x1 = document.documentElement.scrollLeft || 0;
+            y1 = document.documentElement.scrollTop || 0;
+    }
+    if (document.body)
+    {
+            x2 = document.body.scrollLeft || 0;
+            y2 = document.body.scrollTop || 0;
+    }
+    var x3 = window.scrollX || 0;
+    var y3 = window.scrollY || 0;
+
+    var x = Math.max(x1, Math.max(x2, x3));
+    var y = Math.max(y1, Math.max(y2, y3));
+
+    var speed = 1 + acceleration;
+    window.scrollTo(Math.floor(x / speed), Math.floor(y / speed));
+
+    if(x &gt; 0 || y &gt; 0)
+    {
+            var invokeFunction = "goTop(" + acceleration + ", " + time + ")";
+            window.setTimeout(invokeFunction, time);
+    }
+</code></pre>
+
+<p>}
+```</p>
+
+<p>然后创建<code>source/_includes/custom/totop.html</code>,设置返回顶部按钮样式和位置,代码如下:
+```bash</p>
+
+<!--返回顶部开始-->
+
+
+<div id="full" style="width:0px; height:0px; position:fixed; right:180px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;">
+        <a href="#" onclick="goTop();return false;"><img src="http://leon8693.github.io/images/top.png" border=0 alt="返回顶部"></a>
+</div>
+
+
+<script src="http://leon8693.github.io/javascripts/top.js" type="text/javascript"></script>
+
+
+<!--返回顶部结束-->
+
+
+<p>```</p>
+
+<p>最后，还需要将返回顶部的图片放入<code>source/images</code>，命名为top.png(或修改totop.html中图片的路径)。<br/>
+在<code>source/_layouts/default.html</code>添加html样式。</p>
+
+<p><code>bash
+&lt;body&gt;
+  ...
+  <!--返回顶部开始-->
+<div id="full" style="width:0px; height:0px; position:fixed; right:180px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;">
+        <a href="#" onclick="goTop();return false;"><img src="/images/top.png" border=0 alt="返回顶部"></a>
+</div>
+<script src="/javascripts/top.js" type="text/javascript"></script>
+<!--返回顶部结束-->
+
+  ...
+&lt;/body&gt;
+</code></p>
+
+<h3>感谢812lcl</h3>
+
+<p>他的博客讲解的很详细，我部分需求也是看了他的博客才会做，有些问题也是通过他来帮忙解决的。</p>
+
+<hr />
+
+<p>参考文章<br/>
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a><br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress添加统计]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/14/octopresstian-jia-tong-ji/"/>
+    <updated>2013-11-14T14:06:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/14/octopresstian-jia-tong-ji</id>
+    <content type="html"><![CDATA[<p>搭建了Octopress发现自己不会js,css以及各类代码，要美化Octopress真的很难，所以只有谷哥，度娘，东找找，西找找,看一些大牛的文章,照搬过来，统一放到自己的博客里面，方便自己看，也方便其他人不需要频繁的在网上各种搜索。</p>
+
+<p>首先可以通过各类搜索引擎将自己的网站放入进去,这样大家在使用这些搜索引擎的时候方便搜索到自己的博客，网站。  <br/>
+<a href="http://tool.lusongsong.com/addurl.html">http://tool.lusongsong.com/addurl.html</a> <br/>
+<a href="http://urlc.cn/tool/addurl.html">http://urlc.cn/tool/addurl.html</a></p>
+
+<h3>添加关键字</h3>
+
+<h2>```bash</h2>
+
+<p>layout: post
+title: &ldquo;Octopress添加统计&rdquo;
+date: 2013-11-14 14:06
+comments: true
+categories: Octopress
+description: &ldquo;Octopress添加统计&rdquo;
+tags: [octopress,博客,统计]</p>
+
+<h2>keywords: octopress,统计,关键字</h2>
+
+<p>```</p>
+
+<!-- more -->
+
+
+<h3>统计工具</h3>
+
+<p>octopress模板里面默认带了<code>Google Analytics</code>工具,需要注册<a href="http://www.google.com/analytics/">Google Analytics</a>获得一个<code>google_analytics_tracking_id</code>， 添加到<code>_config.yml</code>中对应位置,网站之后进行验证即可，然后可以通过<code>Google Analytics</code>分析网站的流量了。而且可以使用<a href="https://www.google.com/webmasters/tools/home?hl=zh-CN">Google站长工具</a>，对网站进行更全面的分析，进行SEO。
+对自己的网站进行验证，只需将网站提供的用于验证的代码添加到<code>source/_includes/head.html</code>的<code>&lt;head&gt;</code>标签之间，网站部署到网上后，过几分钟即可验证通过，其他 需要验证的也同样操作。
+<code>bash
+  &lt;script&gt;
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'xxxxxxxx', 'leonbb.com');
+  ga('send', 'pageview');
+  &lt;/script&gt;
+</code></p>
+
+<h3>文章部分显示</h3>
+
+<p>如果想让文章在首页只显示一部分，需要在文章相应的位置添加<code>&lt;!-- more --&gt;</code>，在<code>_config.yml</code>中修改<code>excerpt_link: "继续阅读 &amp;rarr;"</code>来修改继续阅读 按钮的显示内容。</p>
+
+<hr />
+
+<p>参考文章  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress最新评论及友情链接]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/"/>
+    <updated>2013-11-13T16:35:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie</id>
+    <content type="html"><![CDATA[<h3>最新评论，热评</h3>
+
+<p>这边我使用的是友言，友言提供了很多组件，最新评论，热评等等 <br/>
+我们可以将他们 做成侧边栏进行展示，或在首页文章列表中，显示每篇文章的评论数目<br/>
+首先登入友言页面，并注册 <br/>
+<a href="http://uyan.cc/  ">http://uyan.cc/  </a>
+后台管理&mdash;>进入&mdash;>安装设置&mdash;>嵌入组件</p>
+
+<h4>创建文件</h4>
+
+<p>source/_includes/asides/uyan_hotcmt.html <br/>
+```bash
+<section></p>
+
+<h1>评论热榜</h1>
+
+
+<div id="uyan_hotcmt_unit"></div>
+
+
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=xxxxxx"></script>
+
+
+<p> <!-- 如果已经过加载此行JS，即可不用重复加载 -->
+</section>
+```</p>
+
+<!-- more -->
+
+
+<p>source/_includes/asides/uyan_newcmt.html<br/>
+```bash
+<section></p>
+
+<h1>最新评论</h1>
+
+
+<div id="uyan_newcmt_unit"></div>
+
+
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=xxxxxx"></script>
+
+
+<p> <!-- 如果已经过加载此行JS，即可不用重复加载 -->
+</section>
+```</p>
+
+<h4>修改主配置文件</h4>
+
+<p>octopress/_config.yml<br/>
+<code>
+default_asides: [asides/category_list.html,asides/weibo.html,asides/earth.html,asides/uyan_hotcmt.html,asides/uyan_newcmt.html]
+</code></p>
+
+<h3>友情链接</h3>
+
+<p>source/_includes/asides/blog_link.html <br/>
+```
+<section></p>
+
+<h1>友情链接</h1>
+
+
+<ul>
+        <li>
+        <a href="http://plumj.com/">plumj的博客</a>
+        </li>
+</ul>
+
+
+<p></section>
+```</p>
+
+<h4>修改主配置</h4>
+
+<p>octopress/_config.yml <br/>
+<code>
+default_asides: [asides/category_list.html,asides/weibo.html,asides/earth.html,asides/uyan_hotcmt.html,asides/uyan_newcmt.html,asides/blog_link.html]
+</code></p>
+
+<hr />
+
+<p>参考文章
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress访客地图]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu/"/>
+    <updated>2013-11-13T16:10:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu</id>
+    <content type="html"><![CDATA[<h3>Octopress访客地图</h3>
+
+<p>效果如我的博客右侧那个精美的3D旋转地球所示，它可以显示访客数量，访客来自的 地域，既有装饰作用，又有统计作用。它也有2D效果版，可以根据自己喜欢进行设置，地址在这里，然后获得代码。<br/>
+<a href="http://www.revolvermaps.com/?target=setup">http://www.revolvermaps.com/?target=setup</a></p>
+
+<p>source/_includes/asides/earth.html
+```bash
+<section>
+  <h1>访客地图</h1></p>
+
+<pre><code>    &lt;script type="text/javascript" src="http://jg.revolvermaps.com/2/1.js?i=6mb2spkrv1j&amp;amp;s=220&amp;amp;m=0&amp;amp;v=false&amp;amp;r=false&amp;amp;b=000000&amp;amp;n=false&amp;amp;c=ff0000" async="async"&gt;&lt;/script&gt;
+</code></pre>
+
+<p></section>
+```</p>
+
+<!-- more -->
+
+
+<h4>修改主配置增加参数</h4>
+
+<p>octopress/_config.yml
+<code>bash
+default_asides: [asides/category_list.html,asides/weibo.html,asides/earth.html]
+</code></p>
+
+<hr />
+
+<p>参考文章 <br/>
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a>  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress新浪微博侧边栏]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/"/>
+    <updated>2013-11-13T15:26:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan</id>
+    <content type="html"><![CDATA[<h3>增加新浪微博侧边栏</h3>
+
+<h4>先通过微博秀</h4>
+
+<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
+找到自己的代码
+```bash</p>
+
+<iframe 
+width="100%" 
+height="550"
+ class="share_self" 
+ frameborder="0" 
+scrolling="no" 
+src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=xxxxxxxx&verifier=xxxxxxxx">
+</iframe>
+
+
+<p>```</p>
+
+<!-- more -->
+
+
+<h4>将上面的代码转换成HTML</h4>
+
+<p>octopress/source/_includes/asides/weibo.html
+```bash
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo"></p>
+
+<pre><code>&lt;li&gt;
+  &lt;iframe
+    width="100%"
+    height="550"
+    class="share_self"
+    frameborder="0"
+    scrolling="no"
+    src=""http://widget.weibo.com/weiboshow/index.php?width=0&amp;height=550&amp;ptype=1&amp;speed=0&amp;skin=&amp;isTitle=0&amp;noborder=1&amp;isWeibo=1&amp;isFans=&amp;uid=1961590125&amp;verifier=9b2b2fd0&dpc=1"&gt;
+  &lt;/iframe&gt;
+&lt;/li&gt;
+</code></pre>
+
+<p>  </ul>
+</section>
+
+```</p>
+
+<h4>配置文件中增加参数</h4>
+
+<p>octopress/source/_config.yml</p>
+
+<p>```bash
+default_asides: [asides/category_list.html,asides/weibo.html]</p>
+
+<p>weibo_uid: xxxx     #微博中的uid，从微博秀中获得
+weibo_verifier: xxxx     #微博中的verifier 从微博秀中获得
+weibo_fansline: 1     #显示粉丝的数量，1行
+weibo_show: true     #是否显示内容
+weibo_pic: true         #是否显示图片
+weibo_skin: 10          #使用哪种风格的10为序号10的风格
+```</p>
+]]></content>
+  </entry>
+  
+</feed>

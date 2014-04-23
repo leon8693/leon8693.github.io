@@ -1,0 +1,2190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[唯一的真理]]></title>
+  <link href="http://leon8693.github.io/atom.xml" rel="self"/>
+  <link href="http://leon8693.github.io/"/>
+  <updated>2014-04-23T15:38:59+08:00</updated>
+  <id>http://leon8693.github.io/</id>
+  <author>
+    <name><![CDATA[leon]]></name>
+    <email><![CDATA[bolatuleon@hotmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Fastdfs Nginx Lua GraphicsMagick 实时缩略图]]></title>
+    <link href="http://leon8693.github.io/blog/2013/12/09/fastdfs-plus-nginx-plus-lua-plus-graphicsmagickshi-shi-suo-lue-tu/"/>
+    <updated>2013-12-09T14:50:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/12/09/fastdfs-plus-nginx-plus-lua-plus-graphicsmagickshi-shi-suo-lue-tu</id>
+    <content type="html"><![CDATA[<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本</span>
+</span><span class='line'>Centos 2.6.32-358.el6.x86_64
+</span><span class='line'>FastDFS 4.06
+</span><span class='line'>Nginx 1.4.1
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#官网下载地址</span>
+</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装FastDFS</h3>
+
+<p>参考<a href="http://shleon.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
+
+<h3>安装需要的包</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install readline readline-devel perl-ExtUtils-Embed  <span class="c">#lua所需要的包以及后面编译需要的其他模块和库</span>
+</span><span class='line'>yum install libjpeg libjpeg-devel libpng libpng-devel giflib giflib-devel freetype freetype-devel  openjpeg openjpeg-devel <span class="c">#gm需要的图库</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h3>下载相关的包并安装</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">###graphicsmagick install</span>
+</span><span class='line'>wget <span class="s2">&quot;http://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/1.3.16/GraphicsMagick-1.3.16.tar.gz/download&quot;</span>
+</span><span class='line'>tar xf GraphicsMagick-1.3.16.tar.gz
+</span><span class='line'>./configure --prefix<span class="o">=</span>/usr/local/GraphicsMagick-1.3.16
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">###nginx 安装方式</span>
+</span><span class='line'><span class="c">###LuaJIT install</span>
+</span><span class='line'>wget <span class="s2">&quot;http://luajit.org/download/LuaJIT-2.0.0-beta10.tar.gz&quot;</span>
+</span><span class='line'>tar xf LuaJIT-2.0.0-beta10.tar.gz
+</span><span class='line'><span class="nb">cd </span>tar xf LuaJIT-2.0.0-beta10
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install <span class="nv">PREFIX</span><span class="o">=</span>/usr/local/lj2
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">###ngx_devel_kit install</span>
+</span><span class='line'>wget <span class="s2">&quot;https://github.com/simpl/ngx_devel_kit/zipball/master&quot;</span>
+</span><span class='line'>unzip master
+</span><span class='line'>ls simpl-ngx_devel_kit-8dd0df5
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">###lua-nginx-module install</span>
+</span><span class='line'>wget <span class="s2">&quot;https://github.com/chaoslawful/lua-nginx-module/tarball/master&quot;</span> -O master-lug-nginx-module.tar.gz
+</span><span class='line'>tar xf master-lug-nginx-module.tar.gz
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">###echo</span>
+</span><span class='line'>wget <span class="s2">&quot;https://github.com/agentzh/echo-nginx-module/zipball/master&quot;</span> -O <span class="nb">echo</span>-nginx-module.zip
+</span><span class='line'>unzip <span class="nb">echo</span>-nginx-module.zip
+</span><span class='line'>
+</span><span class='line'><span class="c">###cache</span>
+</span><span class='line'>wget <span class="s2">&quot;http://labs.frickle.com/files/ngx_cache_purge-1.6.tar.gz&quot;</span>
+</span><span class='line'>tar xf ngx_cache_purge-1.6.tar.gz
+</span><span class='line'>
+</span><span class='line'><span class="c">###vim /etc/profile</span>
+</span><span class='line'><span class="nb">export </span><span class="nv">LUAJIT_LIB</span><span class="o">=</span>/usr/local/lj2/lib
+</span><span class='line'><span class="nb">export </span><span class="nv">LUAJIT_INC</span><span class="o">=</span>/usr/local/lj2/include/luajit-2.0
+</span><span class='line'><span class="nb">export </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/lib/:<span class="nv">$LD_LIBRARY_PATH</span>
+</span><span class='line'><span class="nb">export  </span><span class="nv">PKG_CONFIG_PATH</span><span class="o">=</span>/usr/local/lib/pkgconfig:<span class="nv">$PKG_CONFIG_PATH</span>
+</span><span class='line'><span class="nv">GM_HOME</span><span class="o">=</span>/usr/local/GraphicsMagick-1.3.16;
+</span><span class='line'><span class="nv">PATH</span><span class="o">=</span><span class="nv">$GM_HOME</span>/bin:<span class="nv">$PATH</span>;
+</span><span class='line'><span class="nb">export </span>PATH
+</span><span class='line'><span class="nb">export </span>GM_HOME
+</span><span class='line'><span class="nb">source</span> /etc/profile
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>nginx install</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#安装前必须安装好Fastdfs</span>
+</span><span class='line'>./configure --prefix<span class="o">=</span>/usr/share/nginx --sbin-path<span class="o">=</span>/usr/sbin/nginx --conf-path<span class="o">=</span>/etc/nginx/nginx.conf --error-log-path<span class="o">=</span>/var/log/nginx/error.log --http-log-path<span class="o">=</span>/var/log/nginx/access.log --http-client-body-temp-path<span class="o">=</span>/var/lib/nginx/tmp/client_body --http-proxy-temp-path<span class="o">=</span>/var/lib/nginx/tmp/proxy --http-fastcgi-temp-path<span class="o">=</span>/var/lib/nginx/tmp/fastcgi --pid-path<span class="o">=</span>/var/run/nginx.pid --lock-path<span class="o">=</span>/var/lock/subsys/nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_gzip_static_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --add-module<span class="o">=</span>/srv/fastdfs-nginx-module/src/  --add-module<span class="o">=</span>/srv/fastdfs/simpl-ngx_devel_kit-8dd0df5/ --add-module<span class="o">=</span>/srv/fastdfs/ngx_cache_purge-1.6/ --with-http_perl_module --add-module<span class="o">=</span>/srv/fastdfs/agentzh-echo-nginx-module-9f811cf/ --with-ld-opt<span class="o">=</span>-Wl,-rpath,/usr/local/lj2/lib --add-module<span class="o">=</span>/srv/fastdfs/chaoslawful-lua-nginx-module-d11dda1/
+</span><span class='line'>
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Nginx 配置</h3>
+
+<h5>这边Fastdfs的配置就不多说了，归档中有</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>server <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        listen  80;
+</span><span class='line'>        server_name     www.test.com;
+</span><span class='line'>        access_log      /data1/logs/nginx/test_access.log gzip;
+</span><span class='line'>        error_log       /data1/logs/nginx/test_error.log;
+</span><span class='line'>
+</span><span class='line'>        location /lua1 <span class="o">{</span>
+</span><span class='line'>                default_type <span class="s1">&#39;text/plain&#39;</span>;
+</span><span class='line'>                content_by_lua <span class="s1">&#39;ngx.say(&quot;hello, lua&quot;)&#39;</span>;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>        location  ~* /g<span class="o">[</span>0-9<span class="o">]</span>/M00/ <span class="o">{</span>
+</span><span class='line'>                ngx_fastdfs_module;
+</span><span class='line'>                <span class="nb">set</span> <span class="nv">$needCreateImg</span> 0;
+</span><span class='line'>                <span class="k">if</span> <span class="o">(</span> !-f <span class="nv">$request_filename</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="nb">set</span> <span class="nv">$needCreateImg</span> <span class="s2">&quot;${needCreateImg}1&quot;</span>;
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">if</span> <span class="o">(</span><span class="nv">$uri</span> ~* <span class="s2">&quot;/g[0-9]/M00/(\w+)/(\w+)/([A-Za-z0-9_-]+).(gif|jpg|jpeg|png).(\d+x\d+).(gif|jpg|jpeg|png)&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="nb">set</span> <span class="nv">$needCreateImg</span> <span class="s2">&quot;${needCreateImg}2&quot;</span>;
+</span><span class='line'>                        <span class="nb">set</span> <span class="nv">$conUri</span>     <span class="s2">&quot;/$1/$2/$3.$4.$5.$6&quot;</span>;
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>                <span class="k">if</span> <span class="o">(</span><span class="nv">$needCreateImg</span> <span class="o">=</span> <span class="s2">&quot;012&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="nb">set</span> <span class="nv">$image_root</span> <span class="s2">&quot;/data/images01/data/&quot;</span>;
+</span><span class='line'>                        <span class="nb">set</span> <span class="nv">$file</span> <span class="s2">&quot;$image_root$conUri&quot;</span>;
+</span><span class='line'>                                rewrite_by_lua <span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">                                        local index = string.find(ngx.var.conUri, &quot;([0-9]+)x([0-9]+)&quot;);</span>
+</span><span class='line'><span class="s1">                                local originalUri = string.sub(ngx.var.conUri, 0, index-2);</span>
+</span><span class='line'><span class="s1">                                local area = string.sub(ngx.var.conUri, index);</span>
+</span><span class='line'><span class="s1">                                index = string.find(area, &quot;([.])&quot;);</span>
+</span><span class='line'><span class="s1">                                area = string.sub(area, 0, index-1);</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">                                function table.contains(table, element)</span>
+</span><span class='line'><span class="s1">                                        for _, value in pairs(table) do</span>
+</span><span class='line'><span class="s1">                                                if value == element then</span>
+</span><span class='line'><span class="s1">                                                        return true</span>
+</span><span class='line'><span class="s1">                                                        end</span>
+</span><span class='line'><span class="s1">                                                                end</span>
+</span><span class='line'><span class="s1">                                                                return false</span>
+</span><span class='line'><span class="s1">                                                                end</span>
+</span><span class='line'>
+</span><span class='line'><span class="s1">                                                                local c = &quot;/usr/local/GraphicsMagick-1.3.16/bin/gm convert &quot; .. ngx.var.image_root ..  originalUri  .. &quot; -thumbnail &quot; .. area .. &quot; - &quot;;</span>
+</span><span class='line'><span class="s1">                                local f = assert(io.popen(c, &quot;r&quot;))</span>
+</span><span class='line'><span class="s1">                                local s = assert(f:read(&quot;*a&quot;))</span>
+</span><span class='line'><span class="s1">                                f:close()</span>
+</span><span class='line'><span class="s1">                                ngx.say(s)</span>
+</span><span class='line'><span class="s1">                                &#39;</span>;
+</span><span class='line'>                        <span class="o">}</span>
+</span><span class='line'>                        <span class="nb">alias</span> /data/images01/data/;
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>        <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>性能测试</h3>
+
+<p>GraphicsMagick VS Ngx_image_thumb(gd)</p>
+
+<h5>测试图片大小</h5>
+
+<p>大小  名字<br/>
+12M 10M.jpg <br/>
+1.1M    1M.jpg <br/>
+4.5M    5M.jpg</p>
+
+<h5>图片其他信息</h5>
+
+<p><img src="http://image01.leonbb.com/info.png" alt="png_info" /></p>
+
+<h5>测试方式</h5>
+
+<p>Apache ab命令  <br/>
+ab -n200 -c 10 url</p>
+
+<h5>图片url</h5>
+
+<p><a href="http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg">http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg</a> (1.1M)<br/>
+<a href="http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg">http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg</a> (4.5M) <br/>
+<a href="http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg">http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg</a> (12M)</p>
+
+<h5>服务器信息</h5>
+
+<p>DELL R420 <br/>
+Intel Xeon E5-2403*1 @1.80GHz <br/>
+MEM 32G</p>
+
+<h3>Ngx_image_thumb测试</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg!t300x300.jpg&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CPU load average: 2.35, 0.53, 0.18 <br/>
+MEM 8706M  <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gd1.png" alt="gd1" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg!t300x300.jpg&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CPU load average: 3.30, 0.88, 0.35 <br/>
+MEM 8689M  <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gd5.png" alt="gd5" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg!t300x300.jpg&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CPU load average: 3.61, 1.21, 0.54 <br/>
+MEM 8743M <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gd10.png" alt="gd10" /></p>
+
+<h3>lua graphicsmagick测试</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg.300x300.jpg&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CPU load average: 1.54, 0.33, 0.11 <br/>
+MEM 3M  <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gm1.png" alt="gm1" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg.300x300.jpg&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CPU load average: 3.66, 0.91, 0.35  <br/>
+MEM 1M  <br/>
+ab 详细信息  <br/>
+<img src="http://image01.leonbb.com/gm5.png" alt="gm5" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>ab -n200 -c10 <span class="s1">&#39;http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg.300x300.jpg&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>CPU load average: 3.76, 1.35, 0.58  <br/>
+MEM 1M  <br/>
+ab 详细信息 <br/>
+<img src="http://image01.leonbb.com/gm10.png" alt="gm10" /></p>
+
+<h3>性能测试总结</h3>
+
+<p>从上面的测试情况来看,lua+graphicsmagick完爆Ngx_image_thumb <br/>
+1.CPU压力相同。 <br/>
+2.MEM Ngx_image_thumb不释放，只有重启nginx后才会释放，而Lua+graphicsmagick使用的时候连接一旦释放内存也会释放。 <br/>
+3.吞吐量以及请求时间,lua+graphicsmagick完爆Ngx_image_thumb</p>
+
+<h3>问题注意</h3>
+
+<p>我在使用graphicsmagick时候发现一台机器是可以对jpeg进行缩略图，一台则不行。<br/>
+通过gm version 查看到原来里面的jpeg功能没有打开，这个需要在编译graphicsmagick前系统就得有libjpeg这个包。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Feature Support:
+</span><span class='line'>  Thread Safe              yes
+</span><span class='line'>  Large Files <span class="o">(</span>&gt; 32 bit<span class="o">)</span>   yes
+</span><span class='line'>  Large Memory <span class="o">(</span>&gt; 32 bit<span class="o">)</span>  yes
+</span><span class='line'>  BZIP                     yes
+</span><span class='line'>  DPS                      no
+</span><span class='line'>  FlashPix                 no
+</span><span class='line'>  FreeType                 yes
+</span><span class='line'>  Ghostscript <span class="o">(</span>Library<span class="o">)</span>    no
+</span><span class='line'>  JBIG                     no
+</span><span class='line'>  JPEG-2000                no
+</span><span class='line'>  JPEG                     yes
+</span><span class='line'>  Little CMS               no
+</span><span class='line'>  Loadable Modules         no
+</span><span class='line'>  OpenMP                   yes <span class="o">(</span>200805<span class="o">)</span>
+</span><span class='line'>  PNG                      yes
+</span><span class='line'>  TIFF                     no
+</span><span class='line'>  TRIO                     no
+</span><span class='line'>  UMEM                     no
+</span><span class='line'>  WMF                      no
+</span><span class='line'>  X11                      yes
+</span><span class='line'>  XML                      yes
+</span><span class='line'>  ZLIB                     yes
+</span><span class='line'>
+</span><span class='line'>Host <span class="nb">type</span>: x86_64-unknown-linux-gnu
+</span><span class='line'>
+</span><span class='line'>Configured using the <span class="nb">command</span>:
+</span><span class='line'>  ./configure  <span class="s1">&#39;--prefix=/usr/local/GraphicsMagick-1.3.16/&#39;</span> --enable-ltdl-convenience
+</span><span class='line'>
+</span><span class='line'>Final Build Parameters:
+</span><span class='line'>  <span class="nv">CC</span>       <span class="o">=</span> gcc -std<span class="o">=</span>gnu99
+</span><span class='line'>  <span class="nv">CFLAGS</span>   <span class="o">=</span> -fopenmp -g -O2 -Wall -pthread
+</span><span class='line'>  <span class="nv">CPPFLAGS</span> <span class="o">=</span> -I/usr/include/freetype2 -I/usr/include/libxml2
+</span><span class='line'>  <span class="nv">CXX</span>      <span class="o">=</span> g++
+</span><span class='line'>  <span class="nv">CXXFLAGS</span> <span class="o">=</span> -pthread
+</span><span class='line'>  <span class="nv">LDFLAGS</span>  <span class="o">=</span> -L/usr/lib -L/usr/lib
+</span><span class='line'>  <span class="nv">LIBS</span>     <span class="o">=</span> -lfreetype -ljpeg -lpng12 -lXext -lSM -lICE -lX11 -lbz2 -lxml2 -lz -lm -lgomp -lpthread
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fastdfs Nginx ngx_image_thumb 实时图片缩略图]]></title>
+    <link href="http://leon8693.github.io/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu/"/>
+    <updated>2013-12-04T14:40:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu</id>
+    <content type="html"><![CDATA[<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本</span>
+</span><span class='line'>Centos 2.6.32-358.el6.x86_64
+</span><span class='line'>FastDFS 4.06
+</span><span class='line'>Tengine 1.5.2
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#官网下载地址</span>
+</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
+</span><span class='line'>
+</span><span class='line'><span class="c">#oopul写的nginx模块ngx_image_thumb</span>
+</span><span class='line'>wget https://github.com/3078825/nginx-image/archive/master.zip
+</span><span class='line'>
+</span><span class='line'><span class="c">#Tengine 1.5.2 下载</span>
+</span><span class='line'>wget http://tengine.taobao.org/download/tengine-1.5.2.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装FastDFS</h3>
+
+<p>参考<a href="http://shleon.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
+
+<h3>安装需要的包</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install gd-devel pcre-devel libcurl-devel gcc automake autoconf m4
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装Tengine并加载ngx_image_thumb模块</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tar xf tengine-1.5.2.tar.gz
+</span><span class='line'><span class="nb">cd </span>tengine-1.5.2
+</span><span class='line'>./configure --add-module<span class="o">=</span>/srv/fastdfs-nginx-module/src/ --add-module<span class="o">=</span>/srv/ngx_image_thumb-master/
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<h3>Nginx配置</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>server <span class="o">{</span>
+</span><span class='line'>        listen  80;
+</span><span class='line'>        server_name     172.16.3.213;
+</span><span class='line'>        access_log      /data1/logs/nginx/fastdfs_access.log gzip;
+</span><span class='line'>        error_log       /data1/logs/nginx/fastdfs_error.log;
+</span><span class='line'>
+</span><span class='line'>        location /g1/M00        <span class="o">{</span>
+</span><span class='line'>                <span class="nb">alias</span> /data/images01/data;
+</span><span class='line'>                ngx_fastdfs_module;
+</span><span class='line'>                image on;
+</span><span class='line'>                image_output on;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>测试</h3>
+
+<p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a> <br/>
+<img src="http://image01.leonbb.com/huonan.jpg" alt="huonan test" /></p>
+
+<p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg</a> <br/>
+<img src="http://image01.leonbb.com/huonan2.jpg" alt="huonan2 test" /></p>
+
+<h3>参数说明</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>image on/off 是否开启缩略图功能,默认关闭
+</span><span class='line'>
+</span><span class='line'>image_backend on/off 是否开启镜像服务，当开启该功能时，请求目录不存在的图片（判断原图），将自动从镜像服务器地址下载原图
+</span><span class='line'>
+</span><span class='line'>image_backend_server 镜像服务器地址
+</span><span class='line'>
+</span><span class='line'>image_output on/off 是否不生成图片而直接处理后输出 默认off
+</span><span class='line'>
+</span><span class='line'>image_jpeg_quality 75 生成JPEG图片的质量 默认值75
+</span><span class='line'>
+</span><span class='line'>image_water on/off 是否开启水印功能
+</span><span class='line'>
+</span><span class='line'>image_water_type 0/1 水印类型 0:图片水印 1:文字水印
+</span><span class='line'>
+</span><span class='line'>image_water_min 300 300 图片宽度 300 高度 300 的情况才添加水印
+</span><span class='line'>
+</span><span class='line'>image_water_pos 0-9 水印位置 默认值9 0为随机位置,1为顶端居左,2为顶端居中,3为顶端居右,4为中部居左,5为中部居中,6为中部居右,7为底端居左,8为底端居中,9为底端居右
+</span><span class='line'>
+</span><span class='line'>image_water_file 水印文件<span class="o">(</span>jpg/png/gif<span class="o">)</span>,绝对路径或者相对路径的水印图片
+</span><span class='line'>
+</span><span class='line'>image_water_transparent 水印透明度,默认20
+</span><span class='line'>
+</span><span class='line'>image_water_text 水印文字 <span class="s2">&quot;Power By Vampire&quot;</span>
+</span><span class='line'>
+</span><span class='line'>image_water_font_size 水印大小 默认 5
+</span><span class='line'>
+</span><span class='line'>image_water_font 文字水印字体文件路径
+</span><span class='line'>
+</span><span class='line'>image_water_color 水印文字颜色,默认 <span class="c">#000000</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>调用说明</h3>
+
+<h6>这里假设你的nginx 访问地址为<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a></h6>
+
+<h6>通过访问<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!t300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!t300x300.jpg</a></h6>
+
+<h6>其中t是生成图片缩略图的参数,300是生成缩略图的宽度,300是生成缩略图的高度</h6>
+
+<h6>可以生成四种不同类型的缩略图</h6>
+
+<h6>支持jpeg/png/gif(Gif生成后变成静态图片)</h6>
+
+<h6>C 参数按请求宽高比例从图片高度 10% 处开始截取图片，然后缩放/放大到指定尺寸（ 图片缩略图大小等于请求的宽高 ）</h6>
+
+<h6>M 参数按请求宽高比例居中截图图片，然后缩放/放大到指定尺寸（ 图片缩略图大小等于请求的宽高 ）</h6>
+
+<h6>T 参数按请求宽高比例按比例缩放/放大到指定尺寸（ 图片缩略图大小可能小于请求的宽高 )</h6>
+
+<h6>W 参数按请求宽高比例缩放/放大到指定尺寸，空白处填充白色背景颜色（ 图片缩略图大小等于请求的宽高 ）</h6>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Linux备份数据至百度网盘]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan/"/>
+    <updated>2013-11-20T14:59:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>前阵同事说百度网盘可以升级到2TB级的空间，井底之蛙的我，才发现自己用的百度网盘才6G，弱爆了，果断升级，但是怎么大的空间如何利用呢？所以想定期对自己linux系统下的文件进行备份放入百度网盘，这时候谷哥，度娘发挥作用了，我将搜咯到的资料进行整合，写下这个篇文章。</p>
+
+<h3>下载安装bpcs_uploader百度pcs上传脚本</h3>
+
+<h4>下载安装</h4>
+
+<p>bpcs_uploader作者官网<br/>
+<a href="http://oott123.github.io/bpcs_uploader/">http://oott123.github.io/bpcs_uploader/</a></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget https://github.com/oott123/bpcs_uploader/zipball/master <span class="c">#下载zip文件</span>
+</span><span class='line'>unzip master  <span class="c">#解压</span>
+</span><span class='line'>mv oott123-bpcs_uploader-ecb07c3 bpcs_uploader <span class="c">#重命名</span>
+</span><span class='line'><span class="nb">cd </span>bpcs_uploader
+</span><span class='line'>chmod +x bpcs_uploader.php <span class="c">#赋予执行权限</span>
+</span><span class='line'>yum install php curl -y   <span class="c">#安装需要的软件包</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h4>百度网盘申请应用</h4>
+
+<p>地址:<a href="http://developer.baidu.com/dev#/create  ">http://developer.baidu.com/dev#/create  </a>
+<img src="http://image01.leonbb.com/api3.png" alt="申请百度应用" /></p>
+
+<p>这个链接可以看到你有多少应用<br/>
+<a href="http://developer.baidu.com/console#app">http://developer.baidu.com/console#app</a>
+<img src="http://image01.leonbb.com/api4.png" alt="查看应用" /></p>
+
+<p>点击API管理<br/>
+<img src="http://image01.leonbb.com/api5.png" alt="API管理" /></p>
+
+<p>打开PCS API<br/>
+<img src="http://image01.leonbb.com/api6.png" alt="API PCS" /></p>
+
+<p>设置目录  <br/>
+<img src="http://image01.leonbb.com/api7.png" alt="API FILE" /></p>
+
+<p>记录KEY <br/>
+<img src="http://image01.leonbb.com/api8.png" alt="API KEY" /></p>
+
+<p>运行bpcs_uploader.php</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>./bpcs_uploader.php init <span class="c">#初始化</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://image01.leonbb.com/api.png" alt="bpcs init" />
+1. 初始化选择Y  <br/>
+2. 输入你前面API KEY值 <br/>
+3. 输入你前面API SECRET值 <br/>
+4. 输入开启API接口时创建的目录名称<br/>
+5. 登入链接输入KEY激活<br/>
+6. 成功则显示你所使用的容量和空余容量</p>
+
+<h3>使用bpcs_uploader上传测试</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/root/scripts/bpcs_uploader/bpcs_uploader.php upload  /tmp/test.html /test/test.html
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://image01.leonbb.com/api10.png" alt="bpcs_uploader upload" /></p>
+
+<h4>查看网盘</h4>
+
+<p>登入自己的网盘发现居然有那个文件了！以此类推，就可以在linux下备份数据到百度网盘了。NICE！<br/>
+<img src="http://image01.leonbb.com/api11.png" alt="bpcs_uploader upload" /></p>
+
+<h3>bpcs_uploader基本命令</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">quota</span> <span class="c1">#查看配额</span>
+</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">upload</span> <span class="p">[</span><span class="nx">path_local</span><span class="p">]</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span> <span class="c1">#上传文件</span>
+</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">download</span> <span class="p">[</span><span class="nx">path_local</span><span class="p">]</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span>  <span class="c1">#下载文件</span>
+</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">delete</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span>  <span class="c1">#删除文件</span>
+</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">fetch</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span> <span class="p">[</span><span class="nx">path_to_fetch</span><span class="p">]</span> <span class="c1">#离线下载</span>
+</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">init</span> <span class="c1">#初始化</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>bpcs_uploader配置解释</h3>
+
+<p>在<code>bpcs_uploader/_bpcs_files_/config</code>下注意几个文件</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">bpcs_uploader</span><span class="o">/</span><span class="nx">_bpcs_files_</span><span class="o">/</span><span class="nx">config</span>
+</span><span class='line'><span class="err">├──</span> <span class="nx">access_token</span>
+</span><span class='line'><span class="err">├──</span> <span class="nx">appkey</span>     <span class="c1">#前面填入的appkey</span>
+</span><span class='line'><span class="err">├──</span> <span class="nx">appname</span>    <span class="c1">#百度网盘应用的目录</span>
+</span><span class='line'><span class="err">├──</span> <span class="nx">appsec</span> <span class="c1">#前面天如的appsec</span>
+</span><span class='line'><span class="err">├──</span> <span class="nx">config</span><span class="o">.</span><span class="nx">lock</span>
+</span><span class='line'><span class="err">├──</span> <span class="nx">readme</span><span class="o">.</span><span class="nx">txt</span>
+</span><span class='line'><span class="err">└──</span> <span class="nx">refresh_token</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>linux下载百度网盘</h3>
+
+<p>进入自己的网盘找到需要下载的文件<br/>
+创建分享链接<br/>
+<img src="http://image01.leonbb.com/wget1.png" alt="linke" /><br/>
+<img src="http://image01.leonbb.com/wget2.png" alt="linke" /> <br/>
+查看链接，firebug等工具查看<br/>
+<img src="http://image01.leonbb.com/wget3.png" alt="find" /></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget -c -O leon.png <span class="s2">&quot;http://d.pcs.baidu.com/thumbnail/be04f0e3e6e96e2102ff9c376778915b?fid=1191379893-250528-3966810088&amp;time=1385030781&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-6tGvvJKsVQd%2FKXr5mscLmcGSFyQ%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=unknown&amp;r=984765212&amp;size=c710_u500&amp;quality=100&quot;</span>
+</span><span class='line'>-c <span class="c">#断点续传</span>
+</span><span class='line'>-O <span class="c">#指定下载下来的文件名称</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>就怎么简单！</p>
+
+<h3>多线程下载百度网盘</h3>
+
+<p>由于wget只能单线程,可是有些大文件单线程实在太慢了,所以需要找个能够多线程的下载工具<br/>
+Axel下载</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#Centos6.4 i686 i386</span>
+</span><span class='line'>wget http://pkgs.repoforge.org/axel/axel-2.4-1.el6.rf.i686.rpm
+</span><span class='line'>rpm -ivh axel-2.4-1.el6.rf.i686.rpm
+</span><span class='line'>
+</span><span class='line'><span class="c">#Ubuntu 12.04</span>
+</span><span class='line'>apt-get install axel
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>根据系统不一样下载相应的包,并安装</p>
+
+<p>使用axel下载百度网盘里的大文件,这里我下一个视频大小为188M</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#用9个线程下载</span>
+</span><span class='line'>axel -n 9 <span class="s2">&quot;http://d.pcs.baidu.com/file/2eab76d2c3fee9335378275313f18d40?fid=1191379893-250528-2944587601&amp;time=1385032735&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-WLdPSqPZBPH2ogqHIEfBTfYbWKk%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=zOo3WfKU2OHg3ebqvI82xwvc2lHPOnXMCe3I8C9LQ8dveBIuprdikBzxxswmQru+GIgsZD9TtLI=&amp;r=553543714&amp;sh=1&amp;cflg=65535&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#axel常用参数</span>
+</span><span class='line'>-n <span class="c">#线程数</span>
+</span><span class='line'>-s <span class="c">#限速,如-s 10240即每秒10K</span>
+</span><span class='line'>-o <span class="c">#指定另存目录</span>
+</span><span class='line'>-q <span class="c">#静默模式</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="http://image01.leonbb.com/axel1.png" alt="axel" /></p>
+
+<p>再看看单线程的wget <br/>
+<img src="http://image01.leonbb.com/wget4.png" alt="wget" /></p>
+
+<p>还是很大的差距的，但是建议不要用axel开太多的进程，控制在100以内。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress样式修改]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/19/octopressyang-shi-xiu-gai/"/>
+    <updated>2013-11-19T14:39:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/19/octopressyang-shi-xiu-gai</id>
+    <content type="html"><![CDATA[<h3>样式修改</h3>
+
+<p>添加或修改控制样式，需编辑<code>sass/custom/_styles.scss</code>，博客的所有颜色控制在<code>/sass/base/_theme.scss</code>中进行设置。定制自己的配色，编辑<code>sass/custom/_colors.scss</code>。查看<a href="http://hslpicker.com/#e1ff00">HSL COLOR PICKER</a>，帮你挑选喜欢的颜色。 <br/>
+修改布局，需要编辑<code>sass/base/_layout.scss</code>，可以修改各部分的宽度等。</p>
+
+<h3>添加背景图片</h3>
+
+<p>在<code>sass/custom/_styles.scss</code>中添加</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>html <span class="o">{</span>
+</span><span class='line'>        background: <span class="c">#555555 url(&quot;/images/lol.jpg&quot;);</span>
+</span><span class='line'>        //background: <span class="c">#555555;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>body &gt; div <span class="o">{</span>
+</span><span class='line'>        background-image: none;
+</span><span class='line'>        //background: <span class="c">#F5F5D5</span>
+</span><span class='line'><span class="o">}</span> //侧边栏
+</span><span class='line'>
+</span><span class='line'>body &gt; div &gt; div <span class="o">{</span> //文章内容
+</span><span class='line'>        background-image: none;
+</span><span class='line'>        //background: <span class="c">#F5F5D5;</span>
+</span><span class='line'>        //background: url<span class="o">(</span><span class="s2">&quot;/images/bg.jpg&quot;</span><span class="o">)</span>;
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将背景图片放入<code>source/images/</code>中，修改上述代码中的路径指向想要的图片，即可 更改博客、侧边栏或文章的背景图片。博客使用背景图片后，与Header区不太和谐，所以我在<code>/sass/base/_theme.scss</code>中将<code>header-bg</code>设置成透明色了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$header</span>-bg: hsla<span class="o">(</span>0, 0%, 15%, 0<span class="o">)</span>  !default;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h3>LOGO图片</h3>
+
+<p>LOGO图片我所说的logo图片有两种，一个是打开一个网页时，标签栏上显示的小图片。还有一个 是标题栏主标题旁的图片。 <br/>
+首先针对于第一种可以选择你喜欢的图片（大小适中），替换source目录下的 favicon.png即可。<br/>
+或者将logo图片放入<code>source/images</code>中，然后修改<code>source/_includes/head.html</code>，找到favicon.png，修改其路径指向你的图片即可。<br/>
+对于主标题旁的图片需要在<code>sass/custom/_styles.scss</code>中填入如下语句:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>//Blog logo pic
+</span><span class='line'>@media only screen and <span class="o">(</span>min-width: 550px<span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>        body &gt; header h1<span class="o">{</span>
+</span><span class='line'>                background: url<span class="o">(</span><span class="s2">&quot;/images/logo1.png&quot;</span><span class="o">)</span> no-repeat 0 1px;
+</span><span class='line'>                padding-left: 65px;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        body &gt; header h2 <span class="o">{</span> padding-left: 65px; <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>根据自己情况进行修改即可。</p>
+
+<h3>导航栏倒圆角</h3>
+
+<p>我设置的header区背景色透明，所以导航栏的直角有些尖锐，在<code>sass/custom/_styles.scss</code>中添加如下语句，将其修改为圆角:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>//倒圆角
+</span><span class='line'>@media only screen and <span class="o">(</span>min-width: 1040px<span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        body &gt; nav <span class="o">{</span>
+</span><span class='line'>                @include border-top-radius<span class="o">(</span>.4em<span class="o">)</span>;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>        body &gt; footer <span class="o">{</span>
+</span><span class='line'>                @include border-bottom-radius<span class="o">(</span>.4em<span class="o">)</span>;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>滑动返回顶部按钮</h3>
+
+<p>当文章较长，通常希望有一个返回顶部的按钮，如下方法实现了在页面右下方添加一个 返回顶部的图片按钮，点击后可以滑动的返回顶部。
+首先创建<code>source/javascripts/top.js</code>，实现滑动返回顶部效果，添加如下代码：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">function </span>goTop<span class="o">(</span>acceleration, <span class="nb">time</span><span class="o">)</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>        <span class="nv">acceleration</span> <span class="o">=</span> acceleration <span class="o">||</span> 0.1;
+</span><span class='line'>        <span class="nb">time</span> <span class="o">=</span> <span class="nb">time</span> <span class="o">||</span> 16;
+</span><span class='line'>
+</span><span class='line'>        var <span class="nv">x1</span> <span class="o">=</span> 0;
+</span><span class='line'>        var <span class="nv">y1</span> <span class="o">=</span> 0;
+</span><span class='line'>        var <span class="nv">x2</span> <span class="o">=</span> 0;
+</span><span class='line'>        var <span class="nv">y2</span> <span class="o">=</span> 0;
+</span><span class='line'>        var <span class="nv">x3</span> <span class="o">=</span> 0;
+</span><span class='line'>        var <span class="nv">y3</span> <span class="o">=</span> 0;
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span>document.documentElement<span class="o">)</span>
+</span><span class='line'>        <span class="o">{</span>
+</span><span class='line'>                <span class="nv">x1</span> <span class="o">=</span> document.documentElement.scrollLeft <span class="o">||</span> 0;
+</span><span class='line'>                <span class="nv">y1</span> <span class="o">=</span> document.documentElement.scrollTop <span class="o">||</span> 0;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span>document.body<span class="o">)</span>
+</span><span class='line'>        <span class="o">{</span>
+</span><span class='line'>                <span class="nv">x2</span> <span class="o">=</span> document.body.scrollLeft <span class="o">||</span> 0;
+</span><span class='line'>                <span class="nv">y2</span> <span class="o">=</span> document.body.scrollTop <span class="o">||</span> 0;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        var <span class="nv">x3</span> <span class="o">=</span> window.scrollX <span class="o">||</span> 0;
+</span><span class='line'>        var <span class="nv">y3</span> <span class="o">=</span> window.scrollY <span class="o">||</span> 0;
+</span><span class='line'>
+</span><span class='line'>        var <span class="nv">x</span> <span class="o">=</span> Math.max<span class="o">(</span>x1, Math.max<span class="o">(</span>x2, x3<span class="o">))</span>;
+</span><span class='line'>        var <span class="nv">y</span> <span class="o">=</span> Math.max<span class="o">(</span>y1, Math.max<span class="o">(</span>y2, y3<span class="o">))</span>;
+</span><span class='line'>
+</span><span class='line'>        var <span class="nv">speed</span> <span class="o">=</span> 1 + acceleration;
+</span><span class='line'>        window.scrollTo<span class="o">(</span>Math.floor<span class="o">(</span>x / speed<span class="o">)</span>, Math.floor<span class="o">(</span>y / speed<span class="o">))</span>;
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="o">(</span>x &gt; 0 <span class="o">||</span> y &gt; 0<span class="o">)</span>
+</span><span class='line'>        <span class="o">{</span>
+</span><span class='line'>                var <span class="nv">invokeFunction</span> <span class="o">=</span> <span class="s2">&quot;goTop(&quot;</span> + acceleration + <span class="s2">&quot;, &quot;</span> + <span class="nb">time</span> + <span class="s2">&quot;)&quot;</span>;
+</span><span class='line'>                window.setTimeout<span class="o">(</span>invokeFunction, <span class="nb">time</span><span class="o">)</span>;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后创建<code>source/_includes/custom/totop.html</code>,设置返回顶部按钮样式和位置,代码如下:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;!--返回顶部开始--&gt;
+</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;full&quot;</span> <span class="nv">style</span><span class="o">=</span><span class="s2">&quot;width:0px; height:0px; position:fixed; right:180px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;&quot;</span>&gt;
+</span><span class='line'>        &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span> <span class="nv">onclick</span><span class="o">=</span><span class="s2">&quot;goTop();return false;&quot;</span>&gt;&lt;img <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/images/top.png&quot;</span> <span class="nv">border</span><span class="o">=</span>0 <span class="nv">alt</span><span class="o">=</span><span class="s2">&quot;返回顶部&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>&lt;/div&gt;
+</span><span class='line'>&lt;script <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/javascripts/top.js&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span>&gt;&lt;/script&gt;
+</span><span class='line'>&lt;!--返回顶部结束--&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后，还需要将返回顶部的图片放入<code>source/images</code>，命名为top.png(或修改totop.html中图片的路径)。<br/>
+在<code>source/_layouts/default.html</code>添加html样式。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;body&gt;
+</span><span class='line'>  ...
+</span><span class='line'>  <span class="o">{</span>% include custom/totop.html %<span class="o">}</span>
+</span><span class='line'>  ...
+</span><span class='line'>&lt;/body&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>感谢812lcl</h3>
+
+<p>他的博客讲解的很详细，我部分需求也是看了他的博客才会做，有些问题也是通过他来帮忙解决的。</p>
+
+<hr />
+
+<p>参考文章<br/>
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a><br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress添加统计]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/14/octopresstian-jia-tong-ji/"/>
+    <updated>2013-11-14T14:06:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/14/octopresstian-jia-tong-ji</id>
+    <content type="html"><![CDATA[<p>搭建了Octopress发现自己不会js,css以及各类代码，要美化Octopress真的很难，所以只有谷哥，度娘，东找找，西找找,看一些大牛的文章,照搬过来，统一放到自己的博客里面，方便自己看，也方便其他人不需要频繁的在网上各种搜索。</p>
+
+<p>首先可以通过各类搜索引擎将自己的网站放入进去,这样大家在使用这些搜索引擎的时候方便搜索到自己的博客，网站。  <br/>
+<a href="http://tool.lusongsong.com/addurl.html">http://tool.lusongsong.com/addurl.html</a> <br/>
+<a href="http://urlc.cn/tool/addurl.html">http://urlc.cn/tool/addurl.html</a></p>
+
+<h3>添加关键字</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>---
+</span><span class='line'>layout: post
+</span><span class='line'>title: <span class="s2">&quot;Octopress添加统计&quot;</span>
+</span><span class='line'>date: 2013-11-14 14:06
+</span><span class='line'>comments: <span class="nb">true</span>
+</span><span class='line'>categories: Octopress
+</span><span class='line'>description: <span class="s2">&quot;Octopress添加统计&quot;</span>
+</span><span class='line'>tags: <span class="o">[</span>octopress,博客,统计<span class="o">]</span>
+</span><span class='line'>keywords: octopress,统计,关键字
+</span><span class='line'>---
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h3>统计工具</h3>
+
+<p>octopress模板里面默认带了<code>Google Analytics</code>工具,需要注册<a href="http://www.google.com/analytics/">Google Analytics</a>获得一个<code>google_analytics_tracking_id</code>， 添加到<code>_config.yml</code>中对应位置,网站之后进行验证即可，然后可以通过<code>Google Analytics</code>分析网站的流量了。而且可以使用<a href="https://www.google.com/webmasters/tools/home?hl=zh-CN">Google站长工具</a>，对网站进行更全面的分析，进行SEO。
+对自己的网站进行验证，只需将网站提供的用于验证的代码添加到<code>source/_includes/head.html</code>的<code>&lt;head&gt;</code>标签之间，网站部署到网上后，过几分钟即可验证通过，其他 需要验证的也同样操作。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  &lt;script&gt;
+</span><span class='line'>  <span class="o">(</span><span class="k">function</span><span class="o">(</span>i,s,o,g,r,a,m<span class="o">){</span>i<span class="o">[</span><span class="s1">&#39;GoogleAnalyticsObject&#39;</span><span class="o">]=</span>r;i<span class="o">[</span>r<span class="o">]=</span>i<span class="o">[</span>r<span class="o">]||</span><span class="k">function</span><span class="o">(){</span>
+</span><span class='line'>  <span class="o">(</span>i<span class="o">[</span>r<span class="o">]</span>.q<span class="o">=</span>i<span class="o">[</span>r<span class="o">]</span>.q||<span class="o">[])</span>.push<span class="o">(</span>arguments<span class="o">)}</span>,i<span class="o">[</span>r<span class="o">]</span>.l<span class="o">=</span>1*new Date<span class="o">()</span>;<span class="nv">a</span><span class="o">=</span>s.createElement<span class="o">(</span>o<span class="o">)</span>,
+</span><span class='line'>  <span class="nv">m</span><span class="o">=</span>s.getElementsByTagName<span class="o">(</span>o<span class="o">)[</span>0<span class="o">]</span>;a.async<span class="o">=</span>1;a.src<span class="o">=</span>g;m.parentNode.insertBefore<span class="o">(</span>a,m<span class="o">)</span>
+</span><span class='line'>  <span class="o">})(</span>window,document,<span class="s1">&#39;script&#39;</span>,<span class="s1">&#39;//www.google-analytics.com/analytics.js&#39;</span>,<span class="s1">&#39;ga&#39;</span><span class="o">)</span>;
+</span><span class='line'>  ga<span class="o">(</span><span class="s1">&#39;create&#39;</span>, <span class="s1">&#39;xxxxxxxx&#39;</span>, <span class="s1">&#39;leonbb.com&#39;</span><span class="o">)</span>;
+</span><span class='line'>  ga<span class="o">(</span><span class="s1">&#39;send&#39;</span>, <span class="s1">&#39;pageview&#39;</span><span class="o">)</span>;
+</span><span class='line'>  &lt;/script&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>文章部分显示</h3>
+
+<p>如果想让文章在首页只显示一部分，需要在文章相应的位置添加<code>&lt;!-- more --&gt;</code>，在<code>_config.yml</code>中修改<code>excerpt_link: "继续阅读 &amp;rarr;"</code>来修改继续阅读 按钮的显示内容。</p>
+
+<hr />
+
+<p>参考文章  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress最新评论及友情链接]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/"/>
+    <updated>2013-11-13T16:35:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie</id>
+    <content type="html"><![CDATA[<h3>最新评论，热评</h3>
+
+<p>这边我使用的是友言，友言提供了很多组件，最新评论，热评等等 <br/>
+我们可以将他们 做成侧边栏进行展示，或在首页文章列表中，显示每篇文章的评论数目<br/>
+首先登入友言页面，并注册 <br/>
+<a href="http://uyan.cc/  ">http://uyan.cc/  </a>
+后台管理&mdash;>进入&mdash;>安装设置&mdash;>嵌入组件</p>
+
+<h4>创建文件</h4>
+
+<p>source/_includes/asides/uyan_hotcmt.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
+</span><span class='line'>&lt;h1&gt;评论热榜&lt;/h1&gt;
+</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;uyan_hotcmt_unit&quot;</span>&gt;&lt;/div&gt;
+</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v2.uyan.cc/code/uyan.js?uid=xxxxxx&quot;</span>&gt;&lt;/script&gt; &lt;!-- 如果已经过加载此行JS，即可不用重复加载 --&gt;
+</span><span class='line'>&lt;/section&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<p>source/_includes/asides/uyan_newcmt.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
+</span><span class='line'>&lt;h1&gt;最新评论&lt;/h1&gt;
+</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;uyan_newcmt_unit&quot;</span>&gt;&lt;/div&gt;
+</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v2.uyan.cc/code/uyan.js?uid=xxxxxx&quot;</span>&gt;&lt;/script&gt; &lt;!-- 如果已经过加载此行JS，即可不用重复加载 --&gt;
+</span><span class='line'>&lt;/section&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>修改主配置文件</h4>
+
+<p>octopress/_config.yml</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html,asides/earth.html,asides/uyan_hotcmt.html,asides/uyan_newcmt.html<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>友情链接</h3>
+
+<p>source/_includes/asides/blog_link.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
+</span><span class='line'>&lt;h1&gt;友情链接&lt;/h1&gt;
+</span><span class='line'>&lt;ul&gt;
+</span><span class='line'>        &lt;li&gt;
+</span><span class='line'>        &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://plumj.com/&quot;</span>&gt;plumj的博客&lt;/a&gt;
+</span><span class='line'>        &lt;/li&gt;
+</span><span class='line'>&lt;/ul&gt;
+</span><span class='line'>&lt;/section&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>修改主配置</h4>
+
+<p>octopress/_config.yml</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html,asides/earth.html,asides/uyan_hotcmt.html,asides/uyan_newcmt.html,asides/blog_link.html<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>参考文章
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress访客地图]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu/"/>
+    <updated>2013-11-13T16:10:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu</id>
+    <content type="html"><![CDATA[<h3>Octopress访客地图</h3>
+
+<p>效果如我的博客右侧那个精美的3D旋转地球所示，它可以显示访客数量，访客来自的 地域，既有装饰作用，又有统计作用。它也有2D效果版，可以根据自己喜欢进行设置，地址在这里，然后获得代码。<br/>
+<a href="http://www.revolvermaps.com/?target=setup">http://www.revolvermaps.com/?target=setup</a></p>
+
+<p>source/_includes/asides/earth.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
+</span><span class='line'>  &lt;h1&gt;访客地图&lt;/h1&gt;
+</span><span class='line'>        &lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://jg.revolvermaps.com/2/1.js?i=6mb2spkrv1j&amp;amp;s=220&amp;amp;m=0&amp;amp;v=false&amp;amp;r=false&amp;amp;b=000000&amp;amp;n=false&amp;amp;c=ff0000&quot;</span> <span class="nv">async</span><span class="o">=</span><span class="s2">&quot;async&quot;</span>&gt;&lt;/script&gt;
+</span><span class='line'>&lt;/section&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<h4>修改主配置增加参数</h4>
+
+<p>octopress/_config.yml</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html,asides/earth.html<span class="o">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<p>参考文章 <br/>
+<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a>  <br/>
+<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
+<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress新浪微博侧边栏]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/"/>
+    <updated>2013-11-13T15:26:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan</id>
+    <content type="html"><![CDATA[<h3>增加新浪微博侧边栏</h3>
+
+<h4>先通过微博秀</h4>
+
+<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
+找到自己的代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;iframe
+</span><span class='line'><span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
+</span><span class='line'><span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
+</span><span class='line'> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
+</span><span class='line'> <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
+</span><span class='line'><span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
+</span><span class='line'><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://widget.weibo.com/weiboshow/index.php?language=&amp;width=0&amp;height=550&amp;fansRow=2&amp;ptype=1&amp;speed=0&amp;skin=1&amp;isTitle=1&amp;noborder=1&amp;isWeibo=1&amp;isFans=1&amp;uid=xxxxxxxx&amp;verifier=xxxxxxxx&quot;</span>&gt;
+</span><span class='line'>&lt;/iframe&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h4>将上面的代码转换成HTML</h4>
+
+<p>octopress/source/_includes/asides/weibo.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">{</span>% <span class="k">if </span>site.weibo_uid %<span class="o">}</span>
+</span><span class='line'>&lt;section&gt;
+</span><span class='line'>  &lt;h1&gt;新浪微博&lt;/h1&gt;
+</span><span class='line'>  &lt;ul <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;weibo&quot;</span>&gt;
+</span><span class='line'>    &lt;li&gt;
+</span><span class='line'>      &lt;iframe
+</span><span class='line'>        <span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
+</span><span class='line'>        <span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
+</span><span class='line'>        <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
+</span><span class='line'>        <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
+</span><span class='line'>        <span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
+</span><span class='line'>        <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;&quot;</span>http://widget.weibo.com/weiboshow/index.php?width<span class="o">=</span>0&amp;height<span class="o">=</span>550&amp;ptype<span class="o">={</span>% <span class="k">if </span>site.weibo_pic %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;speed<span class="o">=</span>0&amp;skin<span class="o">=</span>&amp;isTitle<span class="o">=</span>0&amp;noborder<span class="o">=</span>1&amp;isWeibo<span class="o">={</span>% <span class="k">if </span>site.weibo_show %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;isFans<span class="o">=</span>&amp;uid<span class="o">=</span>&amp;verifier<span class="o">=</span><span class="err">&quot;</span>&gt;
+</span><span class='line'>      &lt;/iframe&gt;
+</span><span class='line'>    &lt;/li&gt;
+</span><span class='line'>  &lt;/ul&gt;
+</span><span class='line'>&lt;/section&gt;
+</span><span class='line'><span class="o">{</span>% endif %<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>配置文件中增加参数</h4>
+
+<p>octopress/source/_config.yml</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html<span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>weibo_uid: xxxx     <span class="c">#微博中的uid，从微博秀中获得</span>
+</span><span class='line'>weibo_verifier: xxxx     <span class="c">#微博中的verifier 从微博秀中获得</span>
+</span><span class='line'>weibo_fansline: 1     <span class="c">#显示粉丝的数量，1行</span>
+</span><span class='line'>weibo_show: <span class="nb">true</span>     <span class="c">#是否显示内容</span>
+</span><span class='line'>weibo_pic: <span class="nb">true</span>         <span class="c">#是否显示图片</span>
+</span><span class='line'>weibo_skin: 10          <span class="c">#使用哪种风格的10为序号10的风格</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress 404公益页面]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/qq-404/"/>
+    <updated>2013-11-13T15:06:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/qq-404</id>
+    <content type="html"><![CDATA[<h3>404公益页面</h3>
+
+<p>访问QQ 404公益页面，获取需要的代码<br/>
+www.qq.com/404<br/>
+将代码放入Nginx制定的目录中，并配置nginx即可</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>server  {
+</span><span class='line'>        listen 80;
+</span><span class='line'>        server_name _;
+</span><span class='line'>        root /octopress/public/;
+</span><span class='line'>                location /{
+</span><span class='line'>                index index.html;
+</span><span class='line'>                }
+</span><span class='line'>        error_page 404 "http://shleon.github.io/404/404.html";
+</span><span class='line'>        error_page 403 "http://shleon.github.io/404/404.html";
+</span><span class='line'>        access_log /data1/logs/nginx/access.log gzip;
+</span><span class='line'>        }</span></code></pre></td></tr></table></div></figure>
+
+
+<p>效果如下<br/>
+<a href="http://shleon.github.io/404/404.html">http://shleon.github.io/404/404.html</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress第三方评论]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/13/octopressdi-san-fang-ping-lun/"/>
+    <updated>2013-11-13T11:12:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/13/octopressdi-san-fang-ping-lun</id>
+    <content type="html"><![CDATA[<h3>Octopress第三方评论添加</h3>
+
+<p>初始的Octopress只有一些twitter之类的评论可以使用，对于国内普遍使用微博，人人，QQ的人来说极其不方便的。
+还好Octopress也可以增加第三方评论，这样可以使我们的Octopress符合我们所需要的。</p>
+
+<h4>配置文件中添加需要的参数</h4>
+
+<p>octopress/_config.yml</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Weibo Like
+</span><span class='line'>weibo_share: true</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>增加代码</h4>
+
+<p>octopress/source/_includes/post/sharing.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  <span class="o">{</span>% <span class="k">if </span>site.weibo_share %<span class="o">}</span>
+</span><span class='line'>     <span class="o">{</span>% include post/weibo.html %<span class="o">}</span>
+</span><span class='line'>  <span class="o">{</span>% endif %<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<h4>增加分享以及留言代码</h4>
+
+<p>octopress/source/_includes/post/weibo.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;!-- JiaThis Button BEGIN --&gt;
+</span><span class='line'>&lt;div <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_style_32x32&quot;</span>&gt;
+</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_qzone&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_tsina&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_tqq&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_weixin&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_renren&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>        &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://www.jiathis.com/share&quot;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis jiathis_txt jtico jtico_jiathis&quot;</span> <span class="nv">target</span><span class="o">=</span><span class="s2">&quot;_blank&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_counter_style&quot;</span>&gt;&lt;/a&gt;
+</span><span class='line'>&lt;/div&gt;
+</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v3.jiathis.com/code/jia.js&quot;</span> <span class="nv">charset</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>&gt;&lt;/script&gt;
+</span><span class='line'>&lt;!-- JiaThis Button END --&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;!-- UY BEGIN --&gt;
+</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;uyan_frame&quot;</span>&gt;&lt;/div&gt;
+</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v2.uyan.cc/code/uyan.js?uid=1863487&quot;</span>&gt;&lt;/script&gt;
+</span><span class='line'>&lt;!-- UY END --&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>上面2段代码获取地点</h4>
+
+<p><a href="http://www.jiathis.com/">http://www.jiathis.com/</a> <br/>
+<a href="http://uyan.cc/">http://uyan.cc/</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress分类]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/11/octopressfen-lei/"/>
+    <updated>2013-11-11T08:09:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/11/octopressfen-lei</id>
+    <content type="html"><![CDATA[<h3>添加侧边栏文章分类</h3>
+
+<p>octopress/plugins/category_list_tag.rb</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module Jekyll 
+</span><span class='line'>  class CategoryListTag &lt; Liquid::Tag 
+</span><span class='line'>    def render(context) 
+</span><span class='line'>      html = "" 
+</span><span class='line'>      categories = context.registers[:site].categories.keys 
+</span><span class='line'>      categories.sort.each do |category| 
+</span><span class='line'>        posts_in_category = context.registers[:site].categories[category].size 
+</span><span class='line'>        category_dir = context.registers[:site].config['category_dir'] 
+</span><span class='line'>        category_url = File.join(category_dir, category.gsub(/_|\P{Word}/, '-').gsub(/-{2,}/, '-').downcase) 
+</span><span class='line'>        html &lt;&lt; "&lt;li class='category'&gt;&lt;a href='http://leon8693.github.io/#{category_url}/'&gt;#{category} (#{posts_in_category})&lt;/a&gt;&lt;/li&gt;\n" 
+</span><span class='line'>      end 
+</span><span class='line'>      html 
+</span><span class='line'>    end 
+</span><span class='line'>  end 
+</span><span class='line'>end
+</span><span class='line'>Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<h4>增加侧栏标注</h4>
+
+<p>octopress/source/_includes/asides/category_list.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
+</span><span class='line'>  &lt;h1&gt;文章分类&lt;/h1&gt;
+</span><span class='line'>  &lt;ul <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;categories&quot;</span>&gt;
+</span><span class='line'>    <span class="o">{</span>% category_list %<span class="o">}</span>
+</span><span class='line'>  &lt;/ul&gt;
+</span><span class='line'>&lt;/section&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>导航栏设置</h3>
+
+<p>octopress/source/_includes/custom/navigation.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;ul <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;main-navigation&quot;</span>&gt;
+</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/&quot;</span>&gt;首页&lt;/a&gt;&lt;/li&gt;
+</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/blog/archives&quot;</span>&gt;归档&lt;/a&gt;&lt;/li&gt;
+</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/huangli&quot;</span>&gt;程序员老黄历&lt;/a&gt;&lt;/li&gt;
+</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/about&quot;</span>&gt;关于&lt;/a&gt;&lt;/li&gt;
+</span><span class='line'>&lt;/ul&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用命令rake new_page[&lsquo;about&rsquo;]创建一个页面，页面路径为source/about/index.markdown;</p>
+
+<h3>设置网站的description和keywords</h3>
+
+<p>在网页的head部分设置name为description和keywords的meta元素可以让网页更容易被搜索引擎搜索到，下面说说怎样在Octopress中设置首页和每篇博文的description和keywords</p>
+
+<p>vim octopress/source/index.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>layout: default
+</span><span class='line'>description: <span class="s2">&quot;世界唯一的真理&quot;</span>
+</span><span class='line'>keywords: Asp.Net,C#
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>---
+</span><span class='line'>layout: post
+</span><span class='line'>title: <span class="s2">&quot;这个是test&quot;</span>
+</span><span class='line'>date: 2013-10-02 06:11
+</span><span class='line'>comments: <span class="nb">true</span>                          <span class="c">#是否允许评论</span>
+</span><span class='line'>categories: <span class="nb">test</span>                          <span class="c">#文章分类</span>
+</span><span class='line'>description: <span class="s2">&quot;test&quot;</span>                         <span class="c">#页面描述</span>
+</span><span class='line'>keywords: <span class="nb">test</span>
+</span><span class='line'>---
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress install]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/11/octopress-install/"/>
+    <updated>2013-11-11T00:46:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/11/octopress-install</id>
+    <content type="html"><![CDATA[<h1>信息版本</h1>
+
+<p>CentOS release 6.2<br/>
+Ruby 1.9.3<br/>
+Nginx 1.4.3</p>
+
+<h3>安装需要的包</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install -y git gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison iconv-devel
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装ruby</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -L https://get.rvm.io | bash -s stable --ruby
+</span><span class='line'><span class="c">#curl -L 表示允许跳转</span>
+</span><span class='line'><span class="c">#bash -s 模拟标准输入</span>
+</span><span class='line'><span class="c">#安装位置/usr/local/rvm/scripts/rvm</span>
+</span><span class='line'>
+</span><span class='line'>vim /etc/bashrc <span class="c">#增加环境变量</span>
+</span><span class='line'><span class="nb">source</span> /usr/local/rvm/scripts/rvm
+</span><span class='line'><span class="nb">source</span> /usr/local/rvm/scripts/completion
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<h4>测试</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">type </span>rvm | head -n1
+</span><span class='line'>rvm is a <span class="k">function</span> <span class="c">#表示成功</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>更换源为淘宝源</h4>
+
+<p>如果服务器在国外则不需要更换源了,但是在国内的话还是换taobao的吧，不然速度实在慢的惨不忍睹,⊙﹏⊙b</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sed -i.backup -e <span class="s1">&#39;s/ftp\.ruby-lang\.org\/pub\/ruby/ruby\.taobao\.org\/mirrors\/ruby/g&#39;</span> /usr/local/rvm/config/db
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>使用rvm安装ruby</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rvm list known <span class="c">#查看源里面有那写软件</span>
+</span><span class='line'>rvm install 1.9.3 <span class="c">#安装1.9.3的ruby</span>
+</span><span class='line'>rvm use 1.9.3 --default <span class="c">#使用1.9.3的ruby</span>
+</span><span class='line'><span class="c">#rvm 其他命令</span>
+</span><span class='line'>rvm list
+</span><span class='line'><span class="c">#查看安装的rubies</span>
+</span><span class='line'>
+</span><span class='line'>rvm <span class="o">[</span>-v<span class="o">]</span> <span class="o">[</span>--version<span class="o">]</span>
+</span><span class='line'><span class="c">#查看版本</span>
+</span><span class='line'>
+</span><span class='line'>rvm remove &lt;ruby_version&gt;
+</span><span class='line'><span class="c">#卸载一个版本</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装Octopress</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone git://github.com/imathis/octopress.git octopress
+</span><span class='line'><span class="nb">cd </span>octopress
+</span><span class='line'><span class="c">#如果使用的是RVM，这一步会被讯网你是否相信.rvmrc，选择yes</span>
+</span><span class='line'>gem install bundler
+</span><span class='line'>bundle install
+</span><span class='line'><span class="c">#安装依赖</span>
+</span><span class='line'>
+</span><span class='line'>rake install<span class="o">[</span><span class="s1">&#39;Theme Name&#39;</span><span class="o">]</span>
+</span><span class='line'><span class="c">#安装主题，无参数则是默认主题</span>
+</span><span class='line'><span class="c">#如果要更换主题，先看完主题的文章后再更换</span>
+</span><span class='line'>
+</span><span class='line'>octopress/_config.yml <span class="c">#octopress配置文件</span>
+</span><span class='line'><span class="c">#可以在octopress/_config.yml修改博客设置，诸如博客标题，插件，以及url格式等</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#_config.yml基本配置</span>
+</span><span class='line'>vim /var/www/html/blog/octopress/_config.yml
+</span><span class='line'>url: http://shleon.github.io     <span class="c">#网站url</span>
+</span><span class='line'>title: 唯一的真理                         <span class="c">#标签</span>
+</span><span class='line'>subtitle: True or False                    <span class="c">#副标题</span>
+</span><span class='line'>author: leon                                   <span class="c">#作者</span>
+</span><span class='line'>simple_search: http://google.com/search     <span class="c">#搜索引擎</span>
+</span><span class='line'>description:                              <span class="c">#网站的描述，出现在HTML页面中的 meta 中的 description</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>测试</h4>
+
+<p>rake preview      #在本机4000端口生成访问内容</p>
+
+<h4>rake基本命令</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rake -T
+</span><span class='line'>
+</span><span class='line'>rake clean                 <span class="c"># Clean out caches: .pygments-cache, .gist-cache, .sass-cache</span>
+</span><span class='line'>rake copydot<span class="o">[</span><span class="nb">source</span>,dest<span class="o">]</span>  <span class="c"># copy dot files for deployment</span>
+</span><span class='line'>rake deploy                <span class="c"># Default deploy task</span>
+</span><span class='line'>rake gen_deploy            <span class="c"># Generate website and deploy</span>
+</span><span class='line'>rake generate              <span class="c"># Generate jekyll site</span>
+</span><span class='line'>rake install<span class="o">[</span>theme<span class="o">]</span>        <span class="c"># Initial setup for Octopress: copies the default theme into the path of Jekyll&#39;s generator.</span>
+</span><span class='line'>rake integrate             <span class="c"># Move all stashed posts back into the posts directory, ready for site generation.</span>
+</span><span class='line'>rake isolate<span class="o">[</span>filename<span class="o">]</span>     <span class="c"># Move all other posts than the one currently being worked on to a temporary stash location (stash) so regener...</span>
+</span><span class='line'>rake list                  <span class="c"># list tasks</span>
+</span><span class='line'>rake new_page<span class="o">[</span>filename<span class="o">]</span>    <span class="c"># Create a new page in source/(filename)/index.markdown</span>
+</span><span class='line'>rake new_post<span class="o">[</span>title<span class="o">]</span>       <span class="c"># Begin a new post in source/_posts</span>
+</span><span class='line'>rake preview               <span class="c"># preview the site in a web browser</span>
+</span><span class='line'>rake push                  <span class="c"># deploy public directory to github pages</span>
+</span><span class='line'>rake rsync                 <span class="c"># Deploy website via rsync</span>
+</span><span class='line'>rake set_root_dir<span class="o">[</span>dir<span class="o">]</span>     <span class="c"># Update configurations to support publishing to root or sub directory</span>
+</span><span class='line'>rake setup_github_pages    <span class="c"># Set up _deploy folder and deploy branch for Github Pages deployment</span>
+</span><span class='line'>rake update_source<span class="o">[</span>theme<span class="o">]</span>  <span class="c"># Move source to source.old, install source theme updates, replace source/_includes/navigation.html with sourc...</span>
+</span><span class='line'>rake update_style<span class="o">[</span>theme<span class="o">]</span>   <span class="c"># Move sass to sass.old, install sass theme updates, replace sass/custom with sass.old/custom</span>
+</span><span class='line'>rake watch                 <span class="c"># Watch the site and regenerate when it changes</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[FastDFS install]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/03/FastDFS-install/"/>
+    <updated>2013-11-03T16:11:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/03/FastDFS-install</id>
+    <content type="html"><![CDATA[<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本     </span>
+</span><span class='line'>Centos 2.6.32-358.el6.x86_64
+</span><span class='line'>FastDFS 4.06
+</span><span class='line'>Nginx 1.4.3
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#官网下载地址</span>
+</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
+</span><span class='line'>
+</span><span class='line'><span class="c">#测试服务器</span>
+</span><span class='line'>test1 172.16.3.212     <span class="o">(</span>tracker,storage<span class="o">)</span>
+</span><span class='line'>test2 172.16.3.213     <span class="o">(</span>tracker,storage<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装FastDFS</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#安装需要的包</span>
+</span><span class='line'>yum groupinstall -y <span class="s2">&quot;Development Tools&quot;</span>
+</span><span class='line'>yum install -y libevent-devel pcre-devel zlib-devel
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h4>安装FastDFS服务</h4>
+
+<h4>由于4.06版本里面默认将内置的web server取消，即直接执行make</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd </span>FastDFS
+</span><span class='line'>./make.sh <span class="o">&amp;&amp;</span> ./make.sh install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>make.sh 安装前可修改的一些参数<br/>
+WITH_LINUX_SERVICE=1     #注释取消表示使用内置web server<br/>
+TARGET_PREFIX=/usr/local    #安装的目录<br/>
+TARGET_CONF_PATH=/etc/fdfs #配置文件目录</p>
+
+<h4>DFS配置文件位置</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/etc/fdfs/
+</span><span class='line'>├── client.conf     <span class="c">#client连接的配置文件  </span>
+</span><span class='line'>├── http.conf       <span class="c">#tracker,storage内置web server的配置文件  </span>
+</span><span class='line'>├── mime.types   <span class="c">#文件类型配置文件  </span>
+</span><span class='line'>├── storage.conf  <span class="c">#storage配置文件  </span>
+</span><span class='line'>└── tracker.conf   <span class="c">#tracker配置文件  </span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>放置启动tracker和storage的脚本</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/srv/FastDFS/init.d/
+</span><span class='line'>├── fdfs_storaged
+</span><span class='line'>└── fdfs_trackerd
+</span><span class='line'>cp -rp /srv/FastDFS/init.d/* /etc/init.d/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>tracker配置</h4>
+
+<h5>创建base_path目录（会生成data,logs）</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /etc/fdfs/tracker.conf
+</span><span class='line'><span class="nv">base_path</span><span class="o">=</span>/etc/fdfs/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>storage_ids.conf配置解释</h4>
+
+<h6>/etc/fdfs/tracker.conf这个参数打开storage_ids_filename = storage_ids.conf ，默认打开4.0后的新功能</h6>
+
+<h5>storage_ids.conf配置如下</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># &lt;id&gt;  &lt;group_name&gt;  &lt;ip_or_hostname&gt;</span>
+</span><span class='line'>100001   g1  172.16.3.212
+</span><span class='line'>100002   g1  172.16.3.213
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>启动tracker</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/etc/init.d/fdfs_trackerd start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>检查是否开启</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>root@test1 fdfs<span class="o">]</span><span class="c"># netstat -lntp |grep fdfs</span>
+</span><span class='line'>tcp        0      0 0.0.0.0:22122               0.0.0.0:*                   LISTEN      5236/fdfs_trackerd
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>storage配置</h4>
+
+<h5>安装nginx取代内置web server</h5>
+
+<h5>下载nginx,fastdfs-nginx-module</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget https://fastdfs.googlecode.com/files/fastdfs-nginx-module_v1.15.tar.gz
+</span><span class='line'>wget http://nginx.org/download/nginx-1.4.3.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">cd </span>nginx-1.4.3
+</span><span class='line'>./configure --prefix<span class="o">=</span>/etc/nginx --sbin-path<span class="o">=</span>/usr/sbin/nginx --conf-path<span class="o">=</span>/etc/nginx/nginx.conf --error-log-path<span class="o">=</span>/var/log/nginx/error.log --http-log-path<span class="o">=</span>/var/log/nginx/access.log --pid-path<span class="o">=</span>/var/run/nginx.pid --lock-path<span class="o">=</span>/var/run/nginx.lock --http-client-body-temp-path<span class="o">=</span>/var/cache/nginx/client_temp --http-proxy-temp-path<span class="o">=</span>/var/cache/nginx/proxy_temp --http-fastcgi-temp-path<span class="o">=</span>/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path<span class="o">=</span>/var/cache/nginx/uwsgi_temp --http-scgi-temp-path<span class="o">=</span>/var/cache/nginx/scgi_temp --user<span class="o">=</span>nginx --group<span class="o">=</span>nginx --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-mail --with-mail_ssl_module --with-file-aio --with-ipv6 --with-cc-opt<span class="o">=</span><span class="s1">&#39;-O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector --param=ssp-buffer-size=4 -m64 -mtune=generic&#39;</span> --add-module<span class="o">=</span>/srv/fastdfs-nginx-module/src/
+</span><span class='line'>
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>/srv/fastdfs-nginx-module/src/config 中也可以更改读取mod_fastdfs.conf位置然后再编译</h5>
+
+<h5>storage配置修改</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /etc/fdfs/storage.conf
+</span><span class='line'><span class="nv">base_path</span><span class="o">=</span>/etc/fdfs/             <span class="c">#放置data和log的位置</span>
+</span><span class='line'><span class="nv">store_path0</span><span class="o">=</span>/data/images01/     <span class="c">#放置数据的位置，如果新增盘，可以增加store_path1</span>
+</span><span class='line'><span class="nv">tracker_server</span><span class="o">=</span>172.16.3.212:22122   <span class="c">#告知tracker server 的位置</span>
+</span><span class='line'><span class="nv">tracker_server</span><span class="o">=</span>172.16.3.213:22122   <span class="c">#有多个tracker就写多行</span>
+</span><span class='line'><span class="nv">group_name</span><span class="o">=</span>g1 <span class="c">#此台storage1所属的服务器组名，同组内storage数据完全相同</span>
+</span><span class='line'>mkdir -p /data/images01/ <span class="c">#创建存储数据的目录</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>启动storage</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>/etc/init.d/fdfs_storaged start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>下面会生成许多2级目录就此结束</h5>
+
+<h4>查看是否启动</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">[</span>root@test1 /<span class="o">]</span><span class="c"># netstat -lntp|grep fdfs</span>
+</span><span class='line'>tcp        0      0 0.0.0.0:23000               0.0.0.0:*                   LISTEN      8209/fdfs_storaged
+</span><span class='line'>tcp        0      0 0.0.0.0:22122               0.0.0.0:*                   LISTEN      5236/fdfs_trackerd
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>mod_fastdfs.conf配置</h4>
+
+<h5>nginx使用了mod_fastdfs模块，这个模块配置直接影响nginx使用</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cp -rp /srv/fastdfs-nginx-module/src/mod_fastdfs.conf /etc/fdfs/
+</span><span class='line'>vim /etc/fdfs/mod_fastdfs.conf
+</span><span class='line'><span class="nv">base_path</span><span class="o">=</span>/etc/fdfs/     <span class="c">#放置storage日志的位置</span>
+</span><span class='line'><span class="nv">store_path0</span><span class="o">=</span>/data/images01/ <span class="c">#放置storage数据的位置</span>
+</span><span class='line'><span class="nv">tracker_server</span><span class="o">=</span>172.16.3.212:22122
+</span><span class='line'><span class="nv">tracker_server</span><span class="o">=</span>172.16.3.213:22122
+</span><span class='line'><span class="nv">group_name</span><span class="o">=</span>g1 <span class="c">#此台storage1所属的服务器组名</span>
+</span><span class='line'><span class="nv">url_have_group_name</span> <span class="o">=</span> <span class="nb">true</span> <span class="c">#在URL是否中包含group名称(访问路径不带group名,storage只有一个group的情况),为false时，group_count必须为0</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>nginx配置</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>server <span class="o">{</span>
+</span><span class='line'>        listen  80;
+</span><span class='line'>        server_name     172.16.3.212;     <span class="c">#域名自己可以定义</span>
+</span><span class='line'>        access_log      /data1/logs/nginx/fastdfs_access.log gzip;
+</span><span class='line'>        error_log       /data1/logs/nginx/fastdfs_error.log;
+</span><span class='line'>
+</span><span class='line'>        location /g1/M00        <span class="o">{</span>
+</span><span class='line'>                <span class="nb">alias</span> /data/images01/data;
+</span><span class='line'>                ngx_fastdfs_module;
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>172.16.3.213 一样配置</h4>
+
+<h4>测试</h4>
+
+<h5>测试时会调用client.conf</h5>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /etc/fdfs/client.conf
+</span><span class='line'>http.tracker_server_port<span class="o">=</span>80 <span class="c">#访问80端口</span>
+</span><span class='line'><span class="nv">base_path</span><span class="o">=</span>/etc/fdfs/
+</span><span class='line'><span class="nv">tracker_server</span><span class="o">=</span>172.16.3.212:22122
+</span><span class='line'><span class="nv">tracker_server</span><span class="o">=</span>172.16.3.213:22122
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>1.测试是否可以上传文件，并访问</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> <span class="s2">&quot;111&quot;</span> &gt; /tmp/test.txt
+</span><span class='line'>fdfs_test /etc/fdfs/client.conf upload /tmp/test.txt
+</span><span class='line'>http://172.16.3.212/g1/M00/00/00/rBAD1FJw0uyAWXOIAAAAB-kMomQ551.txt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2.测试其中tracker,storage异常退出</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>172.16.3.212
+</span><span class='line'>/etc/init.d/fdfs_storaged  stop
+</span><span class='line'>/etc/init.d/fdfs_trackerd stop
+</span><span class='line'>172.16.3.213 上传文件
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;hahaha&quot;</span> &gt; /tmp/test1.txt
+</span><span class='line'>fdfs_test /etc/fdfs/client.conf upload /tmp/test1.txt
+</span><span class='line'>http://172.16.3.213/g1/M00/00/00/rBAD1FJwzuaAAIXoAAAAB-kMomQ310.txt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>然后在212上面访问看看</h5>
+
+<h5><a href="http://172.16.3.212/g1/M00/00/00/rBAD1FJwzuaAAIXoAAAAB-kMomQ310.txt">http://172.16.3.212/g1/M00/00/00/rBAD1FJwzuaAAIXoAAAAB-kMomQ310.txt</a></h5>
+
+<h5>如果返回同样是hahaha那就表示成功</h5>
+
+<h5>访问正常即可</h5>
+
+<p><img src="http://image01.leonbb.com/fastdfs.png" alt="fastdfs test" /></p>
+
+<hr />
+
+<h2>问题集合</h2>
+
+<ol>
+<li>ERROR &ndash; file: ../common/connection_pool.c, line: 84, connect to 172.16.3.213:22122 fail, errno: 111, error info: Connection refused<br/>
+说明，当时另一边没有搭建就开始测试了，所以没找到tracker 213</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

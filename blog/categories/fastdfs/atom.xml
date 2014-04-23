@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: FastDFS | 唯一的真理]]></title>
+  <link href="http://leon8693.github.io/blog/categories/fastdfs/atom.xml" rel="self"/>
+  <link href="http://leon8693.github.io/"/>
+  <updated>2014-04-23T15:38:59+08:00</updated>
+  <id>http://leon8693.github.io/</id>
+  <author>
+    <name><![CDATA[leon]]></name>
+    <email><![CDATA[bolatuleon@hotmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Fastdfs Nginx Lua GraphicsMagick 实时缩略图]]></title>
+    <link href="http://leon8693.github.io/blog/2013/12/09/fastdfs-plus-nginx-plus-lua-plus-graphicsmagickshi-shi-suo-lue-tu/"/>
+    <updated>2013-12-09T14:50:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/12/09/fastdfs-plus-nginx-plus-lua-plus-graphicsmagickshi-shi-suo-lue-tu</id>
+    <content type="html"><![CDATA[<p>```bash</p>
+
+<h1>信息版本</h1>
+
+<p>Centos 2.6.32-358.el6.x86_64
+FastDFS 4.06
+Nginx 1.4.1</p>
+
+<h1>官网下载地址</h1>
+
+<p><a href="https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz">https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz</a></p>
+
+<p>```</p>
+
+<h3>安装FastDFS</h3>
+
+<p>参考<a href="http://shleon.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
+
+<h3>安装需要的包</h3>
+
+<p><code>
+yum install readline readline-devel perl-ExtUtils-Embed  #lua所需要的包以及后面编译需要的其他模块和库
+yum install libjpeg libjpeg-devel libpng libpng-devel giflib giflib-devel freetype freetype-devel  openjpeg openjpeg-devel #gm需要的图库
+</code></p>
+
+<!-- more -->
+
+
+<h3>下载相关的包并安装</h3>
+
+<p>```</p>
+
+<h3>graphicsmagick install</h3>
+
+<p>wget &ldquo;<a href="http://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/1.3.16/GraphicsMagick-1.3.16.tar.gz/download">http://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/1.3.16/GraphicsMagick-1.3.16.tar.gz/download</a>&rdquo;
+tar xf GraphicsMagick-1.3.16.tar.gz
+./configure &mdash;prefix=/usr/local/GraphicsMagick-1.3.16
+make &amp;&amp; make install</p>
+
+<h3>nginx 安装方式</h3>
+
+<h3>LuaJIT install</h3>
+
+<p>wget &ldquo;<a href="http://luajit.org/download/LuaJIT-2.0.0-beta10.tar.gz">http://luajit.org/download/LuaJIT-2.0.0-beta10.tar.gz</a>&rdquo;
+tar xf LuaJIT-2.0.0-beta10.tar.gz
+cd tar xf LuaJIT-2.0.0-beta10
+make &amp;&amp; make install PREFIX=/usr/local/lj2</p>
+
+<h3>ngx_devel_kit install</h3>
+
+<p>wget &ldquo;<a href="https://github.com/simpl/ngx_devel_kit/zipball/master">https://github.com/simpl/ngx_devel_kit/zipball/master</a>&rdquo;
+unzip master
+ls simpl-ngx_devel_kit-8dd0df5</p>
+
+<h3>lua-nginx-module install</h3>
+
+<p>wget &ldquo;<a href="https://github.com/chaoslawful/lua-nginx-module/tarball/master">https://github.com/chaoslawful/lua-nginx-module/tarball/master</a>&rdquo; -O master-lug-nginx-module.tar.gz
+tar xf master-lug-nginx-module.tar.gz</p>
+
+<h3>echo</h3>
+
+<p>wget &ldquo;<a href="https://github.com/agentzh/echo-nginx-module/zipball/master">https://github.com/agentzh/echo-nginx-module/zipball/master</a>&rdquo; -O echo-nginx-module.zip
+unzip echo-nginx-module.zip</p>
+
+<h3>cache</h3>
+
+<p>wget &ldquo;<a href="http://labs.frickle.com/files/ngx_cache_purge-1.6.tar.gz">http://labs.frickle.com/files/ngx_cache_purge-1.6.tar.gz</a>&rdquo;
+tar xf ngx_cache_purge-1.6.tar.gz</p>
+
+<h3>vim /etc/profile</h3>
+
+<p>export LUAJIT_LIB=/usr/local/lj2/lib
+export LUAJIT_INC=/usr/local/lj2/include/luajit-2.0
+export LD_LIBRARY_PATH=/usr/local/lib/:$LD_LIBRARY_PATH
+export  PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH
+GM_HOME=/usr/local/GraphicsMagick-1.3.16;
+PATH=$GM_HOME/bin:$PATH;
+export PATH
+export GM_HOME
+source /etc/profile
+```</p>
+
+<h3>nginx install</h3>
+
+<p>```</p>
+
+<h1>安装前必须安装好Fastdfs</h1>
+
+<p>./configure &mdash;prefix=/usr/share/nginx &mdash;sbin-path=/usr/sbin/nginx &mdash;conf-path=/etc/nginx/nginx.conf &mdash;error-log-path=/var/log/nginx/error.log &mdash;http-log-path=/var/log/nginx/access.log &mdash;http-client-body-temp-path=/var/lib/nginx/tmp/client_body &mdash;http-proxy-temp-path=/var/lib/nginx/tmp/proxy &mdash;http-fastcgi-temp-path=/var/lib/nginx/tmp/fastcgi &mdash;pid-path=/var/run/nginx.pid &mdash;lock-path=/var/lock/subsys/nginx &mdash;with-http_ssl_module &mdash;with-http_realip_module &mdash;with-http_addition_module &mdash;with-http_sub_module &mdash;with-http_dav_module &mdash;with-http_flv_module &mdash;with-http_gzip_static_module &mdash;with-http_stub_status_module &mdash;with-http_perl_module &mdash;with-mail &mdash;with-mail_ssl_module &mdash;add-module=/srv/fastdfs-nginx-module/src/  &mdash;add-module=/srv/fastdfs/simpl-ngx_devel_kit-8dd0df5/ &mdash;add-module=/srv/fastdfs/ngx_cache_purge-1.6/ &mdash;with-http_perl_module &mdash;add-module=/srv/fastdfs/agentzh-echo-nginx-module-9f811cf/ &mdash;with-ld-opt=-Wl,-rpath,/usr/local/lj2/lib &mdash;add-module=/srv/fastdfs/chaoslawful-lua-nginx-module-d11dda1/</p>
+
+<p>make &amp;&amp; make install
+```</p>
+
+<h3>Nginx 配置</h3>
+
+<h5>这边Fastdfs的配置就不多说了，归档中有</h5>
+
+<p>```
+server {</p>
+
+<pre><code>    listen  80;
+    server_name     www.test.com;
+    access_log      /data1/logs/nginx/test_access.log gzip;
+    error_log       /data1/logs/nginx/test_error.log;
+
+    location /lua1 {
+            default_type 'text/plain';
+            content_by_lua 'ngx.say("hello, lua")';
+    }
+
+
+    location  ~* /g[0-9]/M00/ {
+            ngx_fastdfs_module;
+            set $needCreateImg 0;
+            if ( !-f $request_filename) {
+                    set $needCreateImg "${needCreateImg}1";
+            }
+
+
+            if ($uri ~* "/g[0-9]/M00/(\w+)/(\w+)/([A-Za-z0-9_-]+).(gif|jpg|jpeg|png).(\d+x\d+).(gif|jpg|jpeg|png)") {
+                    set $needCreateImg "${needCreateImg}2";
+                    set $conUri     "/$1/$2/$3.$4.$5.$6";
+            }
+
+            if ($needCreateImg = "012") {
+                    set $image_root "/data/images01/data/";
+                    set $file "$image_root$conUri";
+                            rewrite_by_lua '
+                                    local index = string.find(ngx.var.conUri, "([0-9]+)x([0-9]+)");
+                            local originalUri = string.sub(ngx.var.conUri, 0, index-2);
+                            local area = string.sub(ngx.var.conUri, index);
+                            index = string.find(area, "([.])");
+                            area = string.sub(area, 0, index-1);
+
+                            function table.contains(table, element)
+                                    for _, value in pairs(table) do
+                                            if value == element then
+                                                    return true
+                                                    end
+                                                            end
+                                                            return false
+                                                            end
+
+                                                            local c = "/usr/local/GraphicsMagick-1.3.16/bin/gm convert " .. ngx.var.image_root ..  originalUri  .. " -thumbnail " .. area .. " - ";
+                            local f = assert(io.popen(c, "r"))
+                            local s = assert(f:read("*a"))
+                            f:close()
+                            ngx.say(s)
+                            ';
+                    }
+                    alias /data/images01/data/;
+            }
+    }
+</code></pre>
+
+<p>```</p>
+
+<h3>性能测试</h3>
+
+<p>GraphicsMagick VS Ngx_image_thumb(gd)</p>
+
+<h5>测试图片大小</h5>
+
+<p>大小  名字<br/>
+12M 10M.jpg <br/>
+1.1M    1M.jpg <br/>
+4.5M    5M.jpg</p>
+
+<h5>图片其他信息</h5>
+
+<p><img src="http://image01.leonbb.com/info.png" alt="png_info" /></p>
+
+<h5>测试方式</h5>
+
+<p>Apache ab命令  <br/>
+ab -n200 -c 10 url</p>
+
+<h5>图片url</h5>
+
+<p><a href="http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg">http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg</a> (1.1M)<br/>
+<a href="http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg">http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg</a> (4.5M) <br/>
+<a href="http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg">http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg</a> (12M)</p>
+
+<h5>服务器信息</h5>
+
+<p>DELL R420 <br/>
+Intel Xeon E5-2403*1 @1.80GHz <br/>
+MEM 32G</p>
+
+<h3>Ngx_image_thumb测试</h3>
+
+<p><code>
+ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg!t300x300.jpg'   
+</code>
+CPU load average: 2.35, 0.53, 0.18 <br/>
+MEM 8706M  <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gd1.png" alt="gd1" /></p>
+
+<p><code>
+ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg!t300x300.jpg'   
+</code>
+CPU load average: 3.30, 0.88, 0.35 <br/>
+MEM 8689M  <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gd5.png" alt="gd5" /></p>
+
+<p><code>
+ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg!t300x300.jpg'  
+</code>
+CPU load average: 3.61, 1.21, 0.54 <br/>
+MEM 8743M <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gd10.png" alt="gd10" /></p>
+
+<h3>lua graphicsmagick测试</h3>
+
+<p><code>
+ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoIMqAIippABCLd5b4wbs388.jpg.300x300.jpg'   
+</code>
+CPU load average: 1.54, 0.33, 0.11 <br/>
+MEM 3M  <br/>
+ab详细信息 <br/>
+<img src="http://image01.leonbb.com/gm1.png" alt="gm1" /></p>
+
+<p><code>
+ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBVKoJhuAJtQfAEaYyGoiMsc873.jpg.300x300.jpg'  
+</code>
+CPU load average: 3.66, 0.91, 0.35  <br/>
+MEM 1M  <br/>
+ab 详细信息  <br/>
+<img src="http://image01.leonbb.com/gm5.png" alt="gm5" /></p>
+
+<p><code>
+ab -n200 -c10 'http://192.168.1.100/g1/M00/00/00/CgoDBFKoJl-ALBVOALTeZd_Vsio409.jpg.300x300.jpg'   
+</code>
+CPU load average: 3.76, 1.35, 0.58  <br/>
+MEM 1M  <br/>
+ab 详细信息 <br/>
+<img src="http://image01.leonbb.com/gm10.png" alt="gm10" /></p>
+
+<h3>性能测试总结</h3>
+
+<p>从上面的测试情况来看,lua+graphicsmagick完爆Ngx_image_thumb <br/>
+1.CPU压力相同。 <br/>
+2.MEM Ngx_image_thumb不释放，只有重启nginx后才会释放，而Lua+graphicsmagick使用的时候连接一旦释放内存也会释放。 <br/>
+3.吞吐量以及请求时间,lua+graphicsmagick完爆Ngx_image_thumb</p>
+
+<h3>问题注意</h3>
+
+<p>我在使用graphicsmagick时候发现一台机器是可以对jpeg进行缩略图，一台则不行。<br/>
+通过gm version 查看到原来里面的jpeg功能没有打开，这个需要在编译graphicsmagick前系统就得有libjpeg这个包。<br/>
+```
+Feature Support:
+  Thread Safe              yes
+  Large Files (> 32 bit)   yes
+  Large Memory (> 32 bit)  yes
+  BZIP                     yes
+  DPS                      no
+  FlashPix                 no
+  FreeType                 yes
+  Ghostscript (Library)    no
+  JBIG                     no
+  JPEG-2000                no
+  JPEG                     yes
+  Little CMS               no
+  Loadable Modules         no
+  OpenMP                   yes (200805)
+  PNG                      yes
+  TIFF                     no
+  TRIO                     no
+  UMEM                     no
+  WMF                      no
+  X11                      yes
+  XML                      yes
+  ZLIB                     yes</p>
+
+<p>Host type: x86_64-unknown-linux-gnu</p>
+
+<p>Configured using the command:
+  ./configure  &lsquo;&mdash;prefix=/usr/local/GraphicsMagick-1.3.16/&rsquo; &mdash;enable-ltdl-convenience</p>
+
+<p>Final Build Parameters:
+  CC       = gcc -std=gnu99
+  CFLAGS   = -fopenmp -g -O2 -Wall -pthread
+  CPPFLAGS = -I/usr/include/freetype2 -I/usr/include/libxml2
+  CXX      = g++
+  CXXFLAGS = -pthread
+  LDFLAGS  = -L/usr/lib -L/usr/lib
+  LIBS     = -lfreetype -ljpeg -lpng12 -lXext -lSM -lICE -lX11 -lbz2 -lxml2 -lz -lm -lgomp -lpthread
+```</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fastdfs Nginx ngx_image_thumb 实时图片缩略图]]></title>
+    <link href="http://leon8693.github.io/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu/"/>
+    <updated>2013-12-04T14:40:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu</id>
+    <content type="html"><![CDATA[<p>```bash</p>
+
+<h1>信息版本</h1>
+
+<p>Centos 2.6.32-358.el6.x86_64
+FastDFS 4.06
+Tengine 1.5.2</p>
+
+<h1>官网下载地址</h1>
+
+<p><a href="https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz">https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz</a></p>
+
+<h1>oopul写的nginx模块ngx_image_thumb</h1>
+
+<p>wget <a href="https://github.com/3078825/nginx-image/archive/master.zip">https://github.com/3078825/nginx-image/archive/master.zip</a></p>
+
+<h1>Tengine 1.5.2 下载</h1>
+
+<p>wget <a href="http://tengine.taobao.org/download/tengine-1.5.2.tar.gz">http://tengine.taobao.org/download/tengine-1.5.2.tar.gz</a>
+```</p>
+
+<h3>安装FastDFS</h3>
+
+<p>参考<a href="http://shleon.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
+
+<h3>安装需要的包</h3>
+
+<p><code>
+yum install gd-devel pcre-devel libcurl-devel gcc automake autoconf m4
+</code></p>
+
+<h3>安装Tengine并加载ngx_image_thumb模块</h3>
+
+<p><code>
+tar xf tengine-1.5.2.tar.gz
+cd tengine-1.5.2
+./configure --add-module=/srv/fastdfs-nginx-module/src/ --add-module=/srv/ngx_image_thumb-master/
+make &amp;&amp; make install
+</code></p>
+
+<!-- more -->
+
+
+<h3>Nginx配置</h3>
+
+<p>```
+server {</p>
+
+<pre><code>    listen  80;
+    server_name     172.16.3.213;
+    access_log      /data1/logs/nginx/fastdfs_access.log gzip;
+    error_log       /data1/logs/nginx/fastdfs_error.log;
+
+    location /g1/M00        {
+            alias /data/images01/data;
+            ngx_fastdfs_module;
+            image on;
+            image_output on;
+    }
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>测试</h3>
+
+<p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a> <br/>
+<img src="http://image01.leonbb.com/huonan.jpg" alt="huonan test" /></p>
+
+<p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg</a> <br/>
+<img src="http://image01.leonbb.com/huonan2.jpg" alt="huonan2 test" /></p>
+
+<h3>参数说明</h3>
+
+<p>```
+image on/off 是否开启缩略图功能,默认关闭</p>
+
+<p>image_backend on/off 是否开启镜像服务，当开启该功能时，请求目录不存在的图片（判断原图），将自动从镜像服务器地址下载原图</p>
+
+<p>image_backend_server 镜像服务器地址</p>
+
+<p>image_output on/off 是否不生成图片而直接处理后输出 默认off</p>
+
+<p>image_jpeg_quality 75 生成JPEG图片的质量 默认值75</p>
+
+<p>image_water on/off 是否开启水印功能</p>
+
+<p>image_water_type 0/1 水印类型 0:图片水印 1:文字水印</p>
+
+<p>image_water_min 300 300 图片宽度 300 高度 300 的情况才添加水印</p>
+
+<p>image_water_pos 0-9 水印位置 默认值9 0为随机位置,1为顶端居左,2为顶端居中,3为顶端居右,4为中部居左,5为中部居中,6为中部居右,7为底端居左,8为底端居中,9为底端居右</p>
+
+<p>image_water_file 水印文件(jpg/png/gif),绝对路径或者相对路径的水印图片</p>
+
+<p>image_water_transparent 水印透明度,默认20</p>
+
+<p>image_water_text 水印文字 &ldquo;Power By Vampire&rdquo;</p>
+
+<p>image_water_font_size 水印大小 默认 5</p>
+
+<p>image_water_font 文字水印字体文件路径</p>
+
+<p>image_water_color 水印文字颜色,默认 #000000
+```</p>
+
+<h3>调用说明</h3>
+
+<h6>这里假设你的nginx 访问地址为<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a></h6>
+
+<h6>通过访问<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!t300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!t300x300.jpg</a></h6>
+
+<h6>其中t是生成图片缩略图的参数,300是生成缩略图的宽度,300是生成缩略图的高度</h6>
+
+<h6>可以生成四种不同类型的缩略图</h6>
+
+<h6>支持jpeg/png/gif(Gif生成后变成静态图片)</h6>
+
+<h6>C 参数按请求宽高比例从图片高度 10% 处开始截取图片，然后缩放/放大到指定尺寸（ 图片缩略图大小等于请求的宽高 ）</h6>
+
+<h6>M 参数按请求宽高比例居中截图图片，然后缩放/放大到指定尺寸（ 图片缩略图大小等于请求的宽高 ）</h6>
+
+<h6>T 参数按请求宽高比例按比例缩放/放大到指定尺寸（ 图片缩略图大小可能小于请求的宽高 )</h6>
+
+<h6>W 参数按请求宽高比例缩放/放大到指定尺寸，空白处填充白色背景颜色（ 图片缩略图大小等于请求的宽高 ）</h6>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[FastDFS install]]></title>
+    <link href="http://leon8693.github.io/blog/2013/11/03/FastDFS-install/"/>
+    <updated>2013-11-03T16:11:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2013/11/03/FastDFS-install</id>
+    <content type="html"><![CDATA[<p>```bash</p>
+
+<h1>信息版本</h1>
+
+<p>Centos 2.6.32-358.el6.x86_64
+FastDFS 4.06
+Nginx 1.4.3</p>
+
+<h1>官网下载地址</h1>
+
+<p><a href="https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz">https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz</a></p>
+
+<h1>测试服务器</h1>
+
+<p>test1 172.16.3.212     (tracker,storage)
+test2 172.16.3.213     (tracker,storage)
+```</p>
+
+<h3>安装FastDFS</h3>
+
+<p>```bash</p>
+
+<h1>安装需要的包</h1>
+
+<p>yum groupinstall -y &ldquo;Development Tools&rdquo;
+yum install -y libevent-devel pcre-devel zlib-devel
+```</p>
+
+<!-- more -->
+
+
+<h4>安装FastDFS服务</h4>
+
+<h4>由于4.06版本里面默认将内置的web server取消，即直接执行make</h4>
+
+<p><code>
+cd FastDFS
+./make.sh &amp;&amp; ./make.sh install
+</code></p>
+
+<p>make.sh 安装前可修改的一些参数<br/>
+WITH_LINUX_SERVICE=1     #注释取消表示使用内置web server<br/>
+TARGET_PREFIX=/usr/local    #安装的目录<br/>
+TARGET_CONF_PATH=/etc/fdfs #配置文件目录</p>
+
+<h4>DFS配置文件位置</h4>
+
+<p><code>bash
+/etc/fdfs/  
+├── client.conf     #client连接的配置文件  
+├── http.conf       #tracker,storage内置web server的配置文件  
+├── mime.types   #文件类型配置文件  
+├── storage.conf  #storage配置文件  
+└── tracker.conf   #tracker配置文件  
+</code></p>
+
+<h4>放置启动tracker和storage的脚本</h4>
+
+<p><code>
+/srv/FastDFS/init.d/
+├── fdfs_storaged
+└── fdfs_trackerd
+cp -rp /srv/FastDFS/init.d/* /etc/init.d/
+</code></p>
+
+<h4>tracker配置</h4>
+
+<h5>创建base_path目录（会生成data,logs）</h5>
+
+<p><code>
+vim /etc/fdfs/tracker.conf
+base_path=/etc/fdfs/
+</code></p>
+
+<h4>storage_ids.conf配置解释</h4>
+
+<h6>/etc/fdfs/tracker.conf这个参数打开storage_ids_filename = storage_ids.conf ，默认打开4.0后的新功能</h6>
+
+<h5>storage_ids.conf配置如下</h5>
+
+<p>```</p>
+
+<h1><id>  &lt;group_name>  &lt;ip_or_hostname></h1>
+
+<p>100001   g1  172.16.3.212
+100002   g1  172.16.3.213
+```</p>
+
+<h4>启动tracker</h4>
+
+<p><code>
+/etc/init.d/fdfs_trackerd start
+</code></p>
+
+<h4>检查是否开启</h4>
+
+<p><code>
+[root@test1 fdfs]# netstat -lntp |grep fdfs
+tcp        0      0 0.0.0.0:22122               0.0.0.0:*                   LISTEN      5236/fdfs_trackerd
+</code></p>
+
+<h4>storage配置</h4>
+
+<h5>安装nginx取代内置web server</h5>
+
+<h5>下载nginx,fastdfs-nginx-module</h5>
+
+<p><code>
+wget https://fastdfs.googlecode.com/files/fastdfs-nginx-module_v1.15.tar.gz
+wget http://nginx.org/download/nginx-1.4.3.tar.gz
+</code>
+```
+cd nginx-1.4.3
+./configure &mdash;prefix=/etc/nginx &mdash;sbin-path=/usr/sbin/nginx &mdash;conf-path=/etc/nginx/nginx.conf &mdash;error-log-path=/var/log/nginx/error.log &mdash;http-log-path=/var/log/nginx/access.log &mdash;pid-path=/var/run/nginx.pid &mdash;lock-path=/var/run/nginx.lock &mdash;http-client-body-temp-path=/var/cache/nginx/client_temp &mdash;http-proxy-temp-path=/var/cache/nginx/proxy_temp &mdash;http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp &mdash;http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp &mdash;http-scgi-temp-path=/var/cache/nginx/scgi_temp &mdash;user=nginx &mdash;group=nginx &mdash;with-http_ssl_module &mdash;with-http_realip_module &mdash;with-http_addition_module &mdash;with-http_sub_module &mdash;with-http_dav_module &mdash;with-http_flv_module &mdash;with-http_mp4_module &mdash;with-http_gunzip_module &mdash;with-http_gzip_static_module &mdash;with-http_random_index_module &mdash;with-http_secure_link_module &mdash;with-http_stub_status_module &mdash;with-mail &mdash;with-mail_ssl_module &mdash;with-file-aio &mdash;with-ipv6 &mdash;with-cc-opt=&lsquo;-O2 -g -pipe -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector &mdash;param=ssp-buffer-size=4 -m64 -mtune=generic&rsquo; &mdash;add-module=/srv/fastdfs-nginx-module/src/</p>
+
+<p>make &amp;&amp; make install
+```</p>
+
+<h5>/srv/fastdfs-nginx-module/src/config 中也可以更改读取mod_fastdfs.conf位置然后再编译</h5>
+
+<h5>storage配置修改</h5>
+
+<p><code>
+vim /etc/fdfs/storage.conf
+base_path=/etc/fdfs/             #放置data和log的位置
+store_path0=/data/images01/     #放置数据的位置，如果新增盘，可以增加store_path1
+tracker_server=172.16.3.212:22122   #告知tracker server 的位置
+tracker_server=172.16.3.213:22122   #有多个tracker就写多行
+group_name=g1 #此台storage1所属的服务器组名，同组内storage数据完全相同
+mkdir -p /data/images01/ #创建存储数据的目录
+</code></p>
+
+<h4>启动storage</h4>
+
+<p><code>
+/etc/init.d/fdfs_storaged start
+</code></p>
+
+<h5>下面会生成许多2级目录就此结束</h5>
+
+<h4>查看是否启动</h4>
+
+<p><code>
+[root@test1 /]# netstat -lntp|grep fdfs
+tcp        0      0 0.0.0.0:23000               0.0.0.0:*                   LISTEN      8209/fdfs_storaged
+tcp        0      0 0.0.0.0:22122               0.0.0.0:*                   LISTEN      5236/fdfs_trackerd
+</code></p>
+
+<h4>mod_fastdfs.conf配置</h4>
+
+<h5>nginx使用了mod_fastdfs模块，这个模块配置直接影响nginx使用</h5>
+
+<p><code>
+cp -rp /srv/fastdfs-nginx-module/src/mod_fastdfs.conf /etc/fdfs/
+vim /etc/fdfs/mod_fastdfs.conf
+base_path=/etc/fdfs/     #放置storage日志的位置
+store_path0=/data/images01/ #放置storage数据的位置
+tracker_server=172.16.3.212:22122
+tracker_server=172.16.3.213:22122
+group_name=g1 #此台storage1所属的服务器组名
+url_have_group_name = true #在URL是否中包含group名称(访问路径不带group名,storage只有一个group的情况),为false时，group_count必须为0
+</code></p>
+
+<h4>nginx配置</h4>
+
+<p>```bash
+server {</p>
+
+<pre><code>    listen  80;
+    server_name     172.16.3.212;     #域名自己可以定义
+    access_log      /data1/logs/nginx/fastdfs_access.log gzip;
+    error_log       /data1/logs/nginx/fastdfs_error.log;
+
+    location /g1/M00        {
+            alias /data/images01/data;
+            ngx_fastdfs_module;
+    }
+</code></pre>
+
+<p>}
+```</p>
+
+<h4>172.16.3.213 一样配置</h4>
+
+<h4>测试</h4>
+
+<h5>测试时会调用client.conf</h5>
+
+<p><code>
+vim /etc/fdfs/client.conf
+http.tracker_server_port=80 #访问80端口
+base_path=/etc/fdfs/
+tracker_server=172.16.3.212:22122
+tracker_server=172.16.3.213:22122
+</code></p>
+
+<p>1.测试是否可以上传文件，并访问
+<code>
+echo "111" &gt; /tmp/test.txt
+fdfs_test /etc/fdfs/client.conf upload /tmp/test.txt
+http://172.16.3.212/g1/M00/00/00/rBAD1FJw0uyAWXOIAAAAB-kMomQ551.txt
+</code></p>
+
+<p>2.测试其中tracker,storage异常退出
+<code>
+172.16.3.212
+/etc/init.d/fdfs_storaged  stop
+/etc/init.d/fdfs_trackerd stop
+172.16.3.213 上传文件
+echo "hahaha" &gt; /tmp/test1.txt
+fdfs_test /etc/fdfs/client.conf upload /tmp/test1.txt
+http://172.16.3.213/g1/M00/00/00/rBAD1FJwzuaAAIXoAAAAB-kMomQ310.txt
+</code></p>
+
+<h5>然后在212上面访问看看</h5>
+
+<h5><a href="http://172.16.3.212/g1/M00/00/00/rBAD1FJwzuaAAIXoAAAAB-kMomQ310.txt">http://172.16.3.212/g1/M00/00/00/rBAD1FJwzuaAAIXoAAAAB-kMomQ310.txt</a></h5>
+
+<h5>如果返回同样是hahaha那就表示成功</h5>
+
+<h5>访问正常即可</h5>
+
+<p><img src="http://image01.leonbb.com/fastdfs.png" alt="fastdfs test" /></p>
+
+<hr />
+
+<h2>问题集合</h2>
+
+<ol>
+<li>ERROR &ndash; file: ../common/connection_pool.c, line: 84, connect to 172.16.3.213:22122 fail, errno: 111, error info: Connection refused<br/>
+说明，当时另一边没有搭建就开始测试了，所以没找到tracker 213</li>
+</ol>
+
+]]></content>
+  </entry>
+  
+</feed>

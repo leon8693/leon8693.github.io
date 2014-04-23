@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Octopress新浪微博侧边栏 - 唯一的真理</title>
+  <meta name="author" content="leon">
+
+  
+  <meta name="description" content="Octopress新浪微博侧边栏">
+  <meta name="keywords" content="Octopress,新浪微博,侧边栏">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="唯一的真理" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-45741665-1', 'leonbb.com');
+  ga('send', 'pageview');
+  </script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-45741665-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">唯一的真理</a></h1>
+  
+    <h2>True or False</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:leon8693.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+  <li><a href="/huangli">程序员老黄历</a></li>
+  <li><a href="/about">关于</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Octopress新浪微博侧边栏</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-13T15:26:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h3>增加新浪微博侧边栏</h3>
+
+<h4>先通过微博秀</h4>
+
+<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
+找到自己的代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;iframe
+</span><span class='line'><span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
+</span><span class='line'><span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
+</span><span class='line'> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
+</span><span class='line'> <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
+</span><span class='line'><span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
+</span><span class='line'><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://widget.weibo.com/weiboshow/index.php?language=&amp;width=0&amp;height=550&amp;fansRow=2&amp;ptype=1&amp;speed=0&amp;skin=1&amp;isTitle=1&amp;noborder=1&amp;isWeibo=1&amp;isFans=1&amp;uid=xxxxxxxx&amp;verifier=xxxxxxxx&quot;</span>&gt;
+</span><span class='line'>&lt;/iframe&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h4>将上面的代码转换成HTML</h4>
+
+<p>octopress/source/_includes/asides/weibo.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">{</span>% <span class="k">if </span>site.weibo_uid %<span class="o">}</span>
+</span><span class='line'>&lt;section&gt;
+</span><span class='line'>  &lt;h1&gt;新浪微博&lt;/h1&gt;
+</span><span class='line'>  &lt;ul <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;weibo&quot;</span>&gt;
+</span><span class='line'>    &lt;li&gt;
+</span><span class='line'>      &lt;iframe
+</span><span class='line'>        <span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
+</span><span class='line'>        <span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
+</span><span class='line'>        <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
+</span><span class='line'>        <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
+</span><span class='line'>        <span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
+</span><span class='line'>        <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;&quot;</span>http://widget.weibo.com/weiboshow/index.php?width<span class="o">=</span>0&amp;height<span class="o">=</span>550&amp;ptype<span class="o">={</span>% <span class="k">if </span>site.weibo_pic %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;speed<span class="o">=</span>0&amp;skin<span class="o">=</span>&amp;isTitle<span class="o">=</span>0&amp;noborder<span class="o">=</span>1&amp;isWeibo<span class="o">={</span>% <span class="k">if </span>site.weibo_show %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;isFans<span class="o">=</span>&amp;uid<span class="o">=</span>&amp;verifier<span class="o">=</span><span class="err">&quot;</span>&gt;
+</span><span class='line'>      &lt;/iframe&gt;
+</span><span class='line'>    &lt;/li&gt;
+</span><span class='line'>  &lt;/ul&gt;
+</span><span class='line'>&lt;/section&gt;
+</span><span class='line'><span class="o">{</span>% endif %<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>配置文件中增加参数</h4>
+
+<p>octopress/source/_config.yml</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html<span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>weibo_uid: xxxx     <span class="c">#微博中的uid，从微博秀中获得</span>
+</span><span class='line'>weibo_verifier: xxxx     <span class="c">#微博中的verifier 从微博秀中获得</span>
+</span><span class='line'>weibo_fansline: 1     <span class="c">#显示粉丝的数量，1行</span>
+</span><span class='line'>weibo_show: <span class="nb">true</span>     <span class="c">#是否显示内容</span>
+</span><span class='line'>weibo_pic: <span class="nb">true</span>         <span class="c">#是否显示图片</span>
+</span><span class='line'>weibo_skin: 10          <span class="c">#使用哪种风格的10为序号10的风格</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">leon</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-13T15:26:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>Octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  
+  
+  
+     <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style_32x32">
+	<a class="jiathis_button_qzone"></a>
+	<a class="jiathis_button_tsina"></a>
+	<a class="jiathis_button_tqq"></a>
+	<a class="jiathis_button_weixin"></a>
+	<a class="jiathis_button_renren"></a>
+	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+
+<!-- UY BEGIN -->
+<div id="uyan_frame"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1863487"></script>
+<!-- UY END -->
+
+
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/13/qq-404/" title="Previous Post: Octopress 404公益页面">&laquo; Octopress 404公益页面</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/11/13/octopressfang-ke-di-tu/" title="Next Post: Octopress访客地图">Octopress访客地图 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>文章分类</h1>
+  <ul id="categories">
+    <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (1)</a></li>
+
+  </ul>
+</section>
+
+<section>
+  <h1>新浪微博</h1>
+  <ul id="weibo">
+    <li>
+      <iframe
+        width="100%"
+        height="550"
+        class="share_self"
+        frameborder="0"
+        scrolling="no"
+        src="http://widget.weibo.com/weiboshow/index.php?width=0&height=550&ptype=1&speed=0&skin=&isTitle=0&noborder=1&isWeibo=1&isFans=&uid=1961590125&verifier=9b2b2fd0&dpc=1">
+      </iframe>
+    </li>
+  </ul>
+</section>
+
+
+
+<section>
+  <h1>访客地图</h1>
+	<script type="text/javascript" src="http://ja.revolvermaps.com/2/1.js?i=0dyafjqyk1a&amp;s=220&amp;m=0&amp;v=true&amp;r=false&amp;b=000000&amp;n=false&amp;c=ff0000" async="async"></script>
+</section>
+<section>
+<h1>评论热榜</h1>
+<div id="uyan_hotcmt_unit"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1863487"></script> <!-- 如果已经过加载此行JS，即可不用重复加载 -->
+</section>
+<section>
+<h1>最新评论</h1>
+<div id="uyan_newcmt_unit"></div>
+<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1863487"></script> <!-- 如果已经过加载此行JS，即可不用重复加载 -->
+</section>
+<section>
+<h1>友情链接</h1>
+<ul>
+        <li>
+        <a href="http://plumj.com/">Plum.J's blog</a>
+	</li>
+	<li>
+        <a href="http://shzhangji.com/">Ji ZHANG's Blog</a>
+        </li>
+</ul>
+</section>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - leon -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+
+  <!--返回顶部开始-->
+<div id="full" style="width:0px; height:0px; position:fixed; right:180px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;">
+        <a href="#" onclick="goTop();return false;"><img src="/images/top.png" border=0 alt="返回顶部"></a>
+</div>
+<script src="/javascripts/top.js" type="text/javascript"></script>
+<!--返回顶部结束-->
+
+</body>
+</html>
