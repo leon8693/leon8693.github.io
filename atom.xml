@@ -39,7 +39,7 @@
 
 <h3>安装FastDFS</h3>
 
-<p>参考<a href="http://shleon.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
+<p>参考<a href="http://leon8693.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
 
 <h3>安装需要的包</h3>
 
@@ -503,7 +503,7 @@ ab 详细信息 <br/>
 
 <h3>安装FastDFS</h3>
 
-<p>参考<a href="http://shleon.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
+<p>参考<a href="http://leon8693.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
 
 <h3>安装需要的包</h3>
 
@@ -1453,14 +1453,14 @@ www.qq.com/404<br/>
 </span><span class='line'>                location /{
 </span><span class='line'>                index index.html;
 </span><span class='line'>                }
-</span><span class='line'>        error_page 404 "http://shleon.github.io/404/404.html";
-</span><span class='line'>        error_page 403 "http://shleon.github.io/404/404.html";
+</span><span class='line'>        error_page 404 "http://leon8693.github.io/404/404.html";
+</span><span class='line'>        error_page 403 "http://leon8693.github.io/404/404.html";
 </span><span class='line'>        access_log /data1/logs/nginx/access.log gzip;
 </span><span class='line'>        }</span></code></pre></td></tr></table></div></figure>
 
 
 <p>效果如下<br/>
-<a href="http://shleon.github.io/404/404.html">http://shleon.github.io/404/404.html</a></p>
+<a href="http://leon8693.github.io/404/404.html">http://leon8693.github.io/404/404.html</a></p>
 ]]></content>
   </entry>
   
@@ -1803,7 +1803,7 @@ Nginx 1.4.3</p>
 </span><span class='line'>
 </span><span class='line'><span class="c">#_config.yml基本配置</span>
 </span><span class='line'>vim /var/www/html/blog/octopress/_config.yml
-</span><span class='line'>url: http://shleon.github.io     <span class="c">#网站url</span>
+</span><span class='line'>url: http://leon8693.github.io     <span class="c">#网站url</span>
 </span><span class='line'>title: 唯一的真理                         <span class="c">#标签</span>
 </span><span class='line'>subtitle: True or False                    <span class="c">#副标题</span>
 </span><span class='line'>author: leon                                   <span class="c">#作者</span>
