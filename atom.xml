@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-25T15:03:13+08:00</updated>
+  <updated>2014-04-25T15:07:31+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -20,15 +20,13 @@
     <id>http://leon8693.github.io/blog/2014/04/25/python</id>
     <content type="html"><![CDATA[<h3>Class</h3>
 
-<p>class 类名(object):</p>
+<p>1.class 类名(object):
+2.    &ldquo;类的说明文档&rdquo;
+3.    属性
+4.    初始方法<strong>init</strong>
+5.    其他方法</p>
 
-<pre><code>"类的说明文档"
-属性
-初始方法__init__
-其他方法
-</code></pre>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -43,21 +41,22 @@
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>class myclass:  #自定义类，名称叫myclass
-</span><span class='line'>    'this  is my first class of python' #类的说明文档
-</span><span class='line'>    a=100                               #类的属性,a是成员,可以用类名直接访问
-</span><span class='line'>    def __init__(self,list='leon'):     #初始方法
-</span><span class='line'>        self.mylist=list                #实例属性可以动态的添加,此时是在构造时候添加完成
-</span><span class='line'>    def myfang(self):                   #定义类的方法，必须由类的实例来调用
-</span><span class='line'>        print "class's fang"
-</span><span class='line'>    def myname(self):
-</span><span class='line'>        print self.__class__.__name__
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="k">class</span> <span class="nc">myclass</span><span class="p">:</span>  <span class="c">#自定义类，名称叫myclass</span>
+</span><span class='line'>    <span class="s">&#39;this  is my first class of python&#39;</span> <span class="c">#类的说明文档</span>
+</span><span class='line'>    <span class="n">a</span><span class="o">=</span><span class="mi">100</span>                               <span class="c">#类的属性,a是成员,可以用类名直接访问</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">list</span><span class="o">=</span><span class="s">&#39;leon&#39;</span><span class="p">):</span>     <span class="c">#初始方法</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">mylist</span><span class="o">=</span><span class="nb">list</span>                <span class="c">#实例属性可以动态的添加,此时是在构造时候添加完成</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">myfang</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                   <span class="c">#定义类的方法，必须由类的实例来调用</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&quot;class&#39;s fang&quot;</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">myname</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class='line'>        <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span>
 </span><span class='line'>
-</span><span class='line'>print myclass.a #用类明直接访问                                                                                                                                                                              
-</span><span class='line'>C=myclass() #实例化这个类
-</span><span class='line'>C.myfang() #调用类的方法实现
-</span><span class='line'>C.myname()
-</span><span class='line'>print C.mylist</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="k">print</span> <span class="n">myclass</span><span class="o">.</span><span class="n">a</span> <span class="c">#用类明直接访问                                                                                                                                                                              </span>
+</span><span class='line'><span class="n">C</span><span class="o">=</span><span class="n">myclass</span><span class="p">()</span> <span class="c">#实例化这个类</span>
+</span><span class='line'><span class="n">C</span><span class="o">.</span><span class="n">myfang</span><span class="p">()</span> <span class="c">#调用类的方法实现</span>
+</span><span class='line'><span class="n">C</span><span class="o">.</span><span class="n">myname</span><span class="p">()</span>
+</span><span class='line'><span class="k">print</span> <span class="n">C</span><span class="o">.</span><span class="n">mylist</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h4>小知识</h4>
