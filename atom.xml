@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-25T15:12:38+08:00</updated>
+  <updated>2014-04-25T15:14:43+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -20,11 +20,13 @@
     <id>http://leon8693.github.io/blog/2014/04/25/python</id>
     <content type="html"><![CDATA[<h3>Class</h3>
 
-<p>  1.class 类名(object):<br/>
-  2.    &ldquo;类的说明文档&#8221;<br/>
-  3.    属性<br/>
-  4.    初始方法<strong>init</strong><br/>
-  5.    其他方法</p>
+<p>  class 类名(object):</p>
+
+<pre><code>  "类的说明文档"  
+  属性  
+  初始方法__init__  
+  其他方法  
+</code></pre>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
