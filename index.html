@@ -118,6 +118,46 @@
 
   <div class="entry-content"><h3>Class</h3>
 
+<p>class 类名(object):</p>
+
+<pre><code>"类的说明文档"
+属性
+初始方法__init__
+其他方法
+</code></pre>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class myclass:  #自定义类，名称叫myclass
+</span><span class='line'>    'this  is my first class of python' #类的说明文档
+</span><span class='line'>    a=100                               #类的属性,a是成员,可以用类名直接访问
+</span><span class='line'>    def __init__(self,list='leon'):     #初始方法
+</span><span class='line'>        self.mylist=list                #实例属性可以动态的添加,此时是在构造时候添加完成
+</span><span class='line'>    def myfang(self):                   #定义类的方法，必须由类的实例来调用
+</span><span class='line'>        print "class's fang"
+</span><span class='line'>    def myname(self):
+</span><span class='line'>        print self.__class__.__name__
+</span><span class='line'>
+</span><span class='line'>print myclass.a #用类明直接访问                                                                                                                                                                              
+</span><span class='line'>C=myclass() #实例化这个类
+</span><span class='line'>C.myfang() #调用类的方法实现
+</span><span class='line'>C.myname()
+</span><span class='line'>print C.mylist</span></code></pre></td></tr></table></div></figure>
+
+
 <h4>小知识</h4>
 
 <p>这个参数定义在开头就可以在python脚本中添加中文注释了</p>
