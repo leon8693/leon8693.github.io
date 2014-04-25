@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-25T13:57:13+08:00</updated>
+  <updated>2014-04-25T14:00:53+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -19,6 +19,15 @@
     <updated>2014-04-25T13:55:00+08:00</updated>
     <id>http://leon8693.github.io/blog/2014/04/25/python</id>
     <content type="html"><![CDATA[<h3>Class</h3>
+
+<h4>小知识</h4>
+
+<p>这个参数定义在开头就可以在python脚本中添加中文注释了</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c"># -*- coding:utf-8 -* </span>
+</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
