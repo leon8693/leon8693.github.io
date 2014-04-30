@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-30T11:54:56+08:00</updated>
+  <updated>2014-04-30T15:47:41+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -18,38 +18,30 @@
     <link href="http://leon8693.github.io/blog/2014/04/25/python/"/>
     <updated>2014-04-25T13:55:00+08:00</updated>
     <id>http://leon8693.github.io/blog/2014/04/25/python</id>
-    <content type="html"><![CDATA[<h3>Class</h3>
+    <content type="html"><![CDATA[<h2>Class</h2>
 
-<p>```
-  class 类名(object):</p>
+<h4>典型类的调用方法</h4>
 
-<pre><code>  "类的说明文档"  
-  属性  
-  初始方法__init__  
-  其他方法  
-</code></pre>
+<p>```python</p>
 
-<p>```</p>
+<h1>简单类的方式</h1>
 
-<p>```python
-class myclass:  #自定义类，名称叫myclass</p>
+<p>class myclass:                          #定义一个类的名称为myclass</p>
 
-<pre><code>'this  is my first class of python' #类的说明文档
+<pre><code>"this is myclass"                   #定义一个类的说明文档
 a=100                               #类的属性,a是成员,可以用类名直接访问
-def __init__(self,list='leon'):     #初始方法
-    self.mylist=list                #实例属性可以动态的添加,此时是在构造时候添加完成
-def myfang(self):                   #定义类的方法，必须由类的实例来调用
-    print "class's fang"
-def myname(self):
-    print self.__class__.__name__
+def __init__(self):                 #定义类初始化
+    self.name = "alex"              #定义name和age属性,并定义方法，必须由类的实例来调用
+    self.age = "23"
 </code></pre>
 
-<p>print myclass.a #用类明直接访问                                                                                                                                                                            <br/>
-C=myclass() #实例化这个类
-C.myfang() #调用类的方法实现
-C.myname()
-print C.mylist
-```</p>
+<p>print myclass.a
+A = myclass()                           #实例化类
+print A.name                            #类实例化后调用name属性
+print A.age</p>
+
+<p><code>``
+python中</code>self<code>只有在类的方法中才会有，</code>self<code>在定义类的方法时必须有，不需要传入相应参数，</code>self`名称也不是必须的，将上面self替换成myname或是任何其他名称也是可以的</p>
 
 <h4>小知识</h4>
 
