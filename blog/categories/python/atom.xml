@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-05-05T16:32:52+08:00</updated>
+  <updated>2014-05-05T16:36:43+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -42,6 +42,9 @@ print A.age</p>
 
 <p><code>``
 python中</code>self<code>只有在类的方法中才会有，</code>self<code>在定义类的方法时必须有，不需要传入相应参数，</code>self`名称也不是必须的，将上面self替换成myname或是任何其他名称也是可以的</p>
+
+<!-- more -->
+
 
 <h4>2.新类以及动态赋值</h4>
 
