@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-05-05T16:36:43+08:00</updated>
+  <updated>2014-05-05T17:48:35+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -146,6 +146,29 @@
 
 <p>python2.7中，必须在新建类时添加<code>object</code>方法来使这个类成为新类，不过在python3以后默认就是新类，新类和旧类相比多些新的属性。
 上面例子就是简单的条用方式和赋值方法。</p>
+
+<h4>3.类的class属性</h4>
+
+<p>接上面的类打印class的一些属性</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">B</span><span class="o">=</span><span class="n">Account</span><span class="o">.</span><span class="n">__name__</span>                      <span class="c">#name属性需要实例化后才可调用</span>
+</span><span class='line'><span class="n">C</span><span class="o">=</span><span class="n">Account</span><span class="o">.</span><span class="n">__base__</span>                      <span class="c">#base属性需要实例化后才可调用</span>
+</span><span class='line'><span class="k">print</span> <span class="n">A</span><span class="o">.</span><span class="n">__doc__</span>                         <span class="c">#类型帮助信息</span>
+</span><span class='line'><span class="k">print</span> <span class="n">B</span>                                 <span class="c">#类型名称</span>
+</span><span class='line'><span class="k">print</span> <span class="n">A</span><span class="o">.</span><span class="n">__module__</span>                      <span class="c">#类型所在模块</span>
+</span><span class='line'><span class="k">print</span> <span class="n">C</span>                                 <span class="c">#类型所继承的基类</span>
+</span><span class='line'><span class="k">print</span> <span class="n">A</span><span class="o">.</span><span class="n">__dict__</span>                        <span class="c">#类型字典，存储所有类型成员信息</span>
+</span><span class='line'><span class="k">print</span> <span class="n">A</span><span class="o">.</span><span class="n">__class__</span>                       <span class="c">#类型</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h4>小知识</h4>
 
