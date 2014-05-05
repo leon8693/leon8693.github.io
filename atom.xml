@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-05-05T11:12:55+08:00</updated>
+  <updated>2014-05-05T11:23:35+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -19,6 +19,32 @@
     <updated>2014-05-05T11:05:00+08:00</updated>
     <id>http://leon8693.github.io/blog/2014/05/05/awk-and-sed</id>
     <content type="html"><![CDATA[<h3>AWK</h3>
+
+<p>通过-F分割段落并将输出的内容，以一行2个组成2列</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#文本内容
+</span><span class='line'>cat test
+</span><span class='line'>"111" : "33333"
+</span><span class='line'>"222" : "44444"
+</span><span class='line'>"333" : "55555"
+</span><span class='line'>"444" : "66666"
+</span><span class='line'>
+</span><span class='line'>#结果
+</span><span class='line'>awk -F'[":]' 'NR%2{printf $5" ";next}{print $5}' test
+</span><span class='line'>33333 44444
+</span><span class='line'>55555 66666</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
