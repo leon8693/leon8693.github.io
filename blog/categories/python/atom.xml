@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-05-05T11:23:35+08:00</updated>
+  <updated>2014-05-05T16:32:52+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -43,7 +43,41 @@ print A.age</p>
 <p><code>``
 python中</code>self<code>只有在类的方法中才会有，</code>self<code>在定义类的方法时必须有，不需要传入相应参数，</code>self`名称也不是必须的，将上面self替换成myname或是任何其他名称也是可以的</p>
 
-<h4>2.</h4>
+<h4>2.新类以及动态赋值</h4>
+
+<p>```python</p>
+
+<h1>新类表达方式以及动态调用</h1>
+
+<p>class Account(object):                  #在新建Account名字的类时添加object表示属于新类，这个在python2.2版本中引进的,3后面默认是新类</p>
+
+<pre><code>"一个简单的类"                      #类的说明文档
+account_type="Basic"                #你懂的
+def __init__(self,name,balance):    #初始化，并且设定2个属性
+    "初始化一个新的Account实例"
+    self.name=name                  #self.name,self.balance的访问方式访问成员属性
+    self.balance=balance
+def deposit(self,amt):              #设定类中deposit函数
+    "存款"
+    self.balance=self.balance+amt   #设定deposit函数中balance属性获取方式
+def withdraw(self,amt):
+    "取款"
+    self.balance=self.balance-amt   #设定withdraw函数中balance属性获取方式
+def inquiry(self):                  #inquiry函数定义最后返回的balance数值
+    "返回当前余额"
+    return self.balance
+</code></pre>
+
+<p>print Account.account_type
+A=Account(&lsquo;leon&rsquo;,500)                   #实例化类并且赋上默认值
+A.deposit(500)                          #函数deposit中对成员amt赋值
+A.withdraw(300)                         #函数withdraw中对成员amt赋值
+print A.name                            #调用A.name属性
+print A.balance                         #调用A.balance属性
+```</p>
+
+<p>python2.7中，必须在新建类时添加<code>object</code>方法来使这个类成为新类，不过在python3以后默认就是新类，新类和旧类相比多些新的属性。
+上面例子就是简单的条用方式和赋值方法。</p>
 
 <h4>小知识</h4>
 
