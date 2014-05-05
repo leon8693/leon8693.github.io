@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Other | 唯一的真理]]></title>
+  <title><![CDATA[Category: other | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/other/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-04-30T16:10:19+08:00</updated>
+  <updated>2014-05-05T11:08:08+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -14,157 +14,11 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Linux备份数据至百度网盘]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan/"/>
-    <updated>2013-11-20T14:59:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>前阵同事说百度网盘可以升级到2TB级的空间，井底之蛙的我，才发现自己用的百度网盘才6G，弱爆了，果断升级，但是怎么大的空间如何利用呢？所以想定期对自己linux系统下的文件进行备份放入百度网盘，这时候谷哥，度娘发挥作用了，我将搜咯到的资料进行整合，写下这个篇文章。</p>
-
-<h3>下载安装bpcs_uploader百度pcs上传脚本</h3>
-
-<h4>下载安装</h4>
-
-<p>bpcs_uploader作者官网<br/>
-<a href="http://oott123.github.io/bpcs_uploader/">http://oott123.github.io/bpcs_uploader/</a> <br/>
-<code>bash
-wget https://github.com/oott123/bpcs_uploader/zipball/master #下载zip文件
-unzip master    #解压
-mv oott123-bpcs_uploader-ecb07c3 bpcs_uploader #重命名
-cd bpcs_uploader
-chmod +x bpcs_uploader.php #赋予执行权限
-yum install php curl -y #安装需要的软件包
-</code></p>
-
-<!-- more -->
-
-
-<h4>百度网盘申请应用</h4>
-
-<p>地址:<a href="http://developer.baidu.com/dev#/create  ">http://developer.baidu.com/dev#/create  </a>
-<img src="/images/blog_img/api3.png" alt="申请百度应用" /></p>
-
-<p>这个链接可以看到你有多少应用<br/>
-<a href="http://developer.baidu.com/console#app">http://developer.baidu.com/console#app</a>
-<img src="/images/blog_img/api4.png" alt="查看应用" /></p>
-
-<p>点击API管理<br/>
-<img src="/images/blog_img/api5.png" alt="API管理" /></p>
-
-<p>打开PCS API<br/>
-<img src="/images/blog_img/api6.png" alt="API PCS" /></p>
-
-<p>设置目录  <br/>
-<img src="/images/blog_img/api7.png" alt="API FILE" /></p>
-
-<p>记录KEY <br/>
-<img src="/images/blog_img/api8.png" alt="API KEY" /></p>
-
-<p>运行bpcs_uploader.php <br/>
-<code>bash
-./bpcs_uploader.php init #初始化
-</code>
-<img src="/images/blog_img/api.png" alt="bpcs init" />
-1. 初始化选择Y  <br/>
-2. 输入你前面API KEY值 <br/>
-3. 输入你前面API SECRET值 <br/>
-4. 输入开启API接口时创建的目录名称<br/>
-5. 登入链接输入KEY激活<br/>
-6. 成功则显示你所使用的容量和空余容量</p>
-
-<h3>使用bpcs_uploader上传测试</h3>
-
-<p><code>bash
-/root/scripts/bpcs_uploader/bpcs_uploader.php upload  /tmp/test.html /test/test.html
-</code>
-<img src="/images/blog_img/api10.png" alt="bpcs_uploader upload" /></p>
-
-<h4>查看网盘</h4>
-
-<p>登入自己的网盘发现居然有那个文件了！以此类推，就可以在linux下备份数据到百度网盘了。NICE！<br/>
-<img src="/images/blog_img/api11.png" alt="bpcs_uploader upload" /></p>
-
-<h3>bpcs_uploader基本命令</h3>
-
-<p><code>php
-./bpcs_uploader.php quota #查看配额
-./bpcs_uploader.php upload [path_local] [path_remote] #上传文件
-./bpcs_uploader.php download [path_local] [path_remote]  #下载文件
-./bpcs_uploader.php delete [path_remote]  #删除文件
-./bpcs_uploader.php fetch [path_remote] [path_to_fetch] #离线下载
-./bpcs_uploader.php init #初始化
-</code></p>
-
-<h3>bpcs_uploader配置解释</h3>
-
-<p>在<code>bpcs_uploader/_bpcs_files_/config</code>下注意几个文件<br/>
-<code>php
-bpcs_uploader/_bpcs_files_/config
-├── access_token
-├── appkey    #前面填入的appkey
-├── appname   #百度网盘应用的目录
-├── appsec    #前面天如的appsec
-├── config.lock
-├── readme.txt
-└── refresh_token
-</code></p>
-
-<h3>linux下载百度网盘</h3>
-
-<p>进入自己的网盘找到需要下载的文件<br/>
-创建分享链接<br/>
-<img src="/images/blog_img/wget1.png" alt="linke" /><br/>
-<img src="/images/blog_img/wget2.png" alt="linke" /> <br/>
-查看链接，firebug等工具查看<br/>
-<img src="/images/blog_img/wget3.png" alt="find" /></p>
-
-<p><code>bash
-wget -c -O leon.png "http://d.pcs.baidu.com/thumbnail/be04f0e3e6e96e2102ff9c376778915b?fid=1191379893-250528-3966810088&amp;time=1385030781&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-6tGvvJKsVQd%2FKXr5mscLmcGSFyQ%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=unknown&amp;r=984765212&amp;size=c710_u500&amp;quality=100"
--c #断点续传
--O #指定下载下来的文件名称
-</code></p>
-
-<p>就怎么简单！</p>
-
-<h3>多线程下载百度网盘</h3>
-
-<p>由于wget只能单线程,可是有些大文件单线程实在太慢了,所以需要找个能够多线程的下载工具<br/>
-Axel下载
-```</p>
-
-<h1>Centos6.4 i686 i386</h1>
-
-<p>wget <a href="http://pkgs.repoforge.org/axel/axel-2.4-1.el6.rf.i686.rpm">http://pkgs.repoforge.org/axel/axel-2.4-1.el6.rf.i686.rpm</a>
-rpm -ivh axel-2.4-1.el6.rf.i686.rpm</p>
-
-<h1>Ubuntu 12.04</h1>
-
-<p>apt-get install axel<br/>
-```
-根据系统不一样下载相应的包,并安装</p>
-
-<p>使用axel下载百度网盘里的大文件,这里我下一个视频大小为188M <br/>
-```</p>
-
-<h1>用9个线程下载</h1>
-
-<p>axel -n 9 &ldquo;<a href="http://d.pcs.baidu.com/file/2eab76d2c3fee9335378275313f18d40?fid=1191379893-250528-2944587601&amp;time=1385032735&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-WLdPSqPZBPH2ogqHIEfBTfYbWKk%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=zOo3WfKU2OHg3ebqvI82xwvc2lHPOnXMCe3I8C9LQ8dveBIuprdikBzxxswmQru+GIgsZD9TtLI=&amp;r=553543714&amp;sh=1&amp;cflg=65535">http://d.pcs.baidu.com/file/2eab76d2c3fee9335378275313f18d40?fid=1191379893-250528-2944587601&amp;time=1385032735&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-WLdPSqPZBPH2ogqHIEfBTfYbWKk%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=zOo3WfKU2OHg3ebqvI82xwvc2lHPOnXMCe3I8C9LQ8dveBIuprdikBzxxswmQru+GIgsZD9TtLI=&amp;r=553543714&amp;sh=1&amp;cflg=65535</a>&rdquo;</p>
-
-<h1>axel常用参数</h1>
-
-<p>-n #线程数
--s #限速,如-s 10240即每秒10K
--o #指定另存目录
--q #静默模式</p>
-
-<p>```
-<img src="/images/blog_img/axel1.png" alt="axel" /></p>
-
-<p>再看看单线程的wget <br/>
-<img src="/images/blog_img/wget4.png" alt="wget" /></p>
-
-<p>还是很大的差距的，但是建议不要用axel开太多的进程，控制在100以内。</p>
+    <title type="html"><![CDATA[awk and sed]]></title>
+    <link href="http://leon8693.github.io/blog/2014/05/05/awk-and-sed/"/>
+    <updated>2014-05-05T11:05:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/05/05/awk-and-sed</id>
+    <content type="html"><![CDATA[<h3>AWK</h3>
 ]]></content>
   </entry>
   
