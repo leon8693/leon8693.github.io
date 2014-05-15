@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Django | 唯一的真理]]></title>
+  <link href="http://leon8693.github.io/blog/categories/django/atom.xml" rel="self"/>
+  <link href="http://leon8693.github.io/"/>
+  <updated>2014-05-15T10:16:59+08:00</updated>
+  <id>http://leon8693.github.io/</id>
+  <author>
+    <name><![CDATA[leon]]></name>
+    <email><![CDATA[bolatuleon@hotmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[django 基础]]></title>
+    <link href="http://leon8693.github.io/blog/2014/05/15/djangoji-chu/"/>
+    <updated>2014-05-15T09:33:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/05/15/djangoji-chu</id>
+    <content type="html"><![CDATA[<h3>django重点</h3>
+
+<p><code>django-admin.py startproject mysite</code> 命令在当前目录创建一个<code>mysite</code>目录,这个作为一个项目目录
+<code>python
+mysite/
+├── __init__.py         #django 初始化模块
+├── __init__.pyc
+├── settings.py         #django 主要配置,全局环境变量
+├── settings.pyc
+├── urls.py             #django 主要配置,url跳转
+├── urls.pyc
+├── views.py            #django 主要配置,视图功能
+├── views.pyc
+├── wsgi.py             #django 默认加载的模块
+└── wsgi.pyc
+</code>
+django请求流程，用户请求&mdash;>django-urls.py&mdash;>django-views.py</p>
+
+<h3>settings.py</h3>
+
+<p>```python</p>
+
+<h1>是数据库设置</h1>
+
+<p>DATABASES = {</p>
+
+<pre><code>'default': {
+    'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+    'NAME': 'test',                      # Or path to database file if using sqlite3.
+    'USER': 'root',                      # Not used with sqlite3.
+    'PASSWORD': '123456',                  # Not used with sqlite3.
+    'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
+    'PORT': '3306',                      # Set to empty string for default. Not used with sqlite3.
+}
+</code></pre>
+
+<p>}</p>
+
+<h1>需要查看python是否有Mysql模块</h1>
+
+<p>python</p>
+
+<blockquote><blockquote><blockquote><p>import MySQLdb
+test=MySQLdb.connect(db=&lsquo;test&rsquo;,host=&lsquo;localhost&rsquo;,user=&lsquo;root&rsquo;,passwd=&lsquo;123456&rsquo;)
+cur=test.cursor()
+cur.execute(&lsquo;show databases;&rsquo;)
+即可</p></blockquote></blockquote></blockquote>
+
+<h1>运行命令：python manage.py collectstatic 之后静态文件将要复制到的目录，这个目录只有在运行collectstatic时候才会用到，不能想当然的以为这个目录和MEDIA_ROOT的作用是相同的，否则在开发环境的时候可能一直无法找到静态文件。</h1>
+
+<p>STATIC_ROOT = &lsquo;/var/www/html/&rsquo;</p>
+
+<h1>设置的static file的起始url，这个只是在template里边引用到，这个参数和MEDIA_URL的含义相同。</h1>
+
+<p>STATIC_URL = &lsquo;/static/&rsquo;</p>
+
+<h1>STATICFILES_DIRS和TEMPLATE_DIRS的含义差不多，就是除了各个app的static目录以外还需要管理的静态文件设置，比如项目的公共文件差不多。</h1>
+
+<p>STATICFILES_DIRS = (</p>
+
+<pre><code>"/var/www/html/devops",
+"/var/www/html/static",
+</code></pre>
+
+<p>)</p>
+
+<h1>INSTALLED_APPS 告诉 Django 项目哪些 app 处于激活状态</h1>
+
+<p>INSTALLED_APPS = (</p>
+
+<pre><code>'django.contrib.auth',
+'django.contrib.contenttypes',
+'django.contrib.sessions',
+'django.contrib.sites',
+'django.contrib.messages',
+'django.contrib.staticfiles',
+'mysite.books',
+'django.contrib.admin',
+</code></pre>
+
+<p>)
+```</p>
+
+<h3>django日志设置</h3>
+
+<p>```
+vim settings.py
+import logging</p>
+
+<h1>添加报错日志，注意/var/log下的权限和uwsgi启动进程的权限是否有</h1>
+
+<p>logging.basicConfig(</p>
+
+<pre><code>      level = logging.ERROR,
+        format = '%(asctime)s %(levelname)s %(module)s.%(funcName)s Line:%(lineno)d %(message)s',
+          filename = '/var/log/django/django.log',
+          )
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
+  
+</feed>
