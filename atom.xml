@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-05-15T10:16:59+08:00</updated>
+  <updated>2014-05-15T10:22:44+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -48,6 +48,9 @@
 
 
 <p>django请求流程，用户请求&mdash;>django-urls.py&mdash;>django-views.py</p>
+
+<!-- more -->
+
 
 <h3>settings.py</h3>
 
