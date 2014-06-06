@@ -247,24 +247,19 @@
 
 <p>中间我碰到过一个错误<br/>
 UnicodeDecodeError: &lsquo;ascii&rsquo; codec can&rsquo;t decode byte 0xe6 in position 204: ordinal not in range(128)
-字符集问题，导致超出长度<br/>
-所以需要添加<br/>
+字符集问题，导致超出长度,所以需要在最前面的地方添加<br/>
 reload(sys)<br/>
 sys.setdefaultencoding(&lsquo;utf-8&rsquo;)</p>
 
-<p>下面这个语句就是产生一个OptionParser的物件，传入2个值，并且通过usage和version定义，这个在使用-h|&mdash;help 会参数效果.<br/>
+<p>下面这个语句就是产生一个OptionParser的物件，传入2个值，并且通过usage和version定义，这个在使用-h|&mdash;help 会产生效果.<br/>
 <code>optParser = OptionParser(usage=MSG_USAGE,version=MSG_VERSION)</code></p>
 
 <p>对optParser增加选项
 <code>optParser.add_option("-u","--username",action = "store",type = "string",dest = "UserName",help="添加数据库用户名(必填)")</code>
 add_option()参数说明:前面2个&#8221;&ldquo;里面的参数是，使用脚本时需要指定的选项<br/>
-1.action:是存储方式，分为3种<code>store</code>,<code>store_false</code>,<code>store_true</code>，一般情况下是store<br/>
-store_false，store_true，都代表参数存在则为true或者false,当false,dest后面的变量将为None</p>
+1.action:是存储方式，分为3种<code>store</code>,<code>store_false</code>,<code>store_true</code>，一般情况下是store,store_false，store_true，都代表参数存在则为true或者false,当false,dest后面的变量将为None</p>
 
-<p>2.type
-type代表该option存储dest的形态<br/>
-支持的形态有string, int,long, choice, float 和 complex,这一块不全部讲，需要用到的时候查看，简单说一个int，如果type使用的是int<br/>
-那么参数后面（如-u aaa)时，由于aaa不是数字所以type这边就会报错，返回报错信息</p>
+<p>2.type:type代表该option存储dest的形态,支持的形态有string, int,long, choice, float 和 complex,这一块不全部讲，需要用到的时候查看，简单说一个int，如果type使用的是int,那么参数后面（如-u aaa)时，由于aaa不是数字所以type这边就会报错，返回报错信息</p>
 </div>
   
   
