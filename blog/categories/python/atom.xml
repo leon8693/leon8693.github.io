@@ -4,7 +4,7 @@
   <title><![CDATA[Category: python | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-06-06T15:33:09+08:00</updated>
+  <updated>2014-06-06T15:51:43+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -18,7 +18,90 @@
     <link href="http://leon8693.github.io/blog/2014/06/06/python-optionparser/"/>
     <updated>2014-06-06T15:28:00+08:00</updated>
     <id>http://leon8693.github.io/blog/2014/06/06/python-optionparser</id>
-    <content type="html"><![CDATA[
+    <content type="html"><![CDATA[<h2>脚本原型</h2>
+
+<p>```python</p>
+
+<h1>!/usr/bin/python</h1>
+
+<h1>&ndash;<em>&ndash; coding:utf-8 &ndash;</em></h1>
+
+<h1>django添加数据库用户密码</h1>
+
+<p>import sys
+import os
+from optparse import OptionParser</p>
+
+<p>os.environ.setdefault( &ldquo;DJANGO_SETTINGS_MODULE&rdquo;, &ldquo;mysite.settings&rdquo; )
+from accounts.models import User
+import hashlib</p>
+
+<h3>编码转移,可以输出中文</h3>
+
+<p>reload(sys)
+sys.setdefaultencoding(&lsquo;utf-8&rsquo;)</p>
+
+<h3>%prog表示脚本本身</h3>
+
+<p>MSG_USAGE = &ldquo;%prog [ -u <username>][-p <password>][-t &lt;user_type>][-h <help>]&rdquo;
+MSG_VERSION = &ldquo;%prog 20140529&rdquo;</p>
+
+<h3>usage打印用法,version输出版本信息</h3>
+
+<p>optParser = OptionParser(usage=MSG_USAGE,version=MSG_VERSION)</p>
+
+<h3>对optParser增加选项</h3>
+
+<p>optParser.add_option(&ldquo;-u&rdquo;,&ldquo;&mdash;username&rdquo;,action = &ldquo;store&rdquo;,type = &ldquo;string&rdquo;,dest = &ldquo;UserName&rdquo;,help=&ldquo;添加数据库用户名(必填)&rdquo;)
+optParser.add_option(&ldquo;-p&rdquo;,&ldquo;&mdash;password&rdquo;,action = &ldquo;store&rdquo;,type = &ldquo;string&rdquo;,dest = &ldquo;Password&rdquo;,help=&ldquo;添加数据库密码(必填)&rdquo;)
+optParser.add_option(&ldquo;-t&rdquo;,&ldquo;&mdash;user_type&rdquo;,action = &ldquo;store&rdquo;,type = &ldquo;string&rdquo;,dest = &ldquo;User_Type&rdquo;,default=&ldquo;1&rdquo;,help=&ldquo;添加用户权限,0为管理员,1为普通,默认为1&rdquo;)</p>
+
+<h1>fakeArgs = [&lsquo;-u&rsquo;,&lsquo;leon&rsquo;,&lsquo;-p&rsquo;,&lsquo;123456&rsquo;,&lsquo;-t&rsquo;,&lsquo;a&rsquo;]</h1>
+
+<p>options,args = optParser.parse_args()</p>
+
+<p>TYPE = options.User_Type
+USERNAME = options.UserName
+PASSWORD = options.Password</p>
+
+<h1>User_Type返回不是1或者0则退出</h1>
+
+<p>if TYPE not in (&lsquo;1&rsquo;,&lsquo;0&rsquo;):</p>
+
+<pre><code>optParser.print_help()
+sys.exit(1)
+</code></pre>
+
+<h1>判断参数-u,-p是否为空,返回帮助</h1>
+
+<p>args_list = [USERNAME,PASSWORD]
+for i in args_list:</p>
+
+<pre><code>if i is None:
+    print '请使用(-h,--help)来获得帮助'
+    sys.exit(0)
+</code></pre>
+
+<h1>User是在accounts中models.py的类,定义了数据库的一些信息,插入用户</h1>
+
+<h1>判断用户是否存在</h1>
+
+<p>def init():</p>
+
+<pre><code>CHECK_NAME=User.objects.filter(name=USERNAME)
+if len(CHECK_NAME) &gt; 0:
+    print "%s 用户已经存在" % USERNAME
+else:
+    u = User(name=USERNAME, password=hashlib.md5(PASSWORD).hexdigest(), user_type=TYPE)
+    u.save()
+</code></pre>
+
+<p>if &lsquo;<strong>main</strong>&rsquo; == <strong>name</strong>:</p>
+
+<pre><code>init()
+</code></pre>
+
+<p>```python</p>
 ]]></content>
   </entry>
   
