@@ -5,15 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>一个普通SA的博客 - 唯一的真理</title>
+  <title>唯一的真理</title>
   <meta name="author" content="leon">
 
   
-  <meta name="description" content="一个普通SA的博客 Oct 8th, 2013 在这里分享自己学习到的东西。 欢迎大家来这里玩，如有问题我们可以互相探讨，互相学习。 微博二维码 版本更新
-2013100201 搭建博客
-2013100202 增加分类 2013100203 增加第三方评论
-2013100801 增加关于 &hellip;">
-  
+  <meta name="description" content="世界唯一的真理">
+  <meta name="keywords" content="Asp.Net,C#">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -21,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://leon8693.github.io/about">
+  <link rel="canonical" href="http://leon8693.github.io/blog/page/5">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="唯一的真理" type="application/atom+xml">
@@ -88,54 +85,19 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
-    <h1 class="entry-title">一个普通SA的博客</h1>
-    <p class="meta">
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-08T04:27:00+08:00" pubdate data-updated="true">Oct 8<span>th</span>, 2013</time></p>
-  </header>
-  
-  <blockquote><p>在这里分享自己学习到的东西。</p>
-
-<p>欢迎大家来这里玩，如有问题我们可以互相探讨，互相学习。</p></blockquote>
-
-<p>微博二维码</p>
-
-<p><img src="weibo_leon.png" height="30%" width="30%" alt="leon的微博" title="我的微博"/></p>
-
-<hr />
-
-<p>版本更新<br/>
-2013100201 <a href="http://leon8693.github.io/blog/2013/11/11/octopress-install/">搭建博客</a><br/>
-2013100202 <a href="http://leon8693.github.io/blog/2013/11/11/octopressfen-lei/">增加分类</a> <br/>
-2013100203 <a href="http://leon8693.github.io/blog/2013/11/13/octopressdi-san-fang-ping-lun/">增加第三方评论</a><br/>
-2013100801 <a href="http://leon8693.github.io/blog/2013/11/11/octopressfen-lei/">增加关于</a><br/>
-2013101101 <a href="http://leon8693.github.io/blog/2013/11/11/octopressfen-lei/">增加程序员老黄历</a><br/>
-2013101102 <a href="http://leon8693.github.io/blog/2013/11/13/qq-404/">增加腾讯404公益页面</a><br/>
-2013101201 <a href="http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/">增加新浪微博侧边栏</a><br/>
-2013111001 <a href="http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu/">访客地图</a> <br/>
-2013111001 <a href="http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/">友情链接</a> <br/>
-2013111101 <a href="http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/">最新评论</a> <br/>
-2013111401 <a href="http://leon8693.github.io/blog/2013/11/14/octopresstian-jia-tong-ji/">Octopress添加统计</a></p>
-
-  
-    <footer>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/03/FastDFS-install/">FastDFS Install</a></h1>
+    
+    
       <p class="meta">
         
-        
 
 
 
@@ -147,44 +109,72 @@
   
 
 
-<time datetime="2013-10-08T04:27:00+08:00" pubdate data-updated="true">Oct 8<span>th</span>, 2013</time>
+<time datetime="2013-11-03T16:11:00+08:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time>
         
       </p>
-      
-        <div class="sharing">
-  
-  
-  
-  
-     <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style_32x32">
-	<a class="jiathis_button_qzone"></a>
-	<a class="jiathis_button_tsina"></a>
-	<a class="jiathis_button_tqq"></a>
-	<a class="jiathis_button_weixin"></a>
-	<a class="jiathis_button_renren"></a>
-	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	<a class="jiathis_counter_style"></a>
+    
+  </header>
+
+
+  <div class="entry-content"><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本     </span>
+</span><span class='line'>Centos 2.6.32-358.el6.x86_64
+</span><span class='line'>FastDFS 4.06
+</span><span class='line'>Nginx 1.4.3
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#官网下载地址</span>
+</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
+</span><span class='line'>
+</span><span class='line'><span class="c">#测试服务器</span>
+</span><span class='line'>test1 172.16.3.212     <span class="o">(</span>tracker,storage<span class="o">)</span>
+</span><span class='line'>test2 172.16.3.213     <span class="o">(</span>tracker,storage<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装FastDFS</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#安装需要的包</span>
+</span><span class='line'>yum groupinstall -y <span class="s2">&quot;Development Tools&quot;</span>
+</span><span class='line'>yum install -y libevent-devel pcre-devel zlib-devel
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
 </div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-
-<!-- UY BEGIN -->
-<div id="uyan_frame"></div>
-<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1863487"></script>
-<!-- UY END -->
-
-
   
-</div>
-
-      
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/03/FastDFS-install/">继续阅读 &rarr;</a>
     </footer>
   
-</article>
 
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/4/">Newer &rarr;</a>
+    
+  </div>
 </div>
-
 <aside class="sidebar">
   
     <section>
@@ -235,17 +225,16 @@
 <h1>友情链接</h1>
 <ul>
         <li>
-        <a href="http://plumj.com/">Plum.J's blog</a>
+        <a href="http://plumj.com/">Plum.J&#8217;s blog</a>
 	</li>
 	<li>
-        <a href="http://shzhangji.com/">Ji ZHANG's Blog</a>
+        <a href="http://shzhangji.com/">Ji ZHANG&#8217;s Blog</a>
         </li>
 </ul>
 </section>
 
   
 </aside>
-
 
     </div>
   </div>
