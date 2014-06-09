@@ -256,11 +256,19 @@ UnicodeDecodeError: &lsquo;ascii&rsquo; codec can&rsquo;t decode byte 0xe6 in po
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>下面这个语句就是产生一个OptionParser的物件，传入2个值，并且通过usage和version定义，这个在使用-h|&mdash;help 会产生效果.<br/>
-<code>optParser = OptionParser(usage=MSG_USAGE,version=MSG_VERSION)</code></p>
+<p>下面这个语句就是产生一个OptionParser的物件，传入2个值，并且通过usage和version定义，这个在使用-h|&mdash;help 会产生效果.</p>
 
-<p>对optParser增加选项
-<code>optParser.add_option("-u","--username",action = "store",type = "string",dest = "UserName",help="添加数据库用户名(必填)")</code></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">optParser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">MSG_USAGE</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="n">MSG_VERSION</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>对optParser增加选项</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">optParser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-u&quot;</span><span class="p">,</span><span class="s">&quot;--username&quot;</span><span class="p">,</span><span class="n">action</span> <span class="o">=</span> <span class="s">&quot;store&quot;</span><span class="p">,</span><span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;string&quot;</span><span class="p">,</span><span class="n">dest</span> <span class="o">=</span> <span class="s">&quot;UserName&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">&quot;添加数据库用户名(必填)&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>add_option()参数说明:前面2个&#8221;&ldquo;里面的参数是，使用脚本时需要指定的选项<br/>
 1.action&mdash;&mdash;是存储方式，分为3种<code>store</code>,<code>store_false</code>,<code>store_true</code>，一般情况下是store,store_false,store_true,都代表参数存在则为true或者false,当false,dest后面的变量将为None</p>
