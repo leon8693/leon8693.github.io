@@ -4,7 +4,7 @@
   <title><![CDATA[Category: database | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/database/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-06-13T17:34:34+08:00</updated>
+  <updated>2014-06-13T17:44:01+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -22,7 +22,7 @@
 
 <h3>redis 2.8.11 下载</h3>
 
-<p><a href="http://redis.io/download">http://redis.io/download</a>
+<p><a href="http://redis.io/download  ">http://redis.io/download  </a>
 <a href="http://download.redis.io/releases/redis-2.8.11.tar.gz">http://download.redis.io/releases/redis-2.8.11.tar.gz</a></p>
 
 <p>```
@@ -122,10 +122,14 @@ maxmemory 1G</p>
 
 <h6>#</h6>
 
-<p><code>
-可以通过以下2种方式查看是否主从  
-方案1  
-</code>
+<p>```</p>
+
+<!-- more -->
+
+
+<p>可以通过以下2种方式查看是否主从<br/>
+方案1<br/>
+```
 redis-cli -a angel01 -h 192.168.0.210 info Replication</p>
 
 <h1>Replication</h1>
