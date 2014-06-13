@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-06-09T16:12:27+08:00</updated>
+  <updated>2014-06-13T17:34:34+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,289 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Redis Sentinel HA自动切换]]></title>
+    <link href="http://leon8693.github.io/blog/2014/06/13/redis-sentinel-hazi-dong-qie-huan/"/>
+    <updated>2014-06-13T17:11:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/06/13/redis-sentinel-hazi-dong-qie-huan</id>
+    <content type="html"><![CDATA[<h2>Redis Sentinel  HA自动切换</h2>
+
+<h3>redis 2.8.11 下载</h3>
+
+<p><a href="http://redis.io/download">http://redis.io/download</a>
+<a href="http://download.redis.io/releases/redis-2.8.11.tar.gz">http://download.redis.io/releases/redis-2.8.11.tar.gz</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>master 192.168.0.210
+</span><span class='line'>slave 192.168.0.211
+</span><span class='line'>slave 192.168.0.213
+</span><span class='line'>
+</span><span class='line'>#安装redis 2.8.11
+</span><span class='line'>cd /srv/
+</span><span class='line'>tar xf redis-2.8.11.tar.gz
+</span><span class='line'>cd redis-2.8.11
+</span><span class='line'>make && make install 
+</span><span class='line'>
+</span><span class='line'>#复制启动文件
+</span><span class='line'>cp -rp /srv/redis-2.8.11/utils/redis_init_script  /etc/init.d/redis
+</span><span class='line'>chmod +x /etc/init.d/redis
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#master 配置文件
+</span><span class='line'>/etc/redis/redis.conf
+</span><span class='line'>####
+</span><span class='line'>daemonize yes
+</span><span class='line'>pidfile /var/run/redis/redis.pid
+</span><span class='line'>port 6379
+</span><span class='line'>bind 0.0.0.0
+</span><span class='line'>timeout 0
+</span><span class='line'>loglevel notice
+</span><span class='line'>logfile /var/log/redis/redis.log
+</span><span class='line'>databases 16
+</span><span class='line'>save 900 1
+</span><span class='line'>save 300 10
+</span><span class='line'>save 60 10000
+</span><span class='line'>rdbcompression yes
+</span><span class='line'>dbfilename dump.rdb
+</span><span class='line'>dir /var/lib/redis/
+</span><span class='line'>slave-serve-stale-data yes
+</span><span class='line'>appendonly no
+</span><span class='line'>appendfsync everysec
+</span><span class='line'>no-appendfsync-on-rewrite no
+</span><span class='line'>auto-aof-rewrite-percentage 100
+</span><span class='line'>auto-aof-rewrite-min-size 64mb
+</span><span class='line'>slowlog-log-slower-than 10000
+</span><span class='line'>slowlog-max-len 1024
+</span><span class='line'>list-max-ziplist-entries 512
+</span><span class='line'>list-max-ziplist-value 64
+</span><span class='line'>set-max-intset-entries 512
+</span><span class='line'>zset-max-ziplist-entries 128
+</span><span class='line'>zset-max-ziplist-value 64
+</span><span class='line'>activerehashing yes
+</span><span class='line'>requirepass angel01
+</span><span class='line'>slave-read-only yes
+</span><span class='line'>maxmemory 1G
+</span><span class='line'>########
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#slave配置
+</span><span class='line'>########
+</span><span class='line'>daemonize yes
+</span><span class='line'>pidfile /var/run/redis/redis.pid
+</span><span class='line'>port 6379
+</span><span class='line'>bind 0.0.0.0
+</span><span class='line'>timeout 0
+</span><span class='line'>loglevel notice
+</span><span class='line'>logfile /var/log/redis/redis.log
+</span><span class='line'>databases 16
+</span><span class='line'>save 900 1
+</span><span class='line'>save 300 10
+</span><span class='line'>save 60 10000
+</span><span class='line'>rdbcompression yes
+</span><span class='line'>dbfilename dump.rdb
+</span><span class='line'>dir /var/lib/redis/
+</span><span class='line'>slave-serve-stale-data yes
+</span><span class='line'>appendonly yes
+</span><span class='line'>appendfsync everysec
+</span><span class='line'>no-appendfsync-on-rewrite no
+</span><span class='line'>auto-aof-rewrite-percentage 100
+</span><span class='line'>auto-aof-rewrite-min-size 64mb
+</span><span class='line'>slowlog-log-slower-than 10000
+</span><span class='line'>slowlog-max-len 1024
+</span><span class='line'>list-max-ziplist-entries 512
+</span><span class='line'>list-max-ziplist-value 64
+</span><span class='line'>set-max-intset-entries 512
+</span><span class='line'>zset-max-ziplist-entries 128
+</span><span class='line'>zset-max-ziplist-value 64
+</span><span class='line'>activerehashing yes
+</span><span class='line'>slave-serve-stale-data yes
+</span><span class='line'>slaveof 192.168.0.210 6379
+</span><span class='line'>masterauth angel01
+</span><span class='line'>slave-read-only yes
+</span><span class='line'>maxmemory 1G
+</span><span class='line'>#############
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以通过以下2种方式查看是否主从<br/>
+方案1</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>redis-cli -a angel01 -h 192.168.0.210 info Replication
+</span><span class='line'># Replication
+</span><span class='line'>role:master
+</span><span class='line'>connected_slaves:2
+</span><span class='line'>slave0:ip=192.168.0.211,port=6379,state=online,offset=21327,lag=1
+</span><span class='line'>slave1:ip=192.168.0.213,port=6379,state=online,offset=21327,lag=1
+</span><span class='line'>master_repl_offset:21327
+</span><span class='line'>repl_backlog_active:1
+</span><span class='line'>repl_backlog_size:1048576
+</span><span class='line'>repl_backlog_first_byte_offset:2
+</span><span class='line'>repl_backlog_histlen:21326</span></code></pre></td></tr></table></div></figure>
+
+
+<p>方案2</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>master 上操作
+</span><span class='line'>redis-cli -a angel01
+</span><span class='line'>set leon good
+</span><span class='line'>slave 上操作
+</span><span class='line'>redis-cli -a angel01
+</span><span class='line'>get leon
+</span><span class='line'>"good"
+</span><span class='line'>即可成功</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>slave-read-only yes</code> 从只有只读权限<br/>
+<code>maxmemory 1G</code>        最大使用内存1G<br/>
+<code>appendonly yes</code>      slave 上，开启aof备份，路径在dir /var/lib/redis/下面</p>
+
+<p>这边需要注意的是，AOF和RDB的备份，在主上只开启RDB，在SLAVE上2个都开启，但在故障转移的时候slave升成master时，压力会比原来的master大，那是因为RDB和AOF是不会自动转移的。
+到此说明redis正常工作了，接下来开始使用哨兵sentinel进行监控以及主从切换</p>
+
+<p>如下操作</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp -rp /srv/redis-2.8.11/sentinel.conf /etc/redis/
+</span><span class='line'>vim /etc/redis/sentinel.conf
+</span><span class='line'>port 26379
+</span><span class='line'>dir /var/lib/redis
+</span><span class='line'>sentinel monitor mymaster 192.168.0.210 6379 2
+</span><span class='line'>sentinel down-after-milliseconds mymaster 30000
+</span><span class='line'>sentinel parallel-syncs mymaster 1
+</span><span class='line'>sentinel failover-timeout mymaster 180000
+</span><span class='line'>sentinel auth-pass mymaster angel01
+</span><span class='line'>/etc/init.d/redis-sentinel /etc/sentinel.conf --sentinel  #启动命令</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>故障演示</h3>
+
+<p>3台机器都启动查看<br/>
+redis-cli -h 192.168.0.210 -p 26379 info Sentinel 可以查看信息<br/>
+关闭slave<br/>
+没有任何响应</p>
+
+<p>关闭master<br/>
+<img src="http://leon8693.github.io/images/blog_img/redis1.png" alt="stop_master" />
+可以看到213接替了210成了master<br/>
+到此完成切换</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[python OptionParser]]></title>
