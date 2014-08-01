@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-07-11T14:08:44+08:00</updated>
+  <updated>2014-08-01T17:03:29+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,86 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[maptail展现中国地图]]></title>
+    <link href="http://leon8693.github.io/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/"/>
+    <updated>2014-08-01T16:29:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu</id>
+    <content type="html"><![CDATA[<h3>声明</h3>
+
+<p>本篇文章转自王强blog<br/>
+blog地址:<a href="http://qiangwang.github.io/2013/01/27/maptail-china-map.html">maptail展现中国地图</a>
+github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></p>
+
+<h1>maptail</h1>
+
+<p><img src="http://dl.dropbox.com/u/396087/maptail.png" border="0" /></p>
+
+<p><img src="http://qiangwang.github.io/img/maptail-china-map.png" border="0" /></p>
+
+<p>maptail is a realtime map view of GeoIP data. Attach it to your server to track visitors, tail a log, pipe to its stdin or use it as a library to build your own implementation. Just emit IP addresses to it from any source and you&rsquo;ll automagically get a cool map with yellow dots and stuff like that streamed in with websockets or whatever transport you&rsquo;d like to use.</p>
+
+<h2>Installing</h2>
+
+<p><code>npm install maptail -g</code></p>
+
+<p>Omit the <code>-g</code> to install as a module.</p>
+
+<h2>How to use</h2>
+
+<h3>The command line tool:</h3>
+
+<p><code>$ maptail -f nohup.out</code></p>
+
+<p><code>$ tail -f nohup.out | maptail -h my.host.com -p 3000</code></p>
+
+<h3>In your server:</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">maptail</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;maptail&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">createServer</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">maptail</span><span class="p">.</span><span class="nx">track</span><span class="p">())</span>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/map&#39;</span><span class="p">,</span> <span class="nx">maptail</span><span class="p">.</span><span class="kr">static</span><span class="p">())</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">maptail</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Let me explain what these are doing here a bit. <code>maptail.track()</code> tracks visitors&#8217; IPs and emits them to maptail. <code>maptail.static()</code> is an <code>express.static()</code> middleware that points to our static data (maptail.html, css, etc.)</p>
+
+<p><code>maptail.attach(app)</code> attaches a <a href="https://github.com/stagas/simpl">simpl</a> WebSocket server which makes it possible for our frontend app to easily subscribe to the GeoIP data events sent by maptail and display them on the map.</p>
+
+<p>If for example you don&rsquo;t want to track visitors of the http server but instead you want to send IPs from another source, you can easily remove <code>maptail.track()</code> from the middleware and use <code>maptail.emit('ip', ipAddress[, logMessage])</code> to feed our map. It will take care the rest for you.</p>
+
+<h2>Credits</h2>
+
+<p>This is based on <a href="https://github.com/mape">mape</a>&rsquo;s <a href="https://github.com/mape/node-wargames">wargames</a>.</p>
+
+<p><a href="https://github.com/bluesmoon/node-geoip">geoip-lite</a> by <a href="https://github.com/bluesmoon">Philip Tellis</a>.</p>
+
+<p>Earlier versions used <a href="https://github.com/kuno">kuno</a>&rsquo;s <a href="https://github.com/kuno/GeoIP">GeoIP</a> module but since it now uses a C library, I couldn&rsquo;t use it.</p>
+
+<p><a href="http://www.maxmind.com/">MaxMind</a> for their free to use GeoIP data.</p>
+
+<h2>Licence</h2>
+
+<p>maptail is MIT/X11. The rest of the components are of their respective licences.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Redis Sentinel HA自动切换]]></title>

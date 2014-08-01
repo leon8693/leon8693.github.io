@@ -93,6 +93,83 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/11/11/octopressfen-lei/">Octopress分类</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-11T08:09:00+08:00" pubdate data-updated="true">Nov 11<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>添加侧边栏文章分类</h3>
+
+<p>octopress/plugins/category_list_tag.rb</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>module Jekyll 
+</span><span class='line'>  class CategoryListTag &lt; Liquid::Tag 
+</span><span class='line'>    def render(context) 
+</span><span class='line'>      html = "" 
+</span><span class='line'>      categories = context.registers[:site].categories.keys 
+</span><span class='line'>      categories.sort.each do |category| 
+</span><span class='line'>        posts_in_category = context.registers[:site].categories[category].size 
+</span><span class='line'>        category_dir = context.registers[:site].config['category_dir'] 
+</span><span class='line'>        category_url = File.join(category_dir, category.gsub(/_|\P{Word}/, '-').gsub(/-{2,}/, '-').downcase) 
+</span><span class='line'>        html &lt;&lt; "&lt;li class='category'&gt;&lt;a href='/#{category_url}/'&gt;#{category} (#{posts_in_category})&lt;/a&gt;&lt;/li&gt;\n" 
+</span><span class='line'>      end 
+</span><span class='line'>      html 
+</span><span class='line'>    end 
+</span><span class='line'>  end 
+</span><span class='line'>end
+</span><span class='line'>Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/11/octopressfen-lei/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/11/octopress-install/">Octopress Install</a></h1>
     
     
@@ -256,7 +333,7 @@ Nginx 1.4.3</p>
     <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
-<li class='category'><a href='/blog/categories/other/'>Other (2)</a></li>
+<li class='category'><a href='/blog/categories/other/'>Other (3)</a></li>
 <li class='category'><a href='/blog/categories/database/'>database (1)</a></li>
 <li class='category'><a href='/blog/categories/python/'>python (2)</a></li>
 
