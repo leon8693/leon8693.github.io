@@ -142,52 +142,12 @@ github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></
 
 <p><code>$ tail -f nohup.out | maptail -h my.host.com -p 3000</code></p>
 
-<h3>In your server:</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">maptail</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;maptail&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;express&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">.</span><span class="nx">createServer</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">maptail</span><span class="p">.</span><span class="nx">track</span><span class="p">())</span>
-</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s1">&#39;/map&#39;</span><span class="p">,</span> <span class="nx">maptail</span><span class="p">.</span><span class="kr">static</span><span class="p">())</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">maptail</span><span class="p">.</span><span class="nx">attach</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="nx">app</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Let me explain what these are doing here a bit. <code>maptail.track()</code> tracks visitors&#8217; IPs and emits them to maptail. <code>maptail.static()</code> is an <code>express.static()</code> middleware that points to our static data (maptail.html, css, etc.)</p>
-
-<p><code>maptail.attach(app)</code> attaches a <a href="https://github.com/stagas/simpl">simpl</a> WebSocket server which makes it possible for our frontend app to easily subscribe to the GeoIP data events sent by maptail and display them on the map.</p>
-
-<p>If for example you don&rsquo;t want to track visitors of the http server but instead you want to send IPs from another source, you can easily remove <code>maptail.track()</code> from the middleware and use <code>maptail.emit('ip', ipAddress[, logMessage])</code> to feed our map. It will take care the rest for you.</p>
-
-<h2>Credits</h2>
-
-<p>This is based on <a href="https://github.com/mape">mape</a>&rsquo;s <a href="https://github.com/mape/node-wargames">wargames</a>.</p>
-
-<p><a href="https://github.com/bluesmoon/node-geoip">geoip-lite</a> by <a href="https://github.com/bluesmoon">Philip Tellis</a>.</p>
-
-<p>Earlier versions used <a href="https://github.com/kuno">kuno</a>&rsquo;s <a href="https://github.com/kuno/GeoIP">GeoIP</a> module but since it now uses a C library, I couldn&rsquo;t use it.</p>
-
-<p><a href="http://www.maxmind.com/">MaxMind</a> for their free to use GeoIP data.</p>
-
-<h2>Licence</h2>
-
-<p>maptail is MIT/X11. The rest of the components are of their respective licences.</p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/">继续阅读 &rarr;</a>
+    </footer>
   
 
 
