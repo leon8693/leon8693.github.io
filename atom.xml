@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-09-29T16:58:47+08:00</updated>
+  <updated>2014-09-29T17:01:29+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -60,6 +60,9 @@
 </pre></td><td class='code'><pre><code class=''><span class='line'>include: /mnt/config/salt/master
 </span><span class='line'>default_include: /mnt/config/salt/master.d/*.conf
 </span><span class='line'>mkdir -p /mnt/config/salt/ /mnt/config/salt/master.d/</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
 
 
 <p>vim /mnt/config/salt/master #主配置文件</p>
