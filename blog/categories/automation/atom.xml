@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Automation | 唯一的真理]]></title>
+  <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
+  <link href="http://leon8693.github.io/"/>
+  <updated>2014-09-29T16:58:47+08:00</updated>
+  <id>http://leon8693.github.io/</id>
+  <author>
+    <name><![CDATA[leon]]></name>
+    <email><![CDATA[bolatuleon@hotmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[saltstack install (一)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/09/29/saltstack-install-1/"/>
+    <updated>2014-09-29T16:14:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/09/29/saltstack-install-1</id>
+    <content type="html"><![CDATA[<h1>下载安装</h1>
+
+<h5>Centos</h5>
+
+<p>epel源或者centos源都有 <br/>
+<code>
+yum install salt-master -y #服务端
+yum install salt-minion -y #客户端
+</code></p>
+
+<h5>Ubuntu</h5>
+
+<p><code>
+sudo apt-get install python-software-properties
+echo deb http://ppa.launchpad.net/saltstack/salt/ubuntu `lsb_release -sc` main | sudo tee   
+/etc/apt/sources.list.d/saltstack.list
+wget -q -O- "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&amp;amp;search=0x4759FA960E27C0A6" |sudo apt-key add -
+sudo apt-get update
+sudo apt-get install salt-master
+sudo apt-get install salt-minion
+</code></p>
+
+<p>由于我配置文件目录更改,所以有些增加的选项都是非必要的,参考即可</p>
+
+<h3>master配置</h3>
+
+<p>vim /etc/salt/master  配置文件
+<code>
+include: /mnt/config/salt/master
+default_include: /mnt/config/salt/master.d/*.conf
+mkdir -p /mnt/config/salt/ /mnt/config/salt/master.d/
+</code></p>
+
+<p>vim /mnt/config/salt/master #主配置文件
+<code>
+interface: 192.168.0.210
+user: root
+auto_accept: True     #自动认证
+worker_threads: 5     #工作线程，默认5，根据cpu调整
+</code>
+PS: /mnt/config/salt/master.d/ 这个目录会在下篇里面说到</p>
+
+<p>/etc/init.d/salt-master start #启动</p>
+
+<p>```</p>
+
+<h1>表示启动成功</h1>
+
+<p>[root@angel01 ~]# netstat -lntp |grep -E &ldquo;450[5|6]&rdquo;
+tcp        0      0 192.168.0.210:4505          0.0.0.0:<em>                   LISTEN      20004/python2.6  <br/>
+tcp        0      0 192.168.0.210:4506          0.0.0.0:</em>                   LISTEN      19996/python2.6 <br/>
+```</p>
+
+<h3>minion配置</h3>
+
+<p>vim /etc/salt/minion 配置文件
+<code>
+include: /mnt/config/salt/minion
+</code></p>
+
+<p>vim /mnt/config/salt/minion
+<code>
+master: angel01.i.fdmdns.com    #master地址
+user: root                      #启动用户
+id: angel01.i.fdmdns.com        #这个就是服务器用来标示客户端的东西
+</code>
+/etc/init.d/salt-minion start #启动</p>
+
+<p>第一次启动minion,minion会生成钥匙 <br/>
+<code>
+[root@angel01 /]# tree /etc/salt/pki/minion/
+/etc/salt/pki/minion/
+├── minion_master.pub
+├── minion.pem
+└── minion.pub
+</code></p>
+
+<h3>手动认证</h3>
+
+<p>```
+[root@angel01 ~]# salt-key
+Accepted Keys:             #验证通过
+Unaccepted Keys:          #等待验证的
+angel01.i.fdmdns.com
+Rejected Keys:               #拒绝</p>
+
+<p>[root@angel01 ~]# salt-key -A
+接受所有key
+```</p>
+
+<h3>salt-key的基本命令</h3>
+
+<p><code>
+salt-key -L #检测当前server端所有minion端key的情况，三种：接收、等待接收和拒绝
+salt-key -a hostname #指定接收某台minion的key
+salt-key -A #接收Unaccepted Keys下所有的minion
+salt-key -d hostname #删除已经接收的机器中指定机器minion key (Accepted Keys:)
+salt-key -D #删除已经接收的所有机器(Accepted Keys:)
+</code></p>
+
+<h3>测试</h3>
+
+<p>```
+[root@angel01 ~]# salt &lsquo;*&rsquo; test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>```</p>
+
+<p>表示成功了！</p>
+
+<h3>问题集合</h3>
+
+<p>问题1 <br/>
+ImportError: No module named salt.scripts <br/>
+yum 的情况下salt的模块都安装在python2.6 进入/etc/init.d/salte-master进行修改 <br/>
+<code>
+批量修改命令
+sed -i "s/^#\!\/usr\/bin\/python$/#\!\/usr\/bin\/python2.6/g" /usr/bin/salt-*
+批量修改启动命令
+sed -i "s/^PYTHON=\/usr\/bin\/python$/PYTHON=\/usr\/bin\/python2.6/g" /etc/init.d/salt-*
+</code>
+问题2 <br/>
+[root@angel01 ~]# salt  &lsquo;angel01.i.fdmdns.com&rsquo; test.ping  <br/>
+[ERROR   ] Salt request timed out. If this error persists, worker_threads may need to be increased. <br/>
+Failed to authenticate, is this user permitted to execute commands?  <br/>
+由于修改过启动配置文件直接读取/mnt/config/salt/导致,最后改成/etc/salt/master 添加include解决</p>
+]]></content>
+  </entry>
+  
+</feed>

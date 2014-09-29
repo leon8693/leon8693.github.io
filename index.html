@@ -93,6 +93,216 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/09/29/saltstack-install-1/">Saltstack Install (一)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-29T16:14:00+08:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>下载安装</h1>
+
+<h5>Centos</h5>
+
+<p>epel源或者centos源都有</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install salt-master -y #服务端
+</span><span class='line'>yum install salt-minion -y #客户端</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>Ubuntu</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-software-properties
+</span><span class='line'>echo deb http://ppa.launchpad.net/saltstack/salt/ubuntu `lsb_release -sc` main | sudo tee   
+</span><span class='line'>/etc/apt/sources.list.d/saltstack.list
+</span><span class='line'>wget -q -O- "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&amp;search=0x4759FA960E27C0A6" |sudo apt-key add -
+</span><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get install salt-master
+</span><span class='line'>sudo apt-get install salt-minion</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由于我配置文件目录更改,所以有些增加的选项都是非必要的,参考即可</p>
+
+<h3>master配置</h3>
+
+<p>vim /etc/salt/master  配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>include: /mnt/config/salt/master
+</span><span class='line'>default_include: /mnt/config/salt/master.d/*.conf
+</span><span class='line'>mkdir -p /mnt/config/salt/ /mnt/config/salt/master.d/</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vim /mnt/config/salt/master #主配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>interface: 192.168.0.210
+</span><span class='line'>user: root
+</span><span class='line'>auto_accept: True     #自动认证
+</span><span class='line'>worker_threads: 5     #工作线程，默认5，根据cpu调整</span></code></pre></td></tr></table></div></figure>
+
+
+<p>PS: /mnt/config/salt/master.d/ 这个目录会在下篇里面说到</p>
+
+<p>/etc/init.d/salt-master start #启动</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#表示启动成功
+</span><span class='line'>[root@angel01 ~]# netstat -lntp |grep -E "450[5|6]"
+</span><span class='line'>tcp        0      0 192.168.0.210:4505          0.0.0.0:*                   LISTEN      20004/python2.6    
+</span><span class='line'>tcp        0      0 192.168.0.210:4506          0.0.0.0:*                   LISTEN      19996/python2.6   </span></code></pre></td></tr></table></div></figure>
+
+
+<h3>minion配置</h3>
+
+<p>vim /etc/salt/minion 配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>include: /mnt/config/salt/minion</span></code></pre></td></tr></table></div></figure>
+
+
+<p>vim /mnt/config/salt/minion</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>master: angel01.i.fdmdns.com    #master地址
+</span><span class='line'>user: root                      #启动用户
+</span><span class='line'>id: angel01.i.fdmdns.com        #这个就是服务器用来标示客户端的东西</span></code></pre></td></tr></table></div></figure>
+
+
+<p>/etc/init.d/salt-minion start #启动</p>
+
+<p>第一次启动minion,minion会生成钥匙</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 /]# tree /etc/salt/pki/minion/
+</span><span class='line'>/etc/salt/pki/minion/
+</span><span class='line'>├── minion_master.pub
+</span><span class='line'>├── minion.pem
+</span><span class='line'>└── minion.pub</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>手动认证</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt-key
+</span><span class='line'>Accepted Keys:             #验证通过
+</span><span class='line'>Unaccepted Keys:          #等待验证的
+</span><span class='line'>angel01.i.fdmdns.com
+</span><span class='line'>Rejected Keys:               #拒绝
+</span><span class='line'>
+</span><span class='line'>[root@angel01 ~]# salt-key -A
+</span><span class='line'>接受所有key</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>salt-key的基本命令</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>salt-key -L #检测当前server端所有minion端key的情况，三种：接收、等待接收和拒绝
+</span><span class='line'>salt-key -a hostname #指定接收某台minion的key
+</span><span class='line'>salt-key -A #接收Unaccepted Keys下所有的minion
+</span><span class='line'>salt-key -d hostname #删除已经接收的机器中指定机器minion key (Accepted Keys:)
+</span><span class='line'>salt-key -D #删除已经接收的所有机器(Accepted Keys:)</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>测试</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt '*' test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
+
+
+<p>表示成功了！</p>
+
+<h3>问题集合</h3>
+
+<p>问题1 <br/>
+ImportError: No module named salt.scripts <br/>
+yum 的情况下salt的模块都安装在python2.6 进入/etc/init.d/salte-master进行修改</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>批量修改命令
+</span><span class='line'>sed -i "s/^#\!\/usr\/bin\/python$/#\!\/usr\/bin\/python2.6/g" /usr/bin/salt-*
+</span><span class='line'>批量修改启动命令
+</span><span class='line'>sed -i "s/^PYTHON=\/usr\/bin\/python$/PYTHON=\/usr\/bin\/python2.6/g" /etc/init.d/salt-*</span></code></pre></td></tr></table></div></figure>
+
+
+<p>问题2 <br/>
+[root@angel01 ~]# salt  &lsquo;angel01.i.fdmdns.com&rsquo; test.ping  <br/>
+[ERROR   ] Salt request timed out. If this error persists, worker_threads may need to be increased. <br/>
+Failed to authenticate, is this user permitted to execute commands?  <br/>
+由于修改过启动配置文件直接读取/mnt/config/salt/导致,最后改成/etc/salt/master 添加include解决</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/">Maptail展现中国地图</a></h1>
     
     
@@ -546,76 +756,6 @@ github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/15/djangoji-chu/">Django 基础</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-15T09:33:00+08:00" pubdate data-updated="true">May 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>django重点</h3>
-
-<p><code>django-admin.py startproject mysite</code> 命令在当前目录创建一个<code>mysite</code>目录,这个作为一个项目目录</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">mysite</span><span class="o">/</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">__init__</span><span class="o">.</span><span class="n">py</span>         <span class="c">#django 初始化模块</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">__init__</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">settings</span><span class="o">.</span><span class="n">py</span>         <span class="c">#django 主要配置,全局环境变量</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">settings</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">urls</span><span class="o">.</span><span class="n">py</span>             <span class="c">#django 主要配置,url跳转</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">urls</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">views</span><span class="o">.</span><span class="n">py</span>            <span class="c">#django 主要配置,视图功能</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">views</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">wsgi</span><span class="o">.</span><span class="n">py</span>             <span class="c">#django 默认加载的模块</span>
-</span><span class='line'><span class="err">└──</span> <span class="n">wsgi</span><span class="o">.</span><span class="n">pyc</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>django请求流程，用户请求&mdash;>django-urls.py&mdash;>django-views.py</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/05/15/djangoji-chu/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -629,7 +769,8 @@ github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></
     <section>
   <h1>文章分类</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
+    <li class='category'><a href='/blog/categories/automation/'>Automation (1)</a></li>
+<li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
