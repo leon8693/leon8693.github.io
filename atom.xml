@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-08-05T14:17:22+08:00</updated>
+  <updated>2014-09-29T16:07:02+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -96,7 +96,7 @@ github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></
 
 <p>本人使用后非常好,这得感谢王强的付出和共享,随后我将这个通过nginx转发,发现通过nginx代理后页面变成静态了,这个是怎么回事?<br/>
 原本想研究一下,但迫于工作原因,没时间仔细看,不过和同事分享的时候发现了是websocket的问题,这得感谢@朱总的提议,随后查看页面如下<br/>
-<img src="http://leon8693.github.io/images/blog_img/maptail001.png" alt="maptail001" /></p>
+<img src="http://leon8693.github.io/images/blog_img/maptail01.png" alt="maptail01" /></p>
 
 <p>确确实实就是websocket问题<br/>
 接下来我们来解决它,嘿嘿<br/>
