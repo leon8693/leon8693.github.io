@@ -93,6 +93,78 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/11/14/octopresstian-jia-tong-ji/">Octopress添加统计</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-14T14:06:00+08:00" pubdate data-updated="true">Nov 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>搭建了Octopress发现自己不会js,css以及各类代码，要美化Octopress真的很难，所以只有谷哥，度娘，东找找，西找找,看一些大牛的文章,照搬过来，统一放到自己的博客里面，方便自己看，也方便其他人不需要频繁的在网上各种搜索。</p>
+
+<p>首先可以通过各类搜索引擎将自己的网站放入进去,这样大家在使用这些搜索引擎的时候方便搜索到自己的博客，网站。  <br/>
+<a href="http://tool.lusongsong.com/addurl.html">http://tool.lusongsong.com/addurl.html</a> <br/>
+<a href="http://urlc.cn/tool/addurl.html">http://urlc.cn/tool/addurl.html</a></p>
+
+<h3>添加关键字</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>---
+</span><span class='line'>layout: post
+</span><span class='line'>title: <span class="s2">&quot;Octopress添加统计&quot;</span>
+</span><span class='line'>date: 2013-11-14 14:06
+</span><span class='line'>comments: <span class="nb">true</span>
+</span><span class='line'>categories: Octopress
+</span><span class='line'>description: <span class="s2">&quot;Octopress添加统计&quot;</span>
+</span><span class='line'>tags: <span class="o">[</span>octopress,博客,统计<span class="o">]</span>
+</span><span class='line'>keywords: octopress,统计,关键字
+</span><span class='line'>---
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/14/octopresstian-jia-tong-ji/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/">Octopress最新评论及友情链接</a></h1>
     
     
@@ -278,73 +350,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/13/qq-404/">Octopress 404公益页面</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-13T15:06:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>404公益页面</h3>
-
-<p>访问QQ 404公益页面，获取需要的代码<br/>
-www.qq.com/404<br/>
-将代码放入Nginx制定的目录中，并配置nginx即可</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>server  {
-</span><span class='line'>        listen 80;
-</span><span class='line'>        server_name _;
-</span><span class='line'>        root /octopress/public/;
-</span><span class='line'>                location /{
-</span><span class='line'>                index index.html;
-</span><span class='line'>                }
-</span><span class='line'>        error_page 404 "http://leon8693.github.io/404/404.html";
-</span><span class='line'>        error_page 403 "http://leon8693.github.io/404/404.html";
-</span><span class='line'>        access_log /data1/logs/nginx/access.log gzip;
-</span><span class='line'>        }</span></code></pre></td></tr></table></div></figure>
-
-
-<p>效果如下<br/>
-<a href="http://leon8693.github.io/404/404.html">http://leon8693.github.io/404/404.html</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -360,7 +365,7 @@ www.qq.com/404<br/>
     <section>
   <h1>文章分类</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/automation/'>Automation (1)</a></li>
+    <li class='category'><a href='/blog/categories/automation/'>Automation (2)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
