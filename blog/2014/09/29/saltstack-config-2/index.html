@@ -117,31 +117,31 @@
 
 <p>配置文件/etc/salt/master</p>
 
-<p>interface
-默认接口：0.0.0.0（所有的网络地址接口）
+<p>interface  <br/>
+默认接口：0.0.0.0（所有的网络地址接口）  <br/>
 绑定到本地的某个网络接口</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>ginterface: 192.168.0.1</span></code></pre></td></tr></table></div></figure>
 
 
-<p>publish_port
-默认值：4505
+<p>publish_port  <br/>
+默认值：4505  <br/>
 设置master与minion的认证通信端口</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>gpublish_port: 4505</span></code></pre></td></tr></table></div></figure>
 
 
-<p>user
-默认值：root
+<p>user  <br/>
+默认值：root  <br/>
 运行salt进程的用户</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>user: root</span></code></pre></td></tr></table></div></figure>
 
 
-<p>max_open_files
+<p>max_open_files  <br/>
 每一个minion连接到master，至少要使用一个文件描述符，如果足够多的minion连接到master上，你将会从控制台上看到</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -152,7 +152,7 @@
 </span><span class='line'>Aborted (core dumped)</span></code></pre></td></tr></table></div></figure>
 
 
-<p>默认值这个值取决于ulimit -Hn的值，即系统的对打开文件描述符的硬限制
+<p>默认值这个值取决于ulimit -Hn的值，即系统的对打开文件描述符的硬限制   <br/>
 如果你希望重新设置改值或者取消设置，记住这个值不能超过硬限制，提高硬限制取决于你的操作系统或分配，一个好的方法是internet找到对应操作系统的硬限制设置，比如这样搜索：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -163,40 +163,39 @@
 </span><span class='line'>worker_threads</span></code></pre></td></tr></table></div></figure>
 
 
-<p>默认值：5
+<p>默认值：5   <br/>
 启动用来接收或应答minion的线程数。如果你有很多minion，而且minion延迟你的应答，你可以适度的提高该值. 在点对点的系统环境中使用时，该值不要被设置为3以下，但是可以将其设置为1</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>gworker_threads: 5</span></code></pre></td></tr></table></div></figure>
 
 
-<p>gret_port
-默认值：4506
+<p>gret_port  <br/>
+默认值：4506  <br/>
 这个端口是master用来发送命令或者接收minions的命令执行返回信息</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>gret_port: 4506</span></code></pre></td></tr></table></div></figure>
 
 
-<p>pidfile</p>
-
-<p>默认值：/var/run/salt-master.pid
+<p>pidfile  <br/>
+默认值：/var/run/salt-master.pid <br/>
 指定master的pid文件位置</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>pidfile: /var/run/salt-master.pid</span></code></pre></td></tr></table></div></figure>
 
 
-<p>root_dir
-默认值：/
+<p>root_dir  <br/>
+默认值：/  <br/>
 指定该目录为salt运行的根目录，改变它可以使salt从另外一个目录开始运行，好比chroot</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>root_dir: / </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>root_dir: /</span></code></pre></td></tr></table></div></figure>
 
 
-<p>pki_dir
-默认值：/etc/salt/pki
+<p>pki_dir  <br/>
+默认值：/etc/salt/pki  <br/>
 这个目录是用来存放pki认证秘钥</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -206,74 +205,74 @@
 <!-- more -->
 
 
-<p>cachedir
-默认值：/var/cache/salt
+<p>cachedir   <br/>
+默认值：/var/cache/salt  <br/>
 这个目录是用来存放缓存信息，特别是salt工作执行的命令信息</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>cachedir: /var/cache/salt</span></code></pre></td></tr></table></div></figure>
 
 
-<p>keep_jobs
-默认值：24
-设置保持老的工作信息的过期时间，单位小时
-job_cache
-默认值：True
-设置master维护的工作缓存，这是一个很好的功能，当你的Minons超过5000台时，他将很好的承担这个大的架构，关闭这个选项，之前的工作执行以及工作系统将无法被利用，一般不推荐关掉改选项，开启改选项将会是很明智的，他将使master获得更快的IO系统
-ext_job_cache
+<p>keep_jobs   <br/>
+默认值：24  <br/>
+设置保持老的工作信息的过期时间，单位小时  <br/>
+job_cache  <br/>
+默认值：True   <br/>
+设置master维护的工作缓存，这是一个很好的功能，当你的Minons超过5000台时，他将很好的承担这个大的架构，关闭这个选项，之前的工作执行以及工作系统将无法被利用，一般不推荐关掉改选项，开启改选项将会是很明智的，他将使master获得更快的IO系统   <br/>
+ext_job_cache   <br/>
 对所有的minions使用指定的默认值returner，当使用了这个参数来指定一个returner并且配置正确，minions将会一直将返回的数据返回到returner，这也会默认值禁用master的本地缓存</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>ext_job_cache: redis</span></code></pre></td></tr></table></div></figure>
 
 
-<p>minion_data_cache
-默认值：True
+<p>minion_data_cache  <br/>
+默认值：True  <br/>
 minion data cache是关于minion信息存储在master上的参数，这些信息主要是pillar 和 grains数据.这些数据被缓存在cachedir定义的目录下的minion目录下以minion名为名的目录下并且预先确定哪些minions将从执行回复</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>minion_cache_dir: True</span></code></pre></td></tr></table></div></figure>
 
 
-<p>genforce_mine_cache
-默认值：False
+<p>genforce_mine_cache  <br/>
+默认值：False   <br/>
 默认情况下当关闭了minion_data_cache，mine将会停止工作，因为mine是基于缓存数据，通过启用这个选项，我们将会显示的开启对于mine系统的缓存功能</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>genforce_mine_cache: False</span></code></pre></td></tr></table></div></figure>
 
 
-<p>sock_dir
-默认值：/tmp/salt-unix
+<p>sock_dir   <br/>
+默认值：/tmp/salt-unix  <br/>
 指定unix socket主进程通信的socket创建路径</p>
 
-<p>master的安全配置
-open_mode
-默认值：False
+<p>master的安全配置  <br/>
+open_mode  <br/>
+默认值：False  <br/>
 open_mode是一个危险的安全特性，当master遇到pki认证系统，秘钥混淆和身份验证失效时，打开open_mode，master将会接受所有的身份验证。这将会清理掉pki秘钥接受的minions。通常情况下open_mode不应该被打开，它只适用于短时间内清理pki keys，若要打开它，可将值调整为True</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>open_mode: False</span></code></pre></td></tr></table></div></figure>
 
 
-<p>auto_accept
-默认值：False
+<p>auto_accept   <br/>
+默认值：False   <br/>
 开启auto_accept。这个设置将会使master自动接受所有发送公钥的minions</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>auto_accept: True</span></code></pre></td></tr></table></div></figure>
 
 
-<p>autosign_file
-默认值：/etc/salt/autosign.conf
+<p>autosign_file  <br/>
+默认值：/etc/salt/autosign.conf  <br/>
 如果autosign_file的值被指定，那么autosign_file将会通过该输入允许所有的匹配项，首先会搜索字符串进行匹配，然后通过正则表达式进行匹配。这是不安全的</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>autosign_file: /etc/salt/autosign.conf</span></code></pre></td></tr></table></div></figure>
 
 
-<p>client_acl
-默认值：{}
+<p>client_acl   <br/>
+默认值：{}  <br/>
 开启对系统上非root的系统用户在master上执行特殊的模块，这些模块名可以使用正则表达式进行表示</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -286,9 +285,9 @@ open_mode是一个危险的安全特性，当master遇到pki认证系统，秘�
 </span><span class='line'>      - pkg.*</span></code></pre></td></tr></table></div></figure>
 
 
-<p>client_acl_blacklist
-默认值：{}
-黑名单用户或模块
+<p>client_acl_blacklist  <br/>
+默认值：{}  <br/>
+黑名单用户或模块  <br/>
 这个例子表示所有非sudo用户以及root都无法通过cmd这个模块执行命令，默认情况改配置是完全禁用的</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -305,8 +304,8 @@ open_mode是一个危险的安全特性，当master遇到pki认证系统，秘�
 </span><span class='line'>      - cmd</span></code></pre></td></tr></table></div></figure>
 
 
-<p>external_auth
-默认值：{}
+<p>external_auth   <br/>
+默认值：{}  <br/>
 salt的认证模块采用外部的认证系统用来做认证和验证用户在salt系统中的访问区域</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -319,69 +318,74 @@ salt的认证模块采用外部的认证系统用来做认证和验证用户在s
 </span><span class='line'>          - test.*</span></code></pre></td></tr></table></div></figure>
 
 
-<p>token_expire
-默认：43200
+<p>token_expire    <br/>
+默认：43200  <br/>
 新令牌生成的时间间隔，单位秒，默认是12小时</p>
 
-<p>gtoken_expire: 43200
-file_recv
-默认值：False
+<p>token_expire: 43200  <br/>
+file_recv  <br/>
+默认值：False   <br/>
 允许minions推送文件到master上，这个选项默认是禁用的，出于安全考虑</p>
 
-<p>gfile_recv: False
-master模块管理
-runner_dirs
+<p>file_recv: False <br/>
+master模块管理   <br/>
+runner_dirs   <br/>
 默认值：[] 设置搜索runner模块的额外路径</p>
 
-<p>grunner_dirs: []
-cython_enable
-默认值：False
+<p>runner_dirs: []  <br/>
+cython_enable  <br/>
+默认值：False  <br/>
 设置为true来开启对cython模块的编译</p>
 
-<p>gcython_enable: False
-master状态系统设置
-state_verbose
-默认：False
+<p>cython_enable: False <br/>
+master状态系统设置   <br/>
+state_verbose   <br/>
+默认：False  <br/>
 state_verbose允许从minions返回更多详细的信息，通常清空下只返回失败或者已经更改，但是将state_verbose设置为True,将会返回所有的状态检查</p>
 
-<p>gstate_verbose: True
-state_output
-默认值：full
+<p>state_verbose: True <br/>
+state_output  <br/>
+默认值：full   <br/>
 state_output的设置将会改变信息输出的格式，当被设置为”full”时，将全部的输出一行一行的显示输出；当被设置为”terse“时，将会被缩短为一行进行输出；当被设置为”mixed”时，输出样式将会是简洁的，除非状态失败，这种情况下将会全部输出；当被设置为”change”时，输出将会完全输出除非状态没有改变</p>
 
-<p>gstate_output: full
-state_top
-默认值：top.sls
+<p>state_output: full  <br/>
+state_top   <br/>
+默认值：top.sls  <br/>
 状态系统使用一个入口文件告诉minions在什么环境下使用什么模块，这个状态入口文件被定义在基础环境的相对根路径下</p>
 
-<p>gstate_top: top.sls
-external_nodes
-默认值：None
+<p>state_top: top.sls <br/>
+external_nodes   <br/>
+默认值：None   <br/>
 这个外部节点参数允许salt来收集一些数据，通常被放置在一个入口文件或外部节点控制器.外部节点的选择是可执行的，将会返回ENC数据，记住如果两者都启用的话salt会将外部节点和入口文件的结果进行综合汇总。</p>
 
-<p>gexternal_nodes: cobbler-ext-nodes
-renderer
-默认值：yaml_jinja
+<p>external_nodes: cobbler-ext-nodes <br/>
+renderer  <br/>
+默认值：yaml_jinja   <br/>
 使用渲染器用来渲染minions的状态数据</p>
 
-<p>grenderer: yaml_jinja
-failhard
-默认值：False
+<p>renderer: yaml_jinja  <br/>
+failhard  <br/>
+默认值：False  <br/>
 设置一个全局的failhard表示，当单个的状态执行失败后，将会通知所有的状态停止运行状态</p>
 
-<p>gfailhard: False
-test
-默认值：False
+<p>failhard: False  <br/>
+test   <br/>
+默认值：False  <br/>
 如果真的要作出改变或者仅仅通知将要执行什么改变时设置所有的状态调用为test</p>
 
-<p>gtest: False
-master文件服务器设置
-fileserver_backend
+<p>test: False <br/>
+master文件服务器设置</p>
+
+<p>fileserver_backend   <br/>
 默认值：</p>
 
-<p>gfileserver_backend:
-  &ndash; roots
-salt支持模块化的后端文件系统服务器，它允许salt通过第三方的系统来管理收集文件并提供给minions使用，可以配置多个后端文件系统，这里支持gitfs、hgfs、roots、s3fs文件调用的搜索顺序按照后台文件系统的配置顺序来搜索，默认的设置只开启了标准的后端服务器roots，具体的根选项配置通过file_roots参数设置</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>fileserver_backend:
+</span><span class='line'>  - roots</span></code></pre></td></tr></table></div></figure>
+
+
+<p>salt支持模块化的后端文件系统服务器，它允许salt通过第三方的系统来管理收集文件并提供给minions使用，可以配置多个后端文件系统，这里支持gitfs、hgfs、roots、s3fs文件调用的搜索顺序按照后台文件系统的配置顺序来搜索，默认的设置只开启了标准的后端服务器roots，具体的根选项配置通过file_roots参数设置</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -391,12 +395,16 @@ salt支持模块化的后端文件系统服务器，它允许salt通过第三方
 </span><span class='line'>  - gitfs</span></code></pre></td></tr></table></div></figure>
 
 
-<p>file_roots
+<p>file_roots   <br/>
 默认值：</p>
 
-<p>gbase:
-  &ndash; /srv/salt
-salt运行一个轻量级的文件服务器通过ZeroMQ对minions进行文件传输，因此这个文件服务器是构造在master的守护进程中，并且不需要依赖于专用的端口 文件服务器的工作环境传递给master，每一个环境可以有多个跟目录，但是相同环境下多个文件的子目录不能相同，否则下载的文件将不能被可靠的保证，一个基础环境依赖于主的入口文件，如：</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>base:
+</span><span class='line'>  - /srv/salt</span></code></pre></td></tr></table></div></figure>
+
+
+<p>salt运行一个轻量级的文件服务器通过ZeroMQ对minions进行文件传输，因此这个文件服务器是构造在master的守护进程中，并且不需要依赖于专用的端口 文件服务器的工作环境传递给master，每一个环境可以有多个跟目录，但是相同环境下多个文件的子目录不能相同，否则下载的文件将不能被可靠的保证，一个基础环境依赖于主的入口文件，如：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -418,28 +426,33 @@ salt运行一个轻量级的文件服务器通过ZeroMQ对minions进行文件传
 </span><span class='line'>     - /srv/salt/prod/states</span></code></pre></td></tr></table></div></figure>
 
 
-<p>hash_type
-默认值：md5
+<p>hash_type <br/>
+默认值：md5  <br/>
 hash_type是用来当发现在master上需要对一个文件进行hash时的hash使用的算法，默认是md5.但是它也支持sha1,sha224,shar256,shar384,shar512</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>hash_type: md5</span></code></pre></td></tr></table></div></figure>
 
 
-<p>file_buffer_size
-默认值：1048576
+<p>file_buffer_size  <br/>
+默认值：1048576  <br/>
 文件服务器的缓存区大小</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>file_buffer_size: 1048576</span></code></pre></td></tr></table></div></figure>
 
 
-<p>pillar配置
-pillar_roots
-默认值：
-gbase:
-  &ndash; /srv/pillar
-设置不同的环境对应的存放pillar数据的目录，这个配置和file_roots参数配置一样</p>
+<p>pillar配置   <br/>
+pillar_roots   <br/>
+默认值：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>base:
+</span><span class='line'>  - /srv/pillar</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设置不同的环境对应的存放pillar数据的目录，这个配置和file_roots参数配置一样</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -457,9 +470,9 @@ gbase:
 </span><span class='line'>      - /srv/pillar/prod</span></code></pre></td></tr></table></div></figure>
 
 
-<p>ext_pillar
-当进行pillar数据收集时，这个ext_pillar参数允许调用任意数量的外部pillar接口，这个配置是基于ext_pillar函数，你可以从这个找到这个函数<a href="https://github.com/saltstack/salt/blob/develop/salt/pillar">https://github.com/saltstack/salt/blob/develop/salt/pillar</a>
-默认情况下，这个ext_pillar接口没有配置运行
+<p>ext_pillar   <br/>
+当进行pillar数据收集时，这个ext_pillar参数允许调用任意数量的外部pillar接口，这个配置是基于ext_pillar函数，你可以从这个找到这个函数<a href="https://github.com/saltstack/salt/blob/develop/salt/pillar">https://github.com/saltstack/salt/blob/develop/salt/pillar</a>   <br/>
+默认情况下，这个ext_pillar接口没有配置运行   <br/>
 默认值：None</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -478,53 +491,53 @@ gbase:
 
 <p>syndic server配置</p>
 
-<p>syncdic是salt master用来通过从整体架构中高于自己层级的master或者syndic接收命令传递给minions的中间角色。使用syndic非常简单，如果这个master在整体架构中，他的下级存在syndic server，那么需要将master的配置文件中的”order_master”值设置为True，如果这个master还需要运行一个syndic进程，扮演另外一个角色，那么需要设置主master server的信息(上一级master)
+<p>syncdic是salt master用来通过从整体架构中高于自己层级的master或者syndic接收命令传递给minions的中间角色。使用syndic非常简单，如果这个master在整体架构中，他的下级存在syndic server，那么需要将master的配置文件中的”order_master”值设置为True，如果这个master还需要运行一个syndic进程，扮演另外一个角色，那么需要设置主master server的信息(上一级master)    <br/>
 千万别忘记了，这将意味着它将与其他master共享它的minion的id和pki_dir</p>
 
-<p>order_masters
-默认值：False
+<p>order_masters   <br/>
+默认值：False   <br/>
 当额外的数据需要发送和传递，并且这个master控制的minions是被低等级的master或syndic直接管理下，那么”order_masters”这个值必须得设置为True</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>order_master: False</span></code></pre></td></tr></table></div></figure>
 
 
-<p>syndic_master
-默认值：None
+<p>syndic_master   <br/>
+默认值：None   <br/>
 如果这个master运行的salt-syndic连接到了一个更高层级的master,那么这个参数需要配置成连接到的这个高层级的master的地址</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>syndic_master: masterofmasters</span></code></pre></td></tr></table></div></figure>
 
 
-<p>syndic_master_port
-默认值：4506
+<p>syndic_master_port   <br/>
+默认值：4506   <br/>
 如果这个master运行的salt-syndic连接到了一个更高层级的master,那么这个参数需要配置成连接到的这个高层级master的监听端口</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>syndic_master_port: 4506</span></code></pre></td></tr></table></div></figure>
 
 
-<p>syndic_log_file
-默认值：syndic.log
+<p>syndic_log_file   <br/>
+默认值：syndic.log    <br/>
 为syndic进程指定日志文件</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>syndic_log_file: salt-syndic.log</span></code></pre></td></tr></table></div></figure>
 
 
-<p>syndic_pidfile
-默认值：salt-syndic.pid
+<p>syndic_pidfile   <br/>
+默认值：salt-syndic.pid  <br/>
 为syndic进程指定pid文件</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>syndic_pidfile: syndic.pid</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Peer Publish设置
-salt minions可以向其他minions发送命令，但是仅仅在minion允许的情况下。默认情况下”Peer Publication”是关闭的，当需要开启的时候，需要开启对应的minion和对应的命令，这样可以允许根据个人的minions安全的划分出命令
-peer
-默认值：{}
+<p>Peer Publish设置    <br/>
+salt minions可以向其他minions发送命令，但是仅仅在minion允许的情况下。默认情况下”Peer Publication”是关闭的，当需要开启的时候，需要开启对应的minion和对应的命令，这样可以允许根据个人的minions安全的划分出命令   <br/>
+peer   <br/>
+默认值：{}    <br/>
 这个配置使用正则表达式去匹配minions并且是一个正则表达式列表函数，下面这个例子将允许名为foo.example.com的minion认证通过后执行test和pkg模块中的函数</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -549,8 +562,8 @@ peer
 
 <p>这样的配置是极不推荐的，因为任何人得到架构中的任何一个minion即可拥有所有的minions，这是不安全的</p>
 
-<p>peer_run
-默认值：{}
+<p>peer_run   <br/>
+默认值：{}               <br/>
 peer_run参数是用来打开runners在master所允许的minions上，peer_run的配置匹配格式和peer参数的配置一样 下面这个例子允许foo.example.com的minion执行manage.up runner</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -561,8 +574,8 @@ peer_run参数是用来打开runners在master所允许的minions上，peer_run�
 </span><span class='line'>     - manage.up</span></code></pre></td></tr></table></div></figure>
 
 
-<p>nodegroups
-默认值：{}
+<p>nodegroups  <br/>
+默认值：{}  <br/>
 minions允许通过node groups来分成多个逻辑组，每个组由一个组名和复合模式组成</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -573,10 +586,10 @@ minions允许通过node groups来分成多个逻辑组，每个组由一个组�
 </span><span class='line'>  group2: 'G@os:Debian and foo.domain.com'</span></code></pre></td></tr></table></div></figure>
 
 
-<p>Master日志设置
-log_file
-默认值：/var/log/salt/master
-master的日志可以发送到一个普通文件，本地路径名或者网络位置，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_file">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_file</a>
+<p>Master日志设置   <br/>
+log_file  <br/>
+默认值：/var/log/salt/master  <br/>
+master的日志可以发送到一个普通文件，本地路径名或者网络位置，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_file">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_file</a>   <br/>
 例如：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -587,53 +600,53 @@ master的日志可以发送到一个普通文件，本地路径名或者网络�
 </span><span class='line'>log_file: udp://loghost:10514</span></code></pre></td></tr></table></div></figure>
 
 
-<p>log_level
-默认值：warning
+<p>log_level     <br/>
+默认值：warning     <br/>
 按照日志级别发送信息到控制台，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_level">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_level</a></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>log_level: warning</span></code></pre></td></tr></table></div></figure>
 
 
-<p>log_level_logfile
-默认值：warning
+<p>log_level_logfile    <br/>
+默认值：warning     <br/>
 按照日志级别发送信息到日志文件，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_level_logfile">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_level_logfile</a></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>log_level_logfile: warning</span></code></pre></td></tr></table></div></figure>
 
 
-<p>log_datefmt
-默认值：%H:%M:%S
+<p>log_datefmt     <br/>
+默认值：%H:%M:%S    <br/>
 发送到控制台信息所用的日期时间格式，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_datefmt">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_datefmt</a></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>log_datefmt: '%H:%M:%S'</span></code></pre></td></tr></table></div></figure>
 
 
-<p>log_datefmt_logfile
-默认值: %Y-%m-%d %H:%M:%S
+<p>log_datefmt_logfile     <br/>
+默认值: %Y-%m-%d %H:%M:%S     <br/>
 发送到日志文件信息所用的日期时间格式，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_datefmt_logfile">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_datefmt_logfile</a></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>log_datefmt_logfile: '%Y-%m-%d %H:%M:%S'</span></code></pre></td></tr></table></div></figure>
 
 
-<p>log_fmt_console
-默认值: [%(levelname)-8s] %(message)s
+<p>log_fmt_console     <br/>
+默认值: [%(levelname)-8s] %(message)s     <br/>
 控制台日志信息格式，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_fmt_console">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_fmt_console</a></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>log_fmt_console: '[%(levelname)-8s] %(message)s'</span></code></pre></td></tr></table></div></figure>
 
 
-<p>log_fmt_logfile
-默认值: %(asctime)s,%(msecs)03.0f [%(name)-17s][%(levelname)-8s] %(message)s
-%(asctime)s：2003-07-08 16:49:45
-%(msecs)03.0f：当前时间的毫秒部分
-%(name)：日志记录调用器的名字
-%(levelname)：日志记录级别
-%(message)s：日志详细信息
+<p>log_fmt_logfile     <br/>
+默认值: %(asctime)s,%(msecs)03.0f [%(name)-17s][%(levelname)-8s] %(message)s     <br/>
+%(asctime)s：2003-07-08 16:49:45     <br/>
+%(msecs)03.0f：当前时间的毫秒部分    <br/>
+%(name)：日志记录调用器的名字    <br/>
+%(levelname)：日志记录级别    <br/>
+%(message)s：日志详细信息    <br/>
 日志文件信息格式，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_fmt_logfile">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_fmt_logfile</a></p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -642,7 +655,7 @@ master的日志可以发送到一个普通文件，本地路径名或者网络�
 
 <p>log_granular_levels</p>
 
-<p>默认值：{}
+<p>默认值：{}    <br/>
 这可以更加具体的控制日志记录级别，更多详情请访问 <a href="http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_granular_levels">http://docs.saltstack.com/ref/configuration/logging/index.html#std:conf-log-log_granular_levels</a></p>
 
 <p>Include 配置</p>
@@ -651,10 +664,10 @@ master的日志可以发送到一个普通文件，本地路径名或者网络�
 </pre></td><td class='code'><pre><code class=''><span class='line'>default_include</span></code></pre></td></tr></table></div></figure>
 
 
-<p>默认值：master.d/<em>.conf
-master可以从其他文件读取配置，默认情况下master将自动的将master.d/</em>.conf中的配置读取出来并应用，其中master.d目录是相对存在于主配置文件所在的目录
-include
-默认值：not defined
+<p>默认值：master.d/<em>.conf    <br/>
+master可以从其他文件读取配置，默认情况下master将自动的将master.d/</em>.conf中的配置读取出来并应用，其中master.d目录是相对存在于主配置文件所在的目录    <br/>
+include     <br/>
+默认值：not defined     <br/>
 master可以包含其他文件中的配置，要启用此功能，通过此参数定义路径或文件，此路径可以是相对的也可以是绝对的，相对的，会被看作相对于主配置文件所在的目录，路径中还可以使用类似于shell风格的通配符，如果没有文件匹配的路径传递给此选项，那么master将会在日志中记录一条警告的消息</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
