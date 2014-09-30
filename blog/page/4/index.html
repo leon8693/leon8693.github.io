@@ -93,6 +93,96 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/11/19/octopressyang-shi-xiu-gai/">Octopress样式修改</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-19T14:39:00+08:00" pubdate data-updated="true">Nov 19<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>样式修改</h3>
+
+<p>添加或修改控制样式，需编辑<code>sass/custom/_styles.scss</code>，博客的所有颜色控制在<code>/sass/base/_theme.scss</code>中进行设置。定制自己的配色，编辑<code>sass/custom/_colors.scss</code>。查看<a href="http://hslpicker.com/#e1ff00">HSL COLOR PICKER</a>，帮你挑选喜欢的颜色。 <br/>
+修改布局，需要编辑<code>sass/base/_layout.scss</code>，可以修改各部分的宽度等。</p>
+
+<h3>添加背景图片</h3>
+
+<p>在<code>sass/custom/_styles.scss</code>中添加</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>html <span class="o">{</span>
+</span><span class='line'>        background: <span class="c">#555555 url(&quot;/images/lol.jpg&quot;);</span>
+</span><span class='line'>        //background: <span class="c">#555555;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>body &gt; div <span class="o">{</span>
+</span><span class='line'>        background-image: none;
+</span><span class='line'>        //background: <span class="c">#F5F5D5</span>
+</span><span class='line'><span class="o">}</span> //侧边栏
+</span><span class='line'>
+</span><span class='line'>body &gt; div &gt; div <span class="o">{</span> //文章内容
+</span><span class='line'>        background-image: none;
+</span><span class='line'>        //background: <span class="c">#F5F5D5;</span>
+</span><span class='line'>        //background: url<span class="o">(</span><span class="s2">&quot;/images/bg.jpg&quot;</span><span class="o">)</span>;
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>将背景图片放入<code>source/images/</code>中，修改上述代码中的路径指向想要的图片，即可 更改博客、侧边栏或文章的背景图片。博客使用背景图片后，与Header区不太和谐，所以我在<code>/sass/base/_theme.scss</code>中将<code>header-bg</code>设置成透明色了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$header</span>-bg: hsla<span class="o">(</span>0, 0%, 15%, 0<span class="o">)</span>  !default;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/19/octopressyang-shi-xiu-gai/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/14/octopresstian-jia-tong-ji/">Octopress添加统计</a></h1>
     
     
@@ -283,73 +373,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/">Octopress新浪微博侧边栏</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-13T15:26:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>增加新浪微博侧边栏</h3>
-
-<h4>先通过微博秀</h4>
-
-<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
-找到自己的代码</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;iframe
-</span><span class='line'><span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
-</span><span class='line'><span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
-</span><span class='line'> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
-</span><span class='line'> <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
-</span><span class='line'><span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
-</span><span class='line'><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://widget.weibo.com/weiboshow/index.php?language=&amp;width=0&amp;height=550&amp;fansRow=2&amp;ptype=1&amp;speed=0&amp;skin=1&amp;isTitle=1&amp;noborder=1&amp;isWeibo=1&amp;isFans=1&amp;uid=xxxxxxxx&amp;verifier=xxxxxxxx&quot;</span>&gt;
-</span><span class='line'>&lt;/iframe&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -365,7 +388,7 @@
     <section>
   <h1>文章分类</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/automation/'>Automation (2)</a></li>
+    <li class='category'><a href='/blog/categories/automation/'>Automation (3)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>

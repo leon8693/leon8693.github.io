@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Octopress新浪微博侧边栏 - 唯一的真理</title>
+  <title>saltstack minion,nodegroup,cmd.run (三)  - 唯一的真理</title>
   <meta name="author" content="leon">
 
   
-  <meta name="description" content="Octopress新浪微博侧边栏">
-  <meta name="keywords" content="Octopress,新浪微博,侧边栏">
+  <meta name="description" content="saltstack minion,nodegroup,cmd.run">
+  <meta name="keywords" content="saltstack,salt,自动化运维,自动化部署,minion,nodegroup,cmd.run">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan">
+  <link rel="canonical" href="http://leon8693.github.io/blog/2014/09/30/saltstack-minion-nodegroup-cmd-dot-run-3">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="唯一的真理" type="application/atom+xml">
@@ -90,7 +90,7 @@
   
   <header>
     
-      <h1 class="entry-title">Octopress新浪微博侧边栏</h1>
+      <h1 class="entry-title">Saltstack minion,nodegroup,cmd.run (三)</h1>
     
     
       <p class="meta">
@@ -106,49 +106,30 @@
   
 
 
-<time datetime="2013-11-13T15:26:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
+<time datetime="2014-09-30T10:31:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>增加新浪微博侧边栏</h3>
+<div class="entry-content"><h2>minion</h2>
 
-<h4>先通过微博秀</h4>
+<p>客户端标识默认采用主机名,也可以修改配置中的id来指定minion的名字    <br/>
+vim /mnt/config/salt/minion</p>
 
-<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
-找到自己的代码</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;iframe
-</span><span class='line'><span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
-</span><span class='line'><span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
-</span><span class='line'> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
-</span><span class='line'> <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
-</span><span class='line'><span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
-</span><span class='line'><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://widget.weibo.com/weiboshow/index.php?language=&amp;width=0&amp;height=550&amp;fansRow=2&amp;ptype=1&amp;speed=0&amp;skin=1&amp;isTitle=1&amp;noborder=1&amp;isWeibo=1&amp;isFans=1&amp;uid=xxxxxxxx&amp;verifier=xxxxxxxx&quot;</span>&gt;
-</span><span class='line'>&lt;/iframe&gt;
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>master: angel01.i.fdmdns.com
+</span><span class='line'>user: root
+</span><span class='line'>id: angel01.i.fdmdns.com #指定了这个客户端的名字</span></code></pre></td></tr></table></div></figure>
 
 
+<p>查看minion状态,并且可以使用正则 <br/>
+PS:必须在MASTER上操作</p>
 
-
-<!-- more -->
-
-
-<h4>将上面的代码转换成HTML</h4>
-
-<p>octopress/source/_includes/asides/weibo.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -165,31 +146,35 @@
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">{</span>% <span class="k">if </span>site.weibo_uid %<span class="o">}</span>
-</span><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;新浪微博&lt;/h1&gt;
-</span><span class='line'>  &lt;ul <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;weibo&quot;</span>&gt;
-</span><span class='line'>    &lt;li&gt;
-</span><span class='line'>      &lt;iframe
-</span><span class='line'>        <span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
-</span><span class='line'>        <span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
-</span><span class='line'>        <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
-</span><span class='line'>        <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
-</span><span class='line'>        <span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
-</span><span class='line'>        <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;&quot;</span>http://widget.weibo.com/weiboshow/index.php?width<span class="o">=</span>0&amp;height<span class="o">=</span>550&amp;ptype<span class="o">={</span>% <span class="k">if </span>site.weibo_pic %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;speed<span class="o">=</span>0&amp;skin<span class="o">=</span>&amp;isTitle<span class="o">=</span>0&amp;noborder<span class="o">=</span>1&amp;isWeibo<span class="o">={</span>% <span class="k">if </span>site.weibo_show %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;isFans<span class="o">=</span>&amp;uid<span class="o">=</span>&amp;verifier<span class="o">=</span><span class="err">&quot;</span>&gt;
-</span><span class='line'>      &lt;/iframe&gt;
-</span><span class='line'>    &lt;/li&gt;
-</span><span class='line'>  &lt;/ul&gt;
-</span><span class='line'>&lt;/section&gt;
-</span><span class='line'><span class="o">{</span>% endif %<span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt  'angel01.i.fdmdns.com'  test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>[root@angel01 ~]# salt  '*'  test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>[root@angel01 ~]# salt 'angel0[1-2].i.fdmdns.com'  test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>[root@angel01 ~]# salt 'angel0*'  test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
 
 
-<h4>配置文件中增加参数</h4>
+<p>上面展示了匹配的方式<br/>
+test.ping 是salt默认命令,主要测试客户端存活情况</p>
 
-<p>octopress/source/_config.yml</p>
+<p>另2个参数常用 <br/>
+-E来使用正则表达式 <br/>
+-L以列表的方式匹配</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -197,15 +182,77 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html<span class="o">]</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt -E 'angel0\w'  test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>[root@angel01 ~]# salt -L 'angel01.i.fdmdns.com,angel02.i.fdmdns.com'  test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主要的一些匹配演示如上</p>
+
+<h2>cmd.run</h2>
+
+<p>这个是可以批量执行shell命令,可以代替我们以前复杂的for的</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt -L 'angel01.i.fdmdns.com,angel02.i.fdmdns.com'  cmd.run "free -m|awk '/Mem:/{print \$2}'"
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    3702
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    1869</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>nodegroup</h2>
+
+<p>nodegroup可以对我们现有的服务器进行分组,默认配置文件放在/etc/salt/master <br/>
+这边为了更好的修改配置和区分,使用了default_include: /mnt/config/salt/master.d/*.conf</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat /etc/salt/master
+</span><span class='line'>include: /mnt/config/salt/master
+</span><span class='line'>default_include: /mnt/config/salt/master.d/*.conf
+</span><span class='line'>mkdir -p /mnt/config/salt/master.d/
+</span><span class='line'>vim /mnt/config/salt/master.d/nodegroups.conf 
+</span><span class='line'>#group#
+</span><span class='line'>nodegroups:
+</span><span class='line'>  web1:  'angel01.i.fdmdns.com' #测试机1为单独一组
+</span><span class='line'>  web2:  'angel02.i.fdmdns.com' #测试机2为单独一租
+</span><span class='line'>/etc/init.d/salt-master restart
 </span><span class='line'>
-</span><span class='line'>weibo_uid: xxxx     <span class="c">#微博中的uid，从微博秀中获得</span>
-</span><span class='line'>weibo_verifier: xxxx     <span class="c">#微博中的verifier 从微博秀中获得</span>
-</span><span class='line'>weibo_fansline: 1     <span class="c">#显示粉丝的数量，1行</span>
-</span><span class='line'>weibo_show: <span class="nb">true</span>     <span class="c">#是否显示内容</span>
-</span><span class='line'>weibo_pic: <span class="nb">true</span>         <span class="c">#是否显示图片</span>
-</span><span class='line'>weibo_skin: 10          <span class="c">#使用哪种风格的10为序号10的风格</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>[root@angel01 ~]# salt -N 'web1' test.ping
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>[root@angel01 ~]# salt -N 'web2' test.ping
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
@@ -229,12 +276,12 @@
   
 
 
-<time datetime="2013-11-13T15:26:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
+<time datetime="2014-09-30T10:31:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/octopress/'>Octopress</a>
+    <a class='category' href='/blog/categories/automation/'>Automation</a>
   
 </span>
 
@@ -271,10 +318,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/11/13/qq-404/" title="Previous Post: Octopress 404公益页面">&laquo; Octopress 404公益页面</a>
+        <a class="basic-alignment left" href="/blog/2014/09/29/saltstack-config-2/" title="Previous Post: saltstack config  (二)">&laquo; saltstack config  (二)</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/11/13/octopressfang-ke-di-tu/" title="Next Post: Octopress访客地图">Octopress访客地图 &raquo;</a>
       
     </p>
   </footer>

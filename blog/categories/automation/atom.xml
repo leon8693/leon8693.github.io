@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-09-29T17:45:40+08:00</updated>
+  <updated>2014-09-30T15:06:11+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,147 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[saltstack minion,nodegroup,cmd.run (三) ]]></title>
+    <link href="http://leon8693.github.io/blog/2014/09/30/saltstack-minion-nodegroup-cmd-dot-run-3/"/>
+    <updated>2014-09-30T10:31:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/09/30/saltstack-minion-nodegroup-cmd-dot-run-3</id>
+    <content type="html"><![CDATA[<h2>minion</h2>
+
+<p>客户端标识默认采用主机名,也可以修改配置中的id来指定minion的名字    <br/>
+vim /mnt/config/salt/minion <br/>
+<code>
+master: angel01.i.fdmdns.com
+user: root
+id: angel01.i.fdmdns.com #指定了这个客户端的名字
+</code></p>
+
+<p>查看minion状态,并且可以使用正则 <br/>
+PS:必须在MASTER上操作 <br/>
+```
+[root@angel01 ~]# salt  &lsquo;angel01.i.fdmdns.com&rsquo;  test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>[root@angel01 ~]# salt  &lsquo;*&rsquo;  test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>[root@angel01 ~]# salt &lsquo;angel0[1-2].i.fdmdns.com&rsquo;  test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>[root@angel01 ~]# salt &lsquo;angel0*&rsquo;  test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>```
+上面展示了匹配的方式<br/>
+test.ping 是salt默认命令,主要测试客户端存活情况</p>
+
+<p>另2个参数常用 <br/>
+-E来使用正则表达式 <br/>
+-L以列表的方式匹配 <br/>
+```
+[root@angel01 ~]# salt -E &lsquo;angel0\w&rsquo;  test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>[root@angel01 ~]# salt -L &lsquo;angel01.i.fdmdns.com,angel02.i.fdmdns.com&rsquo;  test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>```
+主要的一些匹配演示如上</p>
+
+<h2>cmd.run</h2>
+
+<p>这个是可以批量执行shell命令,可以代替我们以前复杂的for的<br/>
+```
+[root@angel01 ~]# salt -L &lsquo;angel01.i.fdmdns.com,angel02.i.fdmdns.com&rsquo;  cmd.run &ldquo;free -m|awk &lsquo;/Mem:/{print \$2}&rsquo;&rdquo;
+angel01.i.fdmdns.com:</p>
+
+<pre><code>3702
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>1869
+</code></pre>
+
+<p>```</p>
+
+<h2>nodegroup</h2>
+
+<p>nodegroup可以对我们现有的服务器进行分组,默认配置文件放在/etc/salt/master <br/>
+这边为了更好的修改配置和区分,使用了default_include: /mnt/config/salt/master.d/<em>.conf <br/>
+```
+cat /etc/salt/master
+include: /mnt/config/salt/master
+default_include: /mnt/config/salt/master.d/</em>.conf
+mkdir -p /mnt/config/salt/master.d/
+vim /mnt/config/salt/master.d/nodegroups.conf</p>
+
+<h1>group</h1>
+
+<p>nodegroups:
+  web1:  &lsquo;angel01.i.fdmdns.com&rsquo; #测试机1为单独一组
+  web2:  &lsquo;angel02.i.fdmdns.com&rsquo; #测试机2为单独一租
+/etc/init.d/salt-master restart</p>
+
+<p>[root@angel01 ~]# salt -N &lsquo;web1&rsquo; test.ping
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>[root@angel01 ~]# salt -N &lsquo;web2&rsquo; test.ping
+angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[saltstack config  (二)]]></title>
