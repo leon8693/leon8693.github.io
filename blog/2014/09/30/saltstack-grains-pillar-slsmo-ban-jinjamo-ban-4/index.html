@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>saltstack minion,nodegroup,cmd.run (三)  - 唯一的真理</title>
+  <title>saltstack grains,pillar,sls模板,jinja模板 (四) - 唯一的真理</title>
   <meta name="author" content="leon">
 
   
-  <meta name="description" content="saltstack minion,nodegroup,cmd.run">
-  <meta name="keywords" content="saltstack,salt,自动化运维,自动化部署,minion,nodegroup,cmd.run">
+  <meta name="description" content="saltstack grains,pillar,sls模板,jinja模板">
+  <meta name="keywords" content="saltstack,salt,自动化运维,自动化部署,grains,pillar,sls模板,jinja模板">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://leon8693.github.io/blog/2014/09/30/saltstack-minion-nodegroup-cmd-dot-run-3">
+  <link rel="canonical" href="http://leon8693.github.io/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="唯一的真理" type="application/atom+xml">
@@ -90,7 +90,7 @@
   
   <header>
     
-      <h1 class="entry-title">Saltstack minion,nodegroup,cmd.run (三)</h1>
+      <h1 class="entry-title">Saltstack Grains,pillar,sls模板,jinja模板 (四)</h1>
     
     
       <p class="meta">
@@ -106,28 +106,32 @@
   
 
 
-<time datetime="2014-09-30T10:31:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
+<time datetime="2014-09-30T16:16:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>minion</h2>
+<div class="entry-content"><h2>grains</h2>
 
-<p>客户端标识默认采用主机名,也可以修改配置中的id来指定minion的名字    <br/>
-vim /mnt/config/salt/minion</p>
+<p>grains类似puppet的facter一样 负责采集客户端一些基本信息,也可以自定义</p>
+
+<h4>grains使用</h4>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>master: angel01.i.fdmdns.com
-</span><span class='line'>user: root
-</span><span class='line'>id: angel01.i.fdmdns.com #指定了这个客户端的名字</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>salt -E 'angel01' grains.ls   #查看有多少定义好的属性可以用
+</span><span class='line'>salt -E 'angel01' grains.items #查看所有属性返回的值
+</span><span class='line'>salt -E 'angel01' grains.item fqdn os #查看fqdn os 返回的值,以此类推</span></code></pre></td></tr></table></div></figure>
 
 
-<p>查看minion状态,并且可以使用正则 <br/>
-PS:必须在MASTER上操作</p>
+<h4>grains自定义</h4>
+
+<h5>服务端主动推送</h5>
+
+<p>master上操作</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -147,82 +151,46 @@ PS:必须在MASTER上操作</p>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt  'angel01.i.fdmdns.com'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>[root@angel01 ~]# salt  '*'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>[root@angel01 ~]# salt 'angel0[1-2].i.fdmdns.com'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>[root@angel01 ~]# salt 'angel0*'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/master
+</span><span class='line'>增加默认目录
+</span><span class='line'>file_roots:
+</span><span class='line'>  base:
+</span><span class='line'>      - /mnt/config/salt/
+</span><span class='line'>
+</span><span class='line'>mkdir -p /mnt/config/salt/_grains/
+</span><span class='line'>vim /mnt/config/salt/_grains/test.py
+</span><span class='line'># -*- coding: utf-8 -*-
+</span><span class='line'>
+</span><span class='line'>'''
+</span><span class='line'>leon test
+</span><span class='line'>'''
+</span><span class='line'>import commands
+</span><span class='line'>import os
+</span><span class='line'>
+</span><span class='line'>def l_test():
+</span><span class='line'>    '''
+</span><span class='line'>    leon test
+</span><span class='line'>    '''
+</span><span class='line'>    grains={}
+</span><span class='line'>    a = commands.getoutput("hostname")
+</span><span class='line'>    grains['leon_test']=a
+</span><span class='line'>
+</span><span class='line'>    return grains</span></code></pre></td></tr></table></div></figure>
 
 
-
+<p>使用命令<code>saltutil.sync_all</code>进行推送</p>
 
 <!-- more -->
 
 
-<p>上面展示了匹配的方式<br/>
-test.ping 是salt默认命令,主要测试客户端存活情况</p>
-
-<p>另2个参数常用 <br/>
--E来使用正则表达式 <br/>
--L以列表的方式匹配</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt -E 'angel0\w'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>[root@angel01 ~]# salt -L 'angel01.i.fdmdns.com,angel02.i.fdmdns.com'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
-
-
-<p>主要的一些匹配演示如上</p>
-
-<h2>cmd.run</h2>
-
-<p>这个是可以批量执行shell命令,可以代替我们以前复杂的for的</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt -L 'angel01.i.fdmdns.com,angel02.i.fdmdns.com'  cmd.run "free -m|awk '/Mem:/{print \$2}'"
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    3702
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    1869</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>nodegroup</h2>
-
-<p>nodegroup可以对我们现有的服务器进行分组,默认配置文件放在/etc/salt/master <br/>
-这边为了更好的修改配置和区分,使用了default_include: /mnt/config/salt/master.d/*.conf</p>
+<p>再通过salt &lsquo;*&rsquo; grains.item leon_test就可以查看了</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -241,24 +209,104 @@ test.ping 是salt默认命令,主要测试客户端存活情况</p>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /etc/salt/master
-</span><span class='line'>include: /mnt/config/salt/master
-</span><span class='line'>default_include: /mnt/config/salt/master.d/*.conf
-</span><span class='line'>mkdir -p /mnt/config/salt/master.d/
-</span><span class='line'>vim /mnt/config/salt/master.d/nodegroups.conf 
-</span><span class='line'>#group#
-</span><span class='line'>nodegroups:
-</span><span class='line'>  web1:  'angel01.i.fdmdns.com' #测试机1为单独一组
-</span><span class='line'>  web2:  'angel02.i.fdmdns.com' #测试机2为单独一租
-</span><span class='line'>/etc/init.d/salt-master restart
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 salt]# salt '*' saltutil.sync_all
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
 </span><span class='line'>
-</span><span class='line'>[root@angel01 ~]# salt -N 'web1' test.ping
+</span><span class='line'>[root@angel01 salt]# salt '*' grains.item leon_test
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>  leon_test: angel01
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>  leon_test: angel02</span></code></pre></td></tr></table></div></figure>
+
+
+<p>模块进行更改后需要使用<code>sys.reload_modules</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 salt]# salt '*' sys.reload_modules
 </span><span class='line'>angel01.i.fdmdns.com:
 </span><span class='line'>    True
-</span><span class='line'>[root@angel01 ~]# salt -N 'web2' test.ping
 </span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    True
+</span><span class='line'>[root@angel01 salt]# salt '*' saltutil.sync_all 
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
+</span><span class='line'>[root@angel01 salt]# salt '*' grains.item leon_test
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>  leon_test: this is test
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>  leon_test: this is test</span></code></pre></td></tr></table></div></figure>
 
+
+<h4>客户端自动汇报</h4>
 </div>
 
 
@@ -281,7 +329,7 @@ test.ping 是salt默认命令,主要测试客户端存活情况</p>
   
 
 
-<time datetime="2014-09-30T10:31:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
+<time datetime="2014-09-30T16:16:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
       
 
 <span class="categories">
@@ -323,10 +371,8 @@ test.ping 是salt默认命令,主要测试客户端存活情况</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/09/29/saltstack-config-2/" title="Previous Post: saltstack config  (二)">&laquo; saltstack config  (二)</a>
+        <a class="basic-alignment left" href="/blog/2014/09/30/saltstack-minion-nodegroup-cmd-dot-run-3/" title="Previous Post: saltstack minion,nodegroup,cmd.run (三) ">&laquo; saltstack minion,nodegroup,cmd.run (三) </a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/" title="Next Post: saltstack grains,pillar,sls模板,jinja模板 (四)">saltstack grains,pillar,sls模板,jinja模板 (四) &raquo;</a>
       
     </p>
   </footer>

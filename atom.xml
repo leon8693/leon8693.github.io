@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-09-30T15:16:20+08:00</updated>
+  <updated>2014-09-30T17:35:34+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,208 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[saltstack grains,pillar,sls模板,jinja模板 (四)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/"/>
+    <updated>2014-09-30T16:16:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4</id>
+    <content type="html"><![CDATA[<h2>grains</h2>
+
+<p>grains类似puppet的facter一样 负责采集客户端一些基本信息,也可以自定义</p>
+
+<h4>grains使用</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>salt -E 'angel01' grains.ls   #查看有多少定义好的属性可以用
+</span><span class='line'>salt -E 'angel01' grains.items #查看所有属性返回的值
+</span><span class='line'>salt -E 'angel01' grains.item fqdn os #查看fqdn os 返回的值,以此类推</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>grains自定义</h4>
+
+<h5>服务端主动推送</h5>
+
+<p>master上操作</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/master
+</span><span class='line'>增加默认目录
+</span><span class='line'>file_roots:
+</span><span class='line'>  base:
+</span><span class='line'>      - /mnt/config/salt/
+</span><span class='line'>
+</span><span class='line'>mkdir -p /mnt/config/salt/_grains/
+</span><span class='line'>vim /mnt/config/salt/_grains/test.py
+</span><span class='line'># -*- coding: utf-8 -*-
+</span><span class='line'>
+</span><span class='line'>'''
+</span><span class='line'>leon test
+</span><span class='line'>'''
+</span><span class='line'>import commands
+</span><span class='line'>import os
+</span><span class='line'>
+</span><span class='line'>def l_test():
+</span><span class='line'>    '''
+</span><span class='line'>    leon test
+</span><span class='line'>    '''
+</span><span class='line'>    grains={}
+</span><span class='line'>    a = commands.getoutput("hostname")
+</span><span class='line'>    grains['leon_test']=a
+</span><span class='line'>
+</span><span class='line'>    return grains</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用命令<code>saltutil.sync_all</code>进行推送</p>
+
+<!-- more -->
+
+
+<p>再通过salt &lsquo;*&rsquo; grains.item leon_test就可以查看了</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 salt]# salt '*' saltutil.sync_all
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
+</span><span class='line'>
+</span><span class='line'>[root@angel01 salt]# salt '*' grains.item leon_test
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>  leon_test: angel01
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>  leon_test: angel02</span></code></pre></td></tr></table></div></figure>
+
+
+<p>模块进行更改后需要使用<code>sys.reload_modules</code></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 salt]# salt '*' sys.reload_modules
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    True
+</span><span class='line'>[root@angel01 salt]# salt '*' saltutil.sync_all 
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    grains:
+</span><span class='line'>        - grains.test
+</span><span class='line'>    modules:
+</span><span class='line'>    outputters:
+</span><span class='line'>    renderers:
+</span><span class='line'>    returners:
+</span><span class='line'>    states:
+</span><span class='line'>[root@angel01 salt]# salt '*' grains.item leon_test
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>  leon_test: this is test
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>  leon_test: this is test</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>客户端自动汇报</h4>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[saltstack minion,nodegroup,cmd.run (三) ]]></title>
@@ -3388,132 +3590,6 @@ www.qq.com/404<br/>
 
 <p><a href="http://www.jiathis.com/">http://www.jiathis.com/</a> <br/>
 <a href="http://uyan.cc/">http://uyan.cc/</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress分类]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/11/octopressfen-lei/"/>
-    <updated>2013-11-11T08:09:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/11/octopressfen-lei</id>
-    <content type="html"><![CDATA[<h3>添加侧边栏文章分类</h3>
-
-<p>octopress/plugins/category_list_tag.rb</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>module Jekyll 
-</span><span class='line'>  class CategoryListTag &lt; Liquid::Tag 
-</span><span class='line'>    def render(context) 
-</span><span class='line'>      html = "" 
-</span><span class='line'>      categories = context.registers[:site].categories.keys 
-</span><span class='line'>      categories.sort.each do |category| 
-</span><span class='line'>        posts_in_category = context.registers[:site].categories[category].size 
-</span><span class='line'>        category_dir = context.registers[:site].config['category_dir'] 
-</span><span class='line'>        category_url = File.join(category_dir, category.gsub(/_|\P{Word}/, '-').gsub(/-{2,}/, '-').downcase) 
-</span><span class='line'>        html &lt;&lt; "&lt;li class='category'&gt;&lt;a href='http://leon8693.github.io/#{category_url}/'&gt;#{category} (#{posts_in_category})&lt;/a&gt;&lt;/li&gt;\n" 
-</span><span class='line'>      end 
-</span><span class='line'>      html 
-</span><span class='line'>    end 
-</span><span class='line'>  end 
-</span><span class='line'>end
-</span><span class='line'>Liquid::Template.register_tag('category_list', Jekyll::CategoryListTag)</span></code></pre></td></tr></table></div></figure>
-
-
-<!-- more -->
-
-
-<h4>增加侧栏标注</h4>
-
-<p>octopress/source/_includes/asides/category_list.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;文章分类&lt;/h1&gt;
-</span><span class='line'>  &lt;ul <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;categories&quot;</span>&gt;
-</span><span class='line'>    <span class="o">{</span>% category_list %<span class="o">}</span>
-</span><span class='line'>  &lt;/ul&gt;
-</span><span class='line'>&lt;/section&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>导航栏设置</h3>
-
-<p>octopress/source/_includes/custom/navigation.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;ul <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;main-navigation&quot;</span>&gt;
-</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/&quot;</span>&gt;首页&lt;/a&gt;&lt;/li&gt;
-</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/blog/archives&quot;</span>&gt;归档&lt;/a&gt;&lt;/li&gt;
-</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/huangli&quot;</span>&gt;程序员老黄历&lt;/a&gt;&lt;/li&gt;
-</span><span class='line'>  &lt;li&gt;&lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;/about&quot;</span>&gt;关于&lt;/a&gt;&lt;/li&gt;
-</span><span class='line'>&lt;/ul&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>使用命令rake new_page[&lsquo;about&rsquo;]创建一个页面，页面路径为source/about/index.markdown;</p>
-
-<h3>设置网站的description和keywords</h3>
-
-<p>在网页的head部分设置name为description和keywords的meta元素可以让网页更容易被搜索引擎搜索到，下面说说怎样在Octopress中设置首页和每篇博文的description和keywords</p>
-
-<p>vim octopress/source/index.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>layout: default
-</span><span class='line'>description: <span class="s2">&quot;世界唯一的真理&quot;</span>
-</span><span class='line'>keywords: Asp.Net,C#
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>---
-</span><span class='line'>layout: post
-</span><span class='line'>title: <span class="s2">&quot;这个是test&quot;</span>
-</span><span class='line'>date: 2013-10-02 06:11
-</span><span class='line'>comments: <span class="nb">true</span>                          <span class="c">#是否允许评论</span>
-</span><span class='line'>categories: <span class="nb">test</span>                          <span class="c">#文章分类</span>
-</span><span class='line'>description: <span class="s2">&quot;test&quot;</span>                         <span class="c">#页面描述</span>
-</span><span class='line'>keywords: <span class="nb">test</span>
-</span><span class='line'>---
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   

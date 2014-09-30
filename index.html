@@ -93,6 +93,119 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/">Saltstack Grains,pillar,sls模板,jinja模板 (四)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-30T16:16:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>grains</h2>
+
+<p>grains类似puppet的facter一样 负责采集客户端一些基本信息,也可以自定义</p>
+
+<h4>grains使用</h4>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>salt -E 'angel01' grains.ls   #查看有多少定义好的属性可以用
+</span><span class='line'>salt -E 'angel01' grains.items #查看所有属性返回的值
+</span><span class='line'>salt -E 'angel01' grains.item fqdn os #查看fqdn os 返回的值,以此类推</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>grains自定义</h4>
+
+<h5>服务端主动推送</h5>
+
+<p>master上操作</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/master
+</span><span class='line'>增加默认目录
+</span><span class='line'>file_roots:
+</span><span class='line'>  base:
+</span><span class='line'>      - /mnt/config/salt/
+</span><span class='line'>
+</span><span class='line'>mkdir -p /mnt/config/salt/_grains/
+</span><span class='line'>vim /mnt/config/salt/_grains/test.py
+</span><span class='line'># -*- coding: utf-8 -*-
+</span><span class='line'>
+</span><span class='line'>'''
+</span><span class='line'>leon test
+</span><span class='line'>'''
+</span><span class='line'>import commands
+</span><span class='line'>import os
+</span><span class='line'>
+</span><span class='line'>def l_test():
+</span><span class='line'>    '''
+</span><span class='line'>    leon test
+</span><span class='line'>    '''
+</span><span class='line'>    grains={}
+</span><span class='line'>    a = commands.getoutput("hostname")
+</span><span class='line'>    grains['leon_test']=a
+</span><span class='line'>
+</span><span class='line'>    return grains</span></code></pre></td></tr></table></div></figure>
+
+
+<p>使用命令<code>saltutil.sync_all</code>进行推送</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/09/30/saltstack-minion-nodegroup-cmd-dot-run-3/">Saltstack minion,nodegroup,cmd.run (三)</a></h1>
     
     
@@ -394,71 +507,6 @@ PS:必须在MASTER上操作</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/">Maptail展现中国地图</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-01T16:29:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>声明</h3>
-
-<p>本篇文章转自王强blog<br/>
-blog地址:<a href="http://qiangwang.github.io/2013/01/27/maptail-china-map.html">maptail展现中国地图</a> <br/>
-github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></p>
-
-<h1>maptail</h1>
-
-<p><img src="http://qiangwang.github.io/img/maptail-china-map.png" border="0" /></p>
-
-<p>maptail is a realtime map view of GeoIP data. Attach it to your server to track visitors, tail a log, pipe to its stdin or use it as a library to build your own implementation. Just emit IP addresses to it from any source and you&rsquo;ll automagically get a cool map with yellow dots and stuff like that streamed in with websockets or whatever transport you&rsquo;d like to use.</p>
-
-<h2>Installing</h2>
-
-<p><code>npm install maptail -g</code></p>
-
-<p>Omit the <code>-g</code> to install as a module.</p>
-
-<h2>How to use</h2>
-
-<h3>The command line tool:</h3>
-
-<p><code>$ maptail -f nohup.out</code></p>
-
-<p><code>$ tail -f nohup.out | maptail -h my.host.com -p 3000</code></p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -472,7 +520,7 @@ github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></
     <section>
   <h1>文章分类</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/automation/'>Automation (3)</a></li>
+    <li class='category'><a href='/blog/categories/automation/'>Automation (4)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>

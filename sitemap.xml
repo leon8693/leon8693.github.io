@@ -99,6 +99,12 @@
         <lastmod>2014-09-30T15:16:14+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://leon8693.github.io/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/
+        </loc>
+        <lastmod>2014-09-30T17:35:23+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://leon8693.github.io/lol/</loc>
         <lastmod>2013-11-18T17:26:57+08:00</lastmod>
     </url>
@@ -112,7 +118,7 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/blog/archives/</loc>
-        <lastmod>2014-09-30T15:16:14+08:00</lastmod>
+        <lastmod>2014-09-30T17:35:23+08:00</lastmod>
     </url>
     <url>
         <loc>http://leon8693.github.io/huangli/</loc>
@@ -120,6 +126,6 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/</loc>
-        <lastmod>2014-09-30T15:16:14+08:00</lastmod>
+        <lastmod>2014-09-30T17:35:23+08:00</lastmod>
     </url>
 </urlset>

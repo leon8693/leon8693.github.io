@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-09-30T15:16:20+08:00</updated>
+  <updated>2014-09-30T17:35:34+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,148 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[saltstack grains,pillar,sls模板,jinja模板 (四)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/"/>
+    <updated>2014-09-30T16:16:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4</id>
+    <content type="html"><![CDATA[<h2>grains</h2>
+
+<p>grains类似puppet的facter一样 负责采集客户端一些基本信息,也可以自定义</p>
+
+<h4>grains使用</h4>
+
+<p><code>
+salt -E 'angel01' grains.ls   #查看有多少定义好的属性可以用
+salt -E 'angel01' grains.items #查看所有属性返回的值
+salt -E 'angel01' grains.item fqdn os #查看fqdn os 返回的值,以此类推
+</code></p>
+
+<h4>grains自定义</h4>
+
+<h5>服务端主动推送</h5>
+
+<p>master上操作 <br/>
+```
+vim /mnt/config/salt/master
+增加默认目录
+file_roots:
+  base:</p>
+
+<pre><code>  - /mnt/config/salt/
+</code></pre>
+
+<p>mkdir -p /mnt/config/salt/<em>grains/
+vim /mnt/config/salt/</em>grains/test.py</p>
+
+<h1>&ndash;<em>&ndash; coding: utf-8 &ndash;</em>&ndash;</h1>
+
+<p>&lsquo;&rsquo;&lsquo;
+leon test
+&rsquo;&lsquo;&rsquo;
+import commands
+import os</p>
+
+<p>def l_test():</p>
+
+<pre><code>'''
+leon test
+'''
+grains={}
+a = commands.getoutput("hostname")
+grains['leon_test']=a
+
+return grains
+</code></pre>
+
+<p><code>``
+使用命令</code>saltutil.sync_all`进行推送</p>
+
+<!-- more -->
+
+
+<p>再通过salt &lsquo;<em>&rsquo; grains.item leon_test就可以查看了  <br/>
+```
+[root@angel01 salt]# salt &lsquo;</em>&rsquo; saltutil.sync_all
+angel01.i.fdmdns.com:</p>
+
+<pre><code>----------
+grains:
+    - grains.test
+modules:
+outputters:
+renderers:
+returners:
+states:
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>----------
+grains:
+    - grains.test
+modules:
+outputters:
+renderers:
+returners:
+states:
+</code></pre>
+
+<p>[root@angel01 salt]# salt &lsquo;<em>&rsquo; grains.item leon_test
+angel01.i.fdmdns.com:
+  leon_test: angel01
+angel02.i.fdmdns.com:
+  leon_test: angel02
+<code>
+模块进行更改后需要使用`sys.reload_modules`
+</code>
+[root@angel01 salt]# salt &lsquo;</em>&rsquo; sys.reload_modules
+angel01.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>True
+</code></pre>
+
+<p>[root@angel01 salt]# salt &lsquo;*&rsquo; saltutil.sync_all
+angel01.i.fdmdns.com:</p>
+
+<pre><code>----------
+grains:
+    - grains.test
+modules:
+outputters:
+renderers:
+returners:
+states:
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>----------
+grains:
+    - grains.test
+modules:
+outputters:
+renderers:
+returners:
+states:
+</code></pre>
+
+<p>[root@angel01 salt]# salt &lsquo;*&rsquo; grains.item leon_test
+angel01.i.fdmdns.com:
+  leon_test: this is test
+angel02.i.fdmdns.com:
+  leon_test: this is test
+```</p>
+
+<h4>客户端自动汇报</h4>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[saltstack minion,nodegroup,cmd.run (三) ]]></title>
