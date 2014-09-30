@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-09-30T15:06:11+08:00</updated>
+  <updated>2014-09-30T15:16:20+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -70,8 +70,12 @@ angel01.i.fdmdns.com:</p>
 <pre><code>True
 </code></pre>
 
-<p>```
-上面展示了匹配的方式<br/>
+<p>```</p>
+
+<!-- more -->
+
+
+<p>上面展示了匹配的方式<br/>
 test.ping 是salt默认命令,主要测试客户端存活情况</p>
 
 <p>另2个参数常用 <br/>

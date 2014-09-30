@@ -170,95 +170,14 @@ PS:必须在MASTER上操作</p>
 </span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
 
 
-<p>上面展示了匹配的方式<br/>
-test.ping 是salt默认命令,主要测试客户端存活情况</p>
 
-<p>另2个参数常用 <br/>
--E来使用正则表达式 <br/>
--L以列表的方式匹配</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt -E 'angel0\w'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>[root@angel01 ~]# salt -L 'angel01.i.fdmdns.com,angel02.i.fdmdns.com'  test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
-
-
-<p>主要的一些匹配演示如上</p>
-
-<h2>cmd.run</h2>
-
-<p>这个是可以批量执行shell命令,可以代替我们以前复杂的for的</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[root@angel01 ~]# salt -L 'angel01.i.fdmdns.com,angel02.i.fdmdns.com'  cmd.run "free -m|awk '/Mem:/{print \$2}'"
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    3702
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    1869</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>nodegroup</h2>
-
-<p>nodegroup可以对我们现有的服务器进行分组,默认配置文件放在/etc/salt/master <br/>
-这边为了更好的修改配置和区分,使用了default_include: /mnt/config/salt/master.d/*.conf</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cat /etc/salt/master
-</span><span class='line'>include: /mnt/config/salt/master
-</span><span class='line'>default_include: /mnt/config/salt/master.d/*.conf
-</span><span class='line'>mkdir -p /mnt/config/salt/master.d/
-</span><span class='line'>vim /mnt/config/salt/master.d/nodegroups.conf 
-</span><span class='line'>#group#
-</span><span class='line'>nodegroups:
-</span><span class='line'>  web1:  'angel01.i.fdmdns.com' #测试机1为单独一组
-</span><span class='line'>  web2:  'angel02.i.fdmdns.com' #测试机2为单独一租
-</span><span class='line'>/etc/init.d/salt-master restart
-</span><span class='line'>
-</span><span class='line'>[root@angel01 ~]# salt -N 'web1' test.ping
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>    True
-</span><span class='line'>[root@angel01 ~]# salt -N 'web2' test.ping
-</span><span class='line'>angel02.i.fdmdns.com:
-</span><span class='line'>    True</span></code></pre></td></tr></table></div></figure>
 
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/30/saltstack-minion-nodegroup-cmd-dot-run-3/">继续阅读 &rarr;</a>
+    </footer>
   
 
 
