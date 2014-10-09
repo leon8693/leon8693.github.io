@@ -448,9 +448,8 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 </span><span class='line'>    #这边有master默认的一些信息省略了</span></code></pre></td></tr></table></div></figure>
 
 
-<p>`</p>
-
-<p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
+<p>`
+下面结合state.sls和jinja做一个抒写一个文件的动作</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -496,50 +495,50 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 <span class='line-number'>42</span>
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">vim</span> <span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">salt</span><span class="o">/</span><span class="n">top</span><span class="o">.</span><span class="n">sls</span>
-</span><span class='line'><span class="n">base</span><span class="p">:</span>
-</span><span class='line'>  <span class="s">&#39;*&#39;</span><span class="p">:</span>
-</span><span class='line'>   <span class="o">-</span> <span class="n">test</span><span class="o">.</span><span class="n">tmp</span>
-</span><span class='line'><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">salt</span><span class="o">/</span><span class="n">test</span><span class="o">/</span>
-</span><span class='line'><span class="n">vim</span> <span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">salt</span><span class="o">/</span><span class="n">test</span><span class="o">/</span><span class="n">tmp</span><span class="o">.</span><span class="n">sls</span>
-</span><span class='line'><span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">tmp</span><span class="o">.</span><span class="n">conf</span><span class="p">:</span>                              <span class="c">#文件位置</span>
-</span><span class='line'>  <span class="nb">file</span><span class="o">.</span><span class="n">managed</span><span class="p">:</span>                             <span class="c">#采用新增文件的方式</span>
-</span><span class='line'>  <span class="o">-</span> <span class="n">source</span><span class="p">:</span>  <span class="n">salt</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">/</span><span class="n">tmp</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">jinja</span>     <span class="c">#jinja资源位置</span>
-</span><span class='line'>  <span class="o">-</span> <span class="n">template</span><span class="p">:</span> <span class="n">jinja</span>                         <span class="c">#模板</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /mnt/config/salt/top.sls
+</span><span class='line'>base:
+</span><span class='line'>  <span class="s1">&#39;*&#39;</span>:
+</span><span class='line'>   - test.tmp
+</span><span class='line'>mkdir -p /mnt/config/salt/test/
+</span><span class='line'>vim /mnt/config/salt/test/tmp.sls
+</span><span class='line'>/tmp/tmp.conf:                              <span class="c">#文件位置</span>
+</span><span class='line'>  file.managed:                             <span class="c">#采用新增文件的方式</span>
+</span><span class='line'>  - <span class="nb">source</span>:  salt://test/tmp.conf.jinja     <span class="c">#jinja资源位置</span>
+</span><span class='line'>  - template: jinja                         <span class="c">#模板</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">vim</span> <span class="o">/</span><span class="n">mnt</span><span class="o">/</span><span class="n">config</span><span class="o">/</span><span class="n">salt</span><span class="o">/</span><span class="n">test</span><span class="o">/</span><span class="n">tmp</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">jinja</span>
-</span><span class='line'><span class="n">visible</span> <span class="n">hostname</span>  <span class="p"></span>      <span class="c">#通过grains获得的fqdn(hostname)</span>
-</span><span class='line'><span class="p"></span>                     <span class="c">#前面我用pillar定义的MY_NAME</span>
-</span><span class='line'><span class="p"></span>
-</span><span class='line'><span class="n">server_os</span> <span class="p"></span>
+</span><span class='line'>vim /mnt/config/salt/test/tmp.conf.jinja
+</span><span class='line'>visible hostname  <span class="o"></span>      <span class="c">#通过grains获得的fqdn(hostname)</span>
+</span><span class='line'><span class="o"></span>                     <span class="c">#前面我用pillar定义的MY_NAME</span>
+</span><span class='line'><span class="o"></span>
+</span><span class='line'>server_os <span class="o"></span>
 </span><span class='line'>
-</span><span class='line'><span class="n">salt</span>  <span class="s">&#39;*&#39;</span> <span class="n">state</span><span class="o">.</span><span class="n">highstate</span> <span class="o">-</span><span class="n">v</span>
-</span><span class='line'><span class="n">angel01</span><span class="o">.</span><span class="n">i</span><span class="o">.</span><span class="n">fdmdns</span><span class="o">.</span><span class="n">com</span><span class="p">:</span>
-</span><span class='line'><span class="o">----------</span>
-</span><span class='line'>          <span class="n">ID</span><span class="p">:</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">tmp</span><span class="o">.</span><span class="n">conf</span>
-</span><span class='line'>    <span class="n">Function</span><span class="p">:</span> <span class="nb">file</span><span class="o">.</span><span class="n">managed</span>
-</span><span class='line'>      <span class="n">Result</span><span class="p">:</span> <span class="bp">True</span>
-</span><span class='line'>     <span class="n">Comment</span><span class="p">:</span> <span class="n">File</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">tmp</span><span class="o">.</span><span class="n">conf</span> <span class="n">updated</span>
-</span><span class='line'>     <span class="n">Changes</span><span class="p">:</span>
-</span><span class='line'>              <span class="o">----------</span>
-</span><span class='line'>              <span class="n">diff</span><span class="p">:</span>
-</span><span class='line'>                  <span class="n">New</span> <span class="nb">file</span>
-</span><span class='line'>              <span class="n">mode</span><span class="p">:</span>
-</span><span class='line'>                  <span class="mo">0644</span>
+</span><span class='line'>salt  <span class="s1">&#39;*&#39;</span> state.highstate -v
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>----------
+</span><span class='line'>          ID: /tmp/tmp.conf
+</span><span class='line'>    Function: file.managed
+</span><span class='line'>      Result: True
+</span><span class='line'>     Comment: File /tmp/tmp.conf updated
+</span><span class='line'>     Changes:
+</span><span class='line'>              ----------
+</span><span class='line'>              diff:
+</span><span class='line'>                  New file
+</span><span class='line'>              mode:
+</span><span class='line'>                  0644
 </span><span class='line'>
-</span><span class='line'><span class="n">Summary</span>
-</span><span class='line'><span class="o">------------</span>
-</span><span class='line'><span class="n">Succeeded</span><span class="p">:</span> <span class="mi">1</span>
-</span><span class='line'><span class="n">Failed</span><span class="p">:</span>    <span class="mi">0</span>
-</span><span class='line'><span class="o">------------</span>
-</span><span class='line'><span class="n">Total</span><span class="p">:</span>     <span class="mi">1</span>
+</span><span class='line'>Summary
+</span><span class='line'>------------
+</span><span class='line'>Succeeded: 1
+</span><span class='line'>Failed:    0
+</span><span class='line'>------------
+</span><span class='line'>Total:     1
 </span><span class='line'><span class="c">#表示完成</span>
 </span><span class='line'>
-</span><span class='line'><span class="p">[</span><span class="n">root</span><span class="nd">@angel01</span> <span class="n">salt</span><span class="p">]</span><span class="c"># cat /tmp/tmp.conf </span>
-</span><span class='line'><span class="n">visible</span> <span class="n">hostname</span>  <span class="n">angel01</span>
-</span><span class='line'><span class="n">leon</span>
-</span><span class='line'><span class="mi">7758258</span>
-</span><span class='line'><span class="n">server_os</span> <span class="n">CentOS</span>
+</span><span class='line'><span class="o">[</span>root@angel01 salt<span class="o">]</span><span class="c"># cat /tmp/tmp.conf </span>
+</span><span class='line'>visible hostname  angel01
+</span><span class='line'>leon
+</span><span class='line'>7758258
+</span><span class='line'>server_os CentOS
 </span></code></pre></td></tr></table></div></figure>
 
 </div>

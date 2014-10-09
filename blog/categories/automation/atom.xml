@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-09T17:36:38+08:00</updated>
+  <updated>2014-10-09T17:38:58+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -247,11 +247,9 @@ MY_NAME:
 #这边有master默认的一些信息省略了
 </code></pre>
 
-<p>````</p>
-
-<p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
-
-<p>```python
+<p><code>`
+下面结合state.sls和jinja做一个抒写一个文件的动作   
+</code>bash
 vim /mnt/config/salt/top.sls
 base:
   &lsquo;*&rsquo;:
