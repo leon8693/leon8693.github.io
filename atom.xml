@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-09T17:47:21+08:00</updated>
+  <updated>2014-10-09T17:48:54+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -355,7 +355,7 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 
 <p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -400,32 +400,32 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
 <span class='line-number'>45</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /mnt/config/salt/top.sls
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/top.sls
 </span><span class='line'>base:
-</span><span class='line'>  <span class="s1">&#39;*&#39;</span>:
+</span><span class='line'>  '*':
 </span><span class='line'>   - test.tmp
 </span><span class='line'>mkdir -p /mnt/config/salt/test/
 </span><span class='line'>vim /mnt/config/salt/test/tmp.sls
-</span><span class='line'>/tmp/tmp.conf:                              <span class="c">#文件位置</span>
-</span><span class='line'>  file.managed:                             <span class="c">#采用新增文件的方式</span>
-</span><span class='line'>  - <span class="nb">source</span>:  salt://test/tmp.conf.jinja     <span class="c">#jinja资源位置</span>
-</span><span class='line'>  - template: jinja                         <span class="c">#模板</span>
+</span><span class='line'>/tmp/tmp.conf:                              #文件位置
+</span><span class='line'>  file.managed:                             #采用新增文件的方式
+</span><span class='line'>  - source:  salt://test/tmp.conf.jinja     #jinja资源位置
+</span><span class='line'>  - template: jinja                         #模板
 </span><span class='line'>
 </span><span class='line'>vim /mnt/config/salt/test/tmp.conf.jinja
-</span><span class='line'>visible hostname  <span class="se">\{</span><span class="o">{</span> grains<span class="o">[</span><span class="s1">&#39;fqdn&#39;</span><span class="o">]</span> <span class="o">}}</span>      <span class="c">#通过grains获得的fqdn(hostname)</span>
-</span><span class='line'><span class="se">\{</span><span class="o">{</span> pillar<span class="o">[</span><span class="s1">&#39;MY_NAME&#39;</span><span class="o">]</span> <span class="o">}}</span>                     <span class="c">#前面我用pillar定义的MY_NAME</span>
-</span><span class='line'><span class="se">\{</span><span class="o">{</span> pillar<span class="o">[</span><span class="s1">&#39;ID&#39;</span><span class="o">]</span> <span class="o">}}</span>                          <span class="c">#注释的\号自己去掉,双括号情况下在makedown不显示= =！</span>
-</span><span class='line'><span class="c">#server_os \</span>
+</span><span class='line'>visible hostname  \      #通过grains获得的fqdn(hostname)
+</span><span class='line'>\                     #前面我用pillar定义的MY_NAME
+</span><span class='line'>\                          #注释的\号自己去掉,双括号情况下在makedown不显示= =！
+</span><span class='line'>server_os \
 </span><span class='line'>
-</span><span class='line'>1.salt  <span class="s1">&#39;*&#39;</span> state.highstate -v              <span class="c">#方式1</span>
-</span><span class='line'>2.salt  <span class="s1">&#39;angel01.i.fdmdns.com&#39;</span> state.sls test.tmp  <span class="c">#方式2</span>
+</span><span class='line'>1.salt  '*' state.highstate -v              #方式1
+</span><span class='line'>2.salt  'angel01.i.fdmdns.com' state.sls test.tmp  #方式2
 </span><span class='line'>angel01.i.fdmdns.com:
 </span><span class='line'>----------
 </span><span class='line'>          ID: /tmp/tmp.conf
 </span><span class='line'>    Function: file.managed
 </span><span class='line'>      Result: True
 </span><span class='line'>     Comment: File /tmp/tmp.conf updated
-</span><span class='line'>     Changes:
+</span><span class='line'>     Changes:   
 </span><span class='line'>              ----------
 </span><span class='line'>              diff:
 </span><span class='line'>                  New file
@@ -438,14 +438,13 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 </span><span class='line'>Failed:    0
 </span><span class='line'>------------
 </span><span class='line'>Total:     1
-</span><span class='line'><span class="c">#表示完成</span>
+</span><span class='line'>#表示完成
 </span><span class='line'>
-</span><span class='line'><span class="o">[</span>root@angel01 salt<span class="o">]</span><span class="c"># cat /tmp/tmp.conf </span>
+</span><span class='line'>[root@angel01 salt]# cat /tmp/tmp.conf 
 </span><span class='line'>visible hostname  angel01
 </span><span class='line'>leon
 </span><span class='line'>7758258
-</span><span class='line'>server_os CentOS
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>server_os CentOS</span></code></pre></td></tr></table></div></figure>
 
 ]]></content>
   </entry>

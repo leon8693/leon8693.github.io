@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-09T17:47:21+08:00</updated>
+  <updated>2014-10-09T17:48:54+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -251,7 +251,7 @@ MY_NAME:
 
 <p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
 
-<p>```bash
+<p>```
 vim /mnt/config/salt/top.sls
 base:
   &lsquo;*&rsquo;:
@@ -266,9 +266,8 @@ vim /mnt/config/salt/test/tmp.sls
 <p>vim /mnt/config/salt/test/tmp.conf.jinja
 visible hostname        #通过grains获得的fqdn(hostname)
                      #前面我用pillar定义的MY_NAME
-                          #注释的\号自己去掉,双括号情况下在makedown不显示= =！</p>
-
-<h1>server_os </h1>
+                          #注释的\号自己去掉,双括号情况下在makedown不显示= =！
+server_os </p>
 
 <p>1.salt  &lsquo;*&rsquo; state.highstate -v              #方式1
 2.salt  &lsquo;angel01.i.fdmdns.com&rsquo; state.sls test.tmp  #方式2</p>
