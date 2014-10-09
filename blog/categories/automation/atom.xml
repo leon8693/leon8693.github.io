@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-09-30T17:35:34+08:00</updated>
+  <updated>2014-10-09T17:30:13+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -152,6 +152,155 @@ angel02.i.fdmdns.com:
 ```</p>
 
 <h4>客户端自动汇报</h4>
+
+<p>minion上操作 <br/>
+```
+vim /etc/salt/minion
+default_include: /mnt/config/salt/minion.d/*.conf #增加这项
+mkdir -p /mnt/config/salt/minion.d/
+vim /mnt/config/salt/minion.d/test.conf
+grains:
+  leon and leon: 1
+  leon and alex: print 2
+  cpis:</p>
+
+<pre><code>- a
+- b
+</code></pre>
+
+<p>  leon.com:</p>
+
+<pre><code>-------------------------------------------------
+</code></pre>
+
+<p>/etc/init.d/salt-minion restart</p>
+
+<p>[root@angel01 ~]# salt -E &lsquo;angel01&rsquo; grains.item leon\ and\ leon
+angel01.i.fdmdns.com:
+  leon and leon: 1
+[root@angel01 ~]# salt -E &lsquo;angel01&rsquo; grains.item leon.com
+angel01.i.fdmdns.com:
+  leon.com: &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;
+[root@angel01 ~]# salt -E &lsquo;angel01&rsquo; grains.item cpis
+angel01.i.fdmdns.com:
+  cpis:</p>
+
+<pre><code>  a
+  b
+</code></pre>
+
+<p>```</p>
+
+<h4>pillar使用</h4>
+
+<p>pillar是用于给特定的minion定义任何你需要的数据,数据可以被salt其他组件使用,Pillar 数据是与特定 minion 关联的，也就是说每一个minion 都只能看到自己的数据， 所以 Pillar 可以用来传递敏感数据。  <br/>
+pillar可以通过变量的方式再不同的操作系统或者特定的服务server上进行特别的设置。 <br/>
+```</p>
+
+<h1>首先定义pillar的位置</h1>
+
+<p>vim /mnt/config/salt/master
+interface: 192.168.0.210
+user: root
+auto_accept: True
+worker_threads: 5
+file_roots:
+  base:</p>
+
+<pre><code>- /mnt/config/salt/
+</code></pre>
+
+<p>pillar_roots:                   #标识pillar目录
+  base:</p>
+
+<pre><code>- /mnt/config/salt/pillar
+</code></pre>
+
+<p>```</p>
+
+<p>在pilla目录中新建一个top.sls,类似Puppet的入口文件</p>
+
+<p>```
+vim /mnt/config/salt/pillar/top.sls
+base:       #自定义名称
+  &lsquo;<em>&rsquo;:      #客户端过滤,可以是angel0[1-2].</em>,等等
+   &ndash; test   #模板名称</p>
+
+<p>vim /mnt/config/salt/pillar/test.sls
+MY_NAME: leon
+ID: 7758258
+CONTENT:  lol</p>
+
+<p>/etc/init.d/salt-master restart
+/etc/init.d/salt-minion restart</p>
+
+<p>[root@angel01 pillar]# salt  &lsquo;angel01.i.fdmdns.com&rsquo; pillar.data
+angel01.i.fdmdns.com:</p>
+
+<pre><code>----------
+CONTENT:
+    lol
+ID:
+    7758258
+MY_NAME:
+    leon
+#这边有master默认的一些信息省略了
+</code></pre>
+
+<p>````</p>
+
+<p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
+
+<p>```
+vim /mnt/config/salt/top.sls
+base:
+  &lsquo;*&rsquo;:
+   &ndash; test.tmp
+mkdir -p /mnt/config/salt/test/
+vim /mnt/config/salt/test/tmp.sls
+/tmp/tmp.conf:                              #文件位置
+  file.managed:                             #采用新增文件的方式
+  &ndash; source:  salt://test/tmp.conf.jinja     #jinja资源位置
+  &ndash; template: jinja                         #模板</p>
+
+<p>vim /mnt/config/salt/test/tmp.conf.jinja
+visible hostname        #通过grains获得的fqdn(hostname)
+                     #前面我用pillar定义的MY_NAME
+
+server_os </p>
+
+<p>salt  &lsquo;*&rsquo; state.highstate -v</p>
+
+<h2>angel01.i.fdmdns.com:</h2>
+
+<pre><code>      ID: /tmp/tmp.conf
+Function: file.managed
+  Result: True
+ Comment: File /tmp/tmp.conf updated
+ Changes:   
+          ----------
+          diff:
+              New file
+          mode:
+              0644
+</code></pre>
+
+<h2>Summary</h2>
+
+<p>Succeeded: 1</p>
+
+<h2>Failed:    0</h2>
+
+<p>Total:     1</p>
+
+<h1>表示完成</h1>
+
+<p>[root@angel01 salt]# cat /tmp/tmp.conf
+visible hostname  angel01
+leon
+7758258
+server_os CentOS
+```</p>
 ]]></content>
   </entry>
   

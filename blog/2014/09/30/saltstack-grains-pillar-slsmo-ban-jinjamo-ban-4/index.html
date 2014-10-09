@@ -307,6 +307,240 @@
 
 
 <h4>客户端自动汇报</h4>
+
+<p>minion上操作</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /etc/salt/minion
+</span><span class='line'>default_include: /mnt/config/salt/minion.d/*.conf #增加这项
+</span><span class='line'>mkdir -p /mnt/config/salt/minion.d/
+</span><span class='line'>vim /mnt/config/salt/minion.d/test.conf
+</span><span class='line'>grains:
+</span><span class='line'>  leon and leon: 1
+</span><span class='line'>  leon and alex: print 2
+</span><span class='line'>  cpis:
+</span><span class='line'>    - a
+</span><span class='line'>    - b
+</span><span class='line'>  leon.com:
+</span><span class='line'>    -------------------------------------------------
+</span><span class='line'>
+</span><span class='line'>/etc/init.d/salt-minion restart
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>[root@angel01 ~]# salt -E 'angel01' grains.item leon\ and\ leon
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>  leon and leon: 1
+</span><span class='line'>[root@angel01 ~]# salt -E 'angel01' grains.item leon.com
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>  leon.com: -------------------------------------------------
+</span><span class='line'>[root@angel01 ~]# salt -E 'angel01' grains.item cpis
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>  cpis:
+</span><span class='line'>      a
+</span><span class='line'>      b
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>pillar使用</h4>
+
+<p>pillar是用于给特定的minion定义任何你需要的数据,数据可以被salt其他组件使用,Pillar 数据是与特定 minion 关联的，也就是说每一个minion 都只能看到自己的数据， 所以 Pillar 可以用来传递敏感数据。  <br/>
+pillar可以通过变量的方式再不同的操作系统或者特定的服务server上进行特别的设置。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#首先定义pillar的位置
+</span><span class='line'>vim /mnt/config/salt/master
+</span><span class='line'>interface: 192.168.0.210
+</span><span class='line'>user: root
+</span><span class='line'>auto_accept: True
+</span><span class='line'>worker_threads: 5
+</span><span class='line'>file_roots:
+</span><span class='line'>  base:
+</span><span class='line'>    - /mnt/config/salt/
+</span><span class='line'>pillar_roots:                   #标识pillar目录
+</span><span class='line'>  base:
+</span><span class='line'>    - /mnt/config/salt/pillar</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在pilla目录中新建一个top.sls,类似Puppet的入口文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/pillar/top.sls
+</span><span class='line'>base:       #自定义名称
+</span><span class='line'>  '*':      #客户端过滤,可以是angel0[1-2].*,等等
+</span><span class='line'>   - test   #模板名称
+</span><span class='line'>
+</span><span class='line'>vim /mnt/config/salt/pillar/test.sls
+</span><span class='line'>MY_NAME: leon
+</span><span class='line'>ID: 7758258
+</span><span class='line'>CONTENT:  lol
+</span><span class='line'>
+</span><span class='line'>/etc/init.d/salt-master restart
+</span><span class='line'>/etc/init.d/salt-minion restart
+</span><span class='line'>
+</span><span class='line'>[root@angel01 pillar]# salt  'angel01.i.fdmdns.com' pillar.data
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    CONTENT:
+</span><span class='line'>        lol
+</span><span class='line'>    ID:
+</span><span class='line'>        7758258
+</span><span class='line'>    MY_NAME:
+</span><span class='line'>        leon
+</span><span class='line'>    #这边有master默认的一些信息省略了</span></code></pre></td></tr></table></div></figure>
+
+
+<p>`</p>
+
+<p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/top.sls
+</span><span class='line'>base:
+</span><span class='line'>  '*':
+</span><span class='line'>   - test.tmp
+</span><span class='line'>mkdir -p /mnt/config/salt/test/
+</span><span class='line'>vim /mnt/config/salt/test/tmp.sls
+</span><span class='line'>/tmp/tmp.conf:                              #文件位置
+</span><span class='line'>  file.managed:                             #采用新增文件的方式
+</span><span class='line'>  - source:  salt://test/tmp.conf.jinja     #jinja资源位置
+</span><span class='line'>  - template: jinja                         #模板
+</span><span class='line'>
+</span><span class='line'>vim /mnt/config/salt/test/tmp.conf.jinja
+</span><span class='line'>visible hostname        #通过grains获得的fqdn(hostname)
+</span><span class='line'>                     #前面我用pillar定义的MY_NAME
+</span><span class='line'>
+</span><span class='line'>server_os 
+</span><span class='line'>
+</span><span class='line'>salt  '*' state.highstate -v
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>----------
+</span><span class='line'>          ID: /tmp/tmp.conf
+</span><span class='line'>    Function: file.managed
+</span><span class='line'>      Result: True
+</span><span class='line'>     Comment: File /tmp/tmp.conf updated
+</span><span class='line'>     Changes:   
+</span><span class='line'>              ----------
+</span><span class='line'>              diff:
+</span><span class='line'>                  New file
+</span><span class='line'>              mode:
+</span><span class='line'>                  0644
+</span><span class='line'>
+</span><span class='line'>Summary
+</span><span class='line'>------------
+</span><span class='line'>Succeeded: 1
+</span><span class='line'>Failed:    0
+</span><span class='line'>------------
+</span><span class='line'>Total:     1
+</span><span class='line'>#表示完成
+</span><span class='line'>
+</span><span class='line'>[root@angel01 salt]# cat /tmp/tmp.conf 
+</span><span class='line'>visible hostname  angel01
+</span><span class='line'>leon
+</span><span class='line'>7758258
+</span><span class='line'>server_os CentOS</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
