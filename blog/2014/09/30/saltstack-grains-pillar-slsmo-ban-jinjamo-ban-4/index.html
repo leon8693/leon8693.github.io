@@ -448,8 +448,7 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 </span><span class='line'>    #这边有master默认的一些信息省略了</span></code></pre></td></tr></table></div></figure>
 
 
-<p>`
-下面结合state.sls和jinja做一个抒写一个文件的动作</p>
+<p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -508,9 +507,9 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 </span><span class='line'>
 </span><span class='line'>vim /mnt/config/salt/test/tmp.conf.jinja
 </span><span class='line'>visible hostname  <span class="o"></span>      <span class="c">#通过grains获得的fqdn(hostname)</span>
-</span><span class='line'><span class="o"></span>                     <span class="c">#前面我用pillar定义的MY_NAME</span>
-</span><span class='line'><span class="o"></span>
-</span><span class='line'>server_os <span class="o"></span>
+</span><span class='line'><span class="c">#                     #前面我用pillar定义的MY_NAME</span>
+</span><span class='line'><span class="c">#                          #注释的#号自己去掉,双括号情况下在makedown不显示= =！</span>
+</span><span class='line'><span class="c">#server_os </span>
 </span><span class='line'>
 </span><span class='line'>salt  <span class="s1">&#39;*&#39;</span> state.highstate -v
 </span><span class='line'>angel01.i.fdmdns.com:
