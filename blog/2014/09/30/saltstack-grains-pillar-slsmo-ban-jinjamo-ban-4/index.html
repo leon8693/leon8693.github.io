@@ -494,6 +494,7 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 <span class='line-number'>42</span>
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
+<span class='line-number'>45</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>vim /mnt/config/salt/top.sls
 </span><span class='line'>base:
 </span><span class='line'>  <span class="s1">&#39;*&#39;</span>:
@@ -506,12 +507,13 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 </span><span class='line'>  - template: jinja                         <span class="c">#模板</span>
 </span><span class='line'>
 </span><span class='line'>vim /mnt/config/salt/test/tmp.conf.jinja
-</span><span class='line'>visible hostname  <span class="o"></span>      <span class="c">#通过grains获得的fqdn(hostname)</span>
-</span><span class='line'><span class="se">\{\{</span> pillar<span class="o">[</span><span class="s1">&#39;MY_NAME&#39;</span><span class="o">]</span> <span class="o">}}</span>                     <span class="c">#前面我用pillar定义的MY_NAME</span>
-</span><span class='line'><span class="se">\{\{</span> pillar<span class="o">[</span><span class="s1">&#39;ID&#39;</span><span class="o">]</span> <span class="o">}}</span>                          <span class="c">#注释的#号自己去掉,双括号情况下在makedown不显示= =！</span>
-</span><span class='line'><span class="c">#server_os </span>
+</span><span class='line'>visible hostname  <span class="se">\{</span><span class="o">{</span> grains<span class="o">[</span><span class="s1">&#39;fqdn&#39;</span><span class="o">]</span> <span class="o">}}</span>      <span class="c">#通过grains获得的fqdn(hostname)</span>
+</span><span class='line'><span class="se">\{</span><span class="o">{</span> pillar<span class="o">[</span><span class="s1">&#39;MY_NAME&#39;</span><span class="o">]</span> <span class="o">}}</span>                     <span class="c">#前面我用pillar定义的MY_NAME</span>
+</span><span class='line'><span class="se">\{</span><span class="o">{</span> pillar<span class="o">[</span><span class="s1">&#39;ID&#39;</span><span class="o">]</span> <span class="o">}}</span>                          <span class="c">#注释的\号自己去掉,双括号情况下在makedown不显示= =！</span>
+</span><span class='line'><span class="c">#server_os \</span>
 </span><span class='line'>
-</span><span class='line'>salt  <span class="s1">&#39;*&#39;</span> state.highstate -v
+</span><span class='line'>1.salt  <span class="s1">&#39;*&#39;</span> state.highstate -v              <span class="c">#方式1</span>
+</span><span class='line'>2.salt  <span class="s1">&#39;angel01.i.fdmdns.com&#39;</span> state.sls test.tmp  <span class="c">#方式2</span>
 </span><span class='line'>angel01.i.fdmdns.com:
 </span><span class='line'>----------
 </span><span class='line'>          ID: /tmp/tmp.conf
