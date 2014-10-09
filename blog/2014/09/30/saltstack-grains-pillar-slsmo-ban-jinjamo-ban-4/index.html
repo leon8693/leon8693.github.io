@@ -450,7 +450,7 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 
 <p>下面结合state.sls和jinja做一个抒写一个文件的动作</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -495,51 +495,52 @@ pillar可以通过变量的方式再不同的操作系统或者特定的服务se
 <span class='line-number'>43</span>
 <span class='line-number'>44</span>
 <span class='line-number'>45</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/top.sls
-</span><span class='line'>base:
-</span><span class='line'>  '*':
-</span><span class='line'>   - test.tmp
-</span><span class='line'>mkdir -p /mnt/config/salt/test/
-</span><span class='line'>vim /mnt/config/salt/test/tmp.sls
-</span><span class='line'>/tmp/tmp.conf:                              #文件位置
-</span><span class='line'>  file.managed:                             #采用新增文件的方式
-</span><span class='line'>  - source:  salt://test/tmp.conf.jinja     #jinja资源位置
-</span><span class='line'>  - template: jinja                         #模板
+</pre></td><td class='code'><pre><code class='jinja'><span class='line'><span class="x">vim /mnt/config/salt/top.sls</span>
+</span><span class='line'><span class="x">base:</span>
+</span><span class='line'><span class="x">  &#39;*&#39;:</span>
+</span><span class='line'><span class="x">   - test.tmp</span>
+</span><span class='line'><span class="x">mkdir -p /mnt/config/salt/test/</span>
+</span><span class='line'><span class="x">vim /mnt/config/salt/test/tmp.sls</span>
+</span><span class='line'><span class="x">/tmp/tmp.conf:                              #文件位置</span>
+</span><span class='line'><span class="x">  file.managed:                             #采用新增文件的方式</span>
+</span><span class='line'><span class="x">  - source:  salt://test/tmp.conf.jinja     #jinja资源位置</span>
+</span><span class='line'><span class="x">  - template: jinja                         #模板</span>
 </span><span class='line'>
-</span><span class='line'>vim /mnt/config/salt/test/tmp.conf.jinja
-</span><span class='line'>visible hostname  \      #通过grains获得的fqdn(hostname)
-</span><span class='line'>\                     #前面我用pillar定义的MY_NAME
-</span><span class='line'>\                          #注释的\号自己去掉,双括号情况下在makedown不显示= =！
-</span><span class='line'>server_os \
+</span><span class='line'><span class="x">vim /mnt/config/salt/test/tmp.conf.jinja</span>
+</span><span class='line'><span class="x">visible hostname  </span><span class="cp"></span><span class="x">      #通过grains获得的fqdn(hostname)</span>
+</span><span class='line'><span class="cp"></span><span class="x">                     #前面我用pillar定义的MY_NAME</span>
+</span><span class='line'><span class="cp"></span><span class="x">                          #注释的\号自己去掉,双括号情况下在makedown不显示= =！</span>
+</span><span class='line'><span class="x">server_os </span><span class="cp"></span><span class="x"></span>
 </span><span class='line'>
-</span><span class='line'>1.salt  '*' state.highstate -v              #方式1
-</span><span class='line'>2.salt  'angel01.i.fdmdns.com' state.sls test.tmp  #方式2
-</span><span class='line'>angel01.i.fdmdns.com:
-</span><span class='line'>----------
-</span><span class='line'>          ID: /tmp/tmp.conf
-</span><span class='line'>    Function: file.managed
-</span><span class='line'>      Result: True
-</span><span class='line'>     Comment: File /tmp/tmp.conf updated
-</span><span class='line'>     Changes:   
-</span><span class='line'>              ----------
-</span><span class='line'>              diff:
-</span><span class='line'>                  New file
-</span><span class='line'>              mode:
-</span><span class='line'>                  0644
+</span><span class='line'><span class="x">1.salt  &#39;*&#39; state.highstate -v              #方式1</span>
+</span><span class='line'><span class="x">2.salt  &#39;angel01.i.fdmdns.com&#39; state.sls test.tmp  #方式2</span>
+</span><span class='line'><span class="x">angel01.i.fdmdns.com:</span>
+</span><span class='line'><span class="x">----------</span>
+</span><span class='line'><span class="x">          ID: /tmp/tmp.conf</span>
+</span><span class='line'><span class="x">    Function: file.managed</span>
+</span><span class='line'><span class="x">      Result: True</span>
+</span><span class='line'><span class="x">     Comment: File /tmp/tmp.conf updated</span>
+</span><span class='line'><span class="x">     Changes:   </span>
+</span><span class='line'><span class="x">              ----------</span>
+</span><span class='line'><span class="x">              diff:</span>
+</span><span class='line'><span class="x">                  New file</span>
+</span><span class='line'><span class="x">              mode:</span>
+</span><span class='line'><span class="x">                  0644</span>
 </span><span class='line'>
-</span><span class='line'>Summary
-</span><span class='line'>------------
-</span><span class='line'>Succeeded: 1
-</span><span class='line'>Failed:    0
-</span><span class='line'>------------
-</span><span class='line'>Total:     1
-</span><span class='line'>#表示完成
+</span><span class='line'><span class="x">Summary</span>
+</span><span class='line'><span class="x">------------</span>
+</span><span class='line'><span class="x">Succeeded: 1</span>
+</span><span class='line'><span class="x">Failed:    0</span>
+</span><span class='line'><span class="x">------------</span>
+</span><span class='line'><span class="x">Total:     1</span>
+</span><span class='line'><span class="x">#表示完成</span>
 </span><span class='line'>
-</span><span class='line'>[root@angel01 salt]# cat /tmp/tmp.conf 
-</span><span class='line'>visible hostname  angel01
-</span><span class='line'>leon
-</span><span class='line'>7758258
-</span><span class='line'>server_os CentOS</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="x">[root@angel01 salt]# cat /tmp/tmp.conf </span>
+</span><span class='line'><span class="x">visible hostname  angel01</span>
+</span><span class='line'><span class="x">leon</span>
+</span><span class='line'><span class="x">7758258</span>
+</span><span class='line'><span class="x">server_os CentOS</span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
