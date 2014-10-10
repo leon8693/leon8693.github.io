@@ -93,6 +93,89 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/09/29/saltstack-install-1/">Saltstack Install (一)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-09-29T16:14:00+08:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>下载安装</h1>
+
+<h5>Centos</h5>
+
+<p>epel源或者centos源都有</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>yum install salt-master -y #服务端
+</span><span class='line'>yum install salt-minion -y #客户端</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>Ubuntu</h5>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-software-properties
+</span><span class='line'>echo deb http://ppa.launchpad.net/saltstack/salt/ubuntu `lsb_release -sc` main | sudo tee   
+</span><span class='line'>/etc/apt/sources.list.d/saltstack.list
+</span><span class='line'>wget -q -O- "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&amp;search=0x4759FA960E27C0A6" |sudo apt-key add -
+</span><span class='line'>sudo apt-get update
+</span><span class='line'>sudo apt-get install salt-master
+</span><span class='line'>sudo apt-get install salt-minion</span></code></pre></td></tr></table></div></figure>
+
+
+<p>由于我配置文件目录更改,所以有些增加的选项都是非必要的,参考即可</p>
+
+<h3>master配置</h3>
+
+<p>vim /etc/salt/master  配置文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>include: /mnt/config/salt/master
+</span><span class='line'>default_include: /mnt/config/salt/master.d/*.conf
+</span><span class='line'>mkdir -p /mnt/config/salt/ /mnt/config/salt/master.d/</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/09/29/saltstack-install-1/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/">Maptail展现中国地图</a></h1>
     
     
@@ -546,76 +629,6 @@ github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/15/djangoji-chu/">Django 基础</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-15T09:33:00+08:00" pubdate data-updated="true">May 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>django重点</h3>
-
-<p><code>django-admin.py startproject mysite</code> 命令在当前目录创建一个<code>mysite</code>目录,这个作为一个项目目录</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="n">mysite</span><span class="o">/</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">__init__</span><span class="o">.</span><span class="n">py</span>         <span class="c">#django 初始化模块</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">__init__</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">settings</span><span class="o">.</span><span class="n">py</span>         <span class="c">#django 主要配置,全局环境变量</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">settings</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">urls</span><span class="o">.</span><span class="n">py</span>             <span class="c">#django 主要配置,url跳转</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">urls</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">views</span><span class="o">.</span><span class="n">py</span>            <span class="c">#django 主要配置,视图功能</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">views</span><span class="o">.</span><span class="n">pyc</span>
-</span><span class='line'><span class="err">├──</span> <span class="n">wsgi</span><span class="o">.</span><span class="n">py</span>             <span class="c">#django 默认加载的模块</span>
-</span><span class='line'><span class="err">└──</span> <span class="n">wsgi</span><span class="o">.</span><span class="n">pyc</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>django请求流程，用户请求&mdash;>django-urls.py&mdash;>django-views.py</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/05/15/djangoji-chu/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -631,7 +644,7 @@ github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></
     <section>
   <h1>文章分类</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/automation/'>Automation (4)</a></li>
+    <li class='category'><a href='/blog/categories/automation/'>Automation (5)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>

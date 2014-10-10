@@ -93,6 +93,52 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05/">Saltstack 自动化配置管理实战 (五)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-10T10:17:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>自动化部署配置文件</h2>
+
+<h4>/etc/resolv.conf</h4>
+
+<p>对所有/etc/resolv.conf进行部署,指定nameserver和search  <br/>
+angel01是DNS SERVER,angel02是客户端,我们做一个让angel01的resolv.conf中nameserver为127.0.0.1,其他nameserver ip是192.168.0.210</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/">Saltstack Grains,pillar,sls模板,jinja模板 (四)</a></h1>
     
     
@@ -424,89 +470,6 @@ PS:必须在MASTER上操作</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/29/saltstack-install-1/">Saltstack Install (一)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-29T16:14:00+08:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>下载安装</h1>
-
-<h5>Centos</h5>
-
-<p>epel源或者centos源都有</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>yum install salt-master -y #服务端
-</span><span class='line'>yum install salt-minion -y #客户端</span></code></pre></td></tr></table></div></figure>
-
-
-<h5>Ubuntu</h5>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sudo apt-get install python-software-properties
-</span><span class='line'>echo deb http://ppa.launchpad.net/saltstack/salt/ubuntu `lsb_release -sc` main | sudo tee   
-</span><span class='line'>/etc/apt/sources.list.d/saltstack.list
-</span><span class='line'>wget -q -O- "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&amp;search=0x4759FA960E27C0A6" |sudo apt-key add -
-</span><span class='line'>sudo apt-get update
-</span><span class='line'>sudo apt-get install salt-master
-</span><span class='line'>sudo apt-get install salt-minion</span></code></pre></td></tr></table></div></figure>
-
-
-<p>由于我配置文件目录更改,所以有些增加的选项都是非必要的,参考即可</p>
-
-<h3>master配置</h3>
-
-<p>vim /etc/salt/master  配置文件</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>include: /mnt/config/salt/master
-</span><span class='line'>default_include: /mnt/config/salt/master.d/*.conf
-</span><span class='line'>mkdir -p /mnt/config/salt/ /mnt/config/salt/master.d/</span></code></pre></td></tr></table></div></figure>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/29/saltstack-install-1/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -520,7 +483,7 @@ PS:必须在MASTER上操作</p>
     <section>
   <h1>文章分类</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/automation/'>Automation (4)</a></li>
+    <li class='category'><a href='/blog/categories/automation/'>Automation (5)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>

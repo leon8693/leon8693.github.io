@@ -93,6 +93,100 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu/">Fastdfs Nginx Ngx_image_thumb 实时图片缩略图</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-04T14:40:00+08:00" pubdate data-updated="true">Dec 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本</span>
+</span><span class='line'>Centos 2.6.32-358.el6.x86_64
+</span><span class='line'>FastDFS 4.06
+</span><span class='line'>Tengine 1.5.2
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#官网下载地址</span>
+</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
+</span><span class='line'>
+</span><span class='line'><span class="c">#oopul写的nginx模块ngx_image_thumb</span>
+</span><span class='line'>wget https://github.com/3078825/nginx-image/archive/master.zip
+</span><span class='line'>
+</span><span class='line'><span class="c">#Tengine 1.5.2 下载</span>
+</span><span class='line'>wget http://tengine.taobao.org/download/tengine-1.5.2.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装FastDFS</h3>
+
+<p>参考<a href="http://leon8693.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
+
+<h3>安装需要的包</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install gd-devel pcre-devel libcurl-devel gcc automake autoconf m4
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>安装Tengine并加载ngx_image_thumb模块</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tar xf tengine-1.5.2.tar.gz
+</span><span class='line'><span class="nb">cd </span>tengine-1.5.2
+</span><span class='line'>./configure --add-module<span class="o">=</span>/srv/fastdfs-nginx-module/src/ --add-module<span class="o">=</span>/srv/ngx_image_thumb-master/
+</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
+</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan/">Linux备份数据至百度网盘</a></h1>
     
     
@@ -317,72 +411,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/">Octopress最新评论及友情链接</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-13T16:35:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>最新评论，热评</h3>
-
-<p>这边我使用的是友言，友言提供了很多组件，最新评论，热评等等 <br/>
-我们可以将他们 做成侧边栏进行展示，或在首页文章列表中，显示每篇文章的评论数目<br/>
-首先登入友言页面，并注册 <br/>
-<a href="http://uyan.cc/  ">http://uyan.cc/  </a>
-后台管理&mdash;>进入&mdash;>安装设置&mdash;>嵌入组件</p>
-
-<h4>创建文件</h4>
-
-<p>source/_includes/asides/uyan_hotcmt.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
-</span><span class='line'>&lt;h1&gt;评论热榜&lt;/h1&gt;
-</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;uyan_hotcmt_unit&quot;</span>&gt;&lt;/div&gt;
-</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v2.uyan.cc/code/uyan.js?uid=xxxxxx&quot;</span>&gt;&lt;/script&gt; &lt;!-- 如果已经过加载此行JS，即可不用重复加载 --&gt;
-</span><span class='line'>&lt;/section&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -398,7 +426,7 @@
     <section>
   <h1>文章分类</h1>
   <ul id="categories">
-    <li class='category'><a href='/blog/categories/automation/'>Automation (4)</a></li>
+    <li class='category'><a href='/blog/categories/automation/'>Automation (5)</a></li>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>

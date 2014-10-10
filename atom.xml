@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-09T17:53:34+08:00</updated>
+  <updated>2014-10-10T15:41:12+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,203 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[saltstack 自动化配置管理实战 (五)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05/"/>
+    <updated>2014-10-10T10:17:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05</id>
+    <content type="html"><![CDATA[<h2>自动化部署配置文件</h2>
+
+<h4>/etc/resolv.conf</h4>
+
+<p>对所有/etc/resolv.conf进行部署,指定nameserver和search  <br/>
+angel01是DNS SERVER,angel02是客户端,我们做一个让angel01的resolv.conf中nameserver为127.0.0.1,其他nameserver ip是192.168.0.210</p>
+
+<!-- more -->
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#首先设置pillar需要区分的数据
+</span><span class='line'>vim /mnt/config/salt/pillar/top.sls
+</span><span class='line'>base:
+</span><span class='line'>  '*':
+</span><span class='line'>   - base.resolv
+</span><span class='line'>mkdir /mnt/config/salt/pillar/base/
+</span><span class='line'>vim /mnt/config/salt/pillar/base/resolv.sls
+</span><span class='line'>
+</span><span class='line'>nameserver: ['192.168.0.210','202.96.209.133']
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>vim /mnt/config/salt/top.sls
+</span><span class='line'>base:
+</span><span class='line'>  '*':
+</span><span class='line'>  - base.resolv
+</span><span class='line'>mkdir -p /mnt/config/salt/base/
+</span><span class='line'>vim /mnt/config/salt/base/resolv.sls
+</span><span class='line'>/etc/resolv.conf:                                   #文件路径
+</span><span class='line'>  file.managed:                                     #sls函数,修改添加文件
+</span><span class='line'>  - source:  salt://base/jinja/resolv.conf.jinja    #jinja的文件位置
+</span><span class='line'>  - user: root                                      #用户属性
+</span><span class='line'>  - group: root                                     #用户组属性
+</span><span class='line'>  - mode: 644                                       #用户权限
+</span><span class='line'>  - backup: minion                                  #minion客户端本地备份/var/cach/salt/
+</span><span class='line'>  - template: jinja                                 #使用jinja模板
+</span><span class='line'>
+</span><span class='line'>vim /mnt/config/salt/base/jinja/resolv.conf.jinja
+</span><span class='line'>search i.fdmdns.com
+</span><span class='line'>nameserver 
+</span><span class='line'>nameserver 
+</span><span class='line'>
+</span><span class='line'>#使用命令测试
+</span><span class='line'>[root@angel01 salt]# salt '*' pillar.item nameserver
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    nameserver:
+</span><span class='line'>        - 127.0.0.1
+</span><span class='line'>        - 202.96.209.133
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    nameserver:
+</span><span class='line'>        - 192.168.0.210
+</span><span class='line'>        - 202.96.209.133
+</span><span class='line'>#pillar已经有我们属性了,然后同步写入文件内容
+</span><span class='line'>[root@angel01 salt]# salt '*' state.highstate -v
+</span><span class='line'>Executing job with jid 20141010150603492444
+</span><span class='line'>-------------------------------------------
+</span><span class='line'>
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>----------
+</span><span class='line'>          ID: /etc/resolv.conf
+</span><span class='line'>    Function: file.managed
+</span><span class='line'>      Result: True
+</span><span class='line'>     Comment: File /etc/resolv.conf updated
+</span><span class='line'>     Changes:   
+</span><span class='line'>              ----------
+</span><span class='line'>              diff:
+</span><span class='line'>                  New file
+</span><span class='line'>              mode:
+</span><span class='line'>                  0644
+</span><span class='line'>
+</span><span class='line'>Summary
+</span><span class='line'>------------
+</span><span class='line'>Succeeded: 1
+</span><span class='line'>Failed:    0
+</span><span class='line'>------------
+</span><span class='line'>Total:     1
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>----------
+</span><span class='line'>          ID: /etc/resolv.conf
+</span><span class='line'>    Function: file.managed
+</span><span class='line'>      Result: True
+</span><span class='line'>     Comment: File /etc/resolv.conf updated
+</span><span class='line'>     Changes:   
+</span><span class='line'>              ----------
+</span><span class='line'>              diff:
+</span><span class='line'>                  New file
+</span><span class='line'>              mode:
+</span><span class='line'>                  0644
+</span><span class='line'>
+</span><span class='line'>Summary
+</span><span class='line'>------------
+</span><span class='line'>Succeeded: 1
+</span><span class='line'>Failed:    0
+</span><span class='line'>------------
+</span><span class='line'>Total:     1
+</span><span class='line'>#查看文件，如果符合则完成</span></code></pre></td></tr></table></div></figure>
+
+
+<p>未完待续。。。。。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[saltstack grains,pillar,sls模板,jinja模板 (四)]]></title>
@@ -3741,90 +3938,6 @@ www.qq.com/404<br/>
 
 <p>效果如下<br/>
 <a href="http://leon8693.github.io/404/404.html">http://leon8693.github.io/404/404.html</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress第三方评论]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/13/octopressdi-san-fang-ping-lun/"/>
-    <updated>2013-11-13T11:12:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/13/octopressdi-san-fang-ping-lun</id>
-    <content type="html"><![CDATA[<h3>Octopress第三方评论添加</h3>
-
-<p>初始的Octopress只有一些twitter之类的评论可以使用，对于国内普遍使用微博，人人，QQ的人来说极其不方便的。
-还好Octopress也可以增加第三方评论，这样可以使我们的Octopress符合我们所需要的。</p>
-
-<h4>配置文件中添加需要的参数</h4>
-
-<p>octopress/_config.yml</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># Weibo Like
-</span><span class='line'>weibo_share: true</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>增加代码</h4>
-
-<p>octopress/source/_includes/post/sharing.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>  <span class="o">{</span>% <span class="k">if </span>site.weibo_share %<span class="o">}</span>
-</span><span class='line'>     <span class="o">{</span>% include post/weibo.html %<span class="o">}</span>
-</span><span class='line'>  <span class="o">{</span>% endif %<span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<!-- more -->
-
-
-<h4>增加分享以及留言代码</h4>
-
-<p>octopress/source/_includes/post/weibo.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;!-- JiaThis Button BEGIN --&gt;
-</span><span class='line'>&lt;div <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_style_32x32&quot;</span>&gt;
-</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_qzone&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_tsina&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_tqq&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_weixin&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_button_renren&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>        &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://www.jiathis.com/share&quot;</span> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis jiathis_txt jtico jtico_jiathis&quot;</span> <span class="nv">target</span><span class="o">=</span><span class="s2">&quot;_blank&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>        &lt;a <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;jiathis_counter_style&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>&lt;/div&gt;
-</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v3.jiathis.com/code/jia.js&quot;</span> <span class="nv">charset</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span>&gt;&lt;/script&gt;
-</span><span class='line'>&lt;!-- JiaThis Button END --&gt;
-</span><span class='line'>
-</span><span class='line'>&lt;!-- UY BEGIN --&gt;
-</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;uyan_frame&quot;</span>&gt;&lt;/div&gt;
-</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v2.uyan.cc/code/uyan.js?uid=1863487&quot;</span>&gt;&lt;/script&gt;
-</span><span class='line'>&lt;!-- UY END --&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>上面2段代码获取地点</h4>
-
-<p><a href="http://www.jiathis.com/">http://www.jiathis.com/</a> <br/>
-<a href="http://uyan.cc/">http://uyan.cc/</a></p>
 ]]></content>
   </entry>
   

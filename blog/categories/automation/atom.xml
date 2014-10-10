@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Automation | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/automation/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-09T17:53:34+08:00</updated>
+  <updated>2014-10-10T15:41:12+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,131 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[saltstack 自动化配置管理实战 (五)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05/"/>
+    <updated>2014-10-10T10:17:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05</id>
+    <content type="html"><![CDATA[<h2>自动化部署配置文件</h2>
+
+<h4>/etc/resolv.conf</h4>
+
+<p>对所有/etc/resolv.conf进行部署,指定nameserver和search  <br/>
+angel01是DNS SERVER,angel02是客户端,我们做一个让angel01的resolv.conf中nameserver为127.0.0.1,其他nameserver ip是192.168.0.210</p>
+
+<!-- more -->
+
+
+<p>```</p>
+
+<h1>首先设置pillar需要区分的数据</h1>
+
+<p>vim /mnt/config/salt/pillar/top.sls
+base:
+  &lsquo;*&rsquo;:
+   &ndash; base.resolv
+mkdir /mnt/config/salt/pillar/base/
+vim /mnt/config/salt/pillar/base/resolv.sls
+            #匹配Hostname如果是angel01则
+nameserver: [&lsquo;127.0.0.1&rsquo;,&lsquo;202.96.209.133&rsquo;]
+</p>
+
+<p>vim /mnt/config/salt/top.sls
+base:
+  &lsquo;*&rsquo;:
+  &ndash; base.resolv
+mkdir -p /mnt/config/salt/base/
+vim /mnt/config/salt/base/resolv.sls
+/etc/resolv.conf:                                   #文件路径
+  file.managed:                                     #sls函数,修改添加文件
+  &ndash; source:  salt://base/jinja/resolv.conf.jinja    #jinja的文件位置
+  &ndash; user: root                                      #用户属性
+  &ndash; group: root                                     #用户组属性
+  &ndash; mode: 644                                       #用户权限
+  &ndash; backup: minion                                  #minion客户端本地备份/var/cach/salt/
+  &ndash; template: jinja                                 #使用jinja模板</p>
+
+<p>vim /mnt/config/salt/base/jinja/resolv.conf.jinja
+search i.fdmdns.com
+nameserver 
+nameserver </p>
+
+<h1>使用命令测试</h1>
+
+<p>[root@angel01 salt]# salt &lsquo;*&rsquo; pillar.item nameserver
+angel01.i.fdmdns.com:</p>
+
+<pre><code>----------
+nameserver:
+    - 127.0.0.1
+    - 202.96.209.133
+</code></pre>
+
+<p>angel02.i.fdmdns.com:</p>
+
+<pre><code>----------
+nameserver:
+    - 192.168.0.210
+    - 202.96.209.133
+</code></pre>
+
+<h1>pillar已经有我们属性了,然后同步写入文件内容</h1>
+
+<p>[root@angel01 salt]# salt &lsquo;*&rsquo; state.highstate -v</p>
+
+<h2>Executing job with jid 20141010150603492444</h2>
+
+<h2>angel01.i.fdmdns.com:</h2>
+
+<pre><code>      ID: /etc/resolv.conf
+Function: file.managed
+  Result: True
+ Comment: File /etc/resolv.conf updated
+ Changes:   
+          ----------
+          diff:
+              New file
+          mode:
+              0644
+</code></pre>
+
+<h2>Summary</h2>
+
+<p>Succeeded: 1</p>
+
+<h2>Failed:    0</h2>
+
+<p>Total:     1</p>
+
+<h2>angel02.i.fdmdns.com:</h2>
+
+<pre><code>      ID: /etc/resolv.conf
+Function: file.managed
+  Result: True
+ Comment: File /etc/resolv.conf updated
+ Changes:   
+          ----------
+          diff:
+              New file
+          mode:
+              0644
+</code></pre>
+
+<h2>Summary</h2>
+
+<p>Succeeded: 1</p>
+
+<h2>Failed:    0</h2>
+
+<p>Total:     1</p>
+
+<h1>查看文件，如果符合则完成</h1>
+
+<p>```
+未完待续。。。。。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[saltstack grains,pillar,sls模板,jinja模板 (四)]]></title>

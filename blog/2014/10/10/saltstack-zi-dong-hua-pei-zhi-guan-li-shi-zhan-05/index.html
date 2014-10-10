@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Redis Sentinel HA自动切换 - 唯一的真理</title>
+  <title>saltstack 自动化配置管理实战 (五) - 唯一的真理</title>
   <meta name="author" content="leon">
 
   
-  <meta name="description" content="Redis Sentinel HA自动切换">
-  <meta name="keywords" content="linux,python,OptionParser">
+  <meta name="description" content="saltstack grains,pillar,sls模板,jinja模板,自动化部署">
+  <meta name="keywords" content="saltstack,salt,自动化运维,自动化部署,grains,pillar,sls模板,jinja模板">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://leon8693.github.io/blog/2014/06/13/redis-sentinel-hazi-dong-qie-huan">
+  <link rel="canonical" href="http://leon8693.github.io/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="唯一的真理" type="application/atom+xml">
@@ -90,7 +90,7 @@
   
   <header>
     
-      <h1 class="entry-title">Redis Sentinel HA自动切换</h1>
+      <h1 class="entry-title">Saltstack 自动化配置管理实战 (五)</h1>
     
     
       <p class="meta">
@@ -106,19 +106,22 @@
   
 
 
-<time datetime="2014-06-13T17:11:00+08:00" pubdate data-updated="true">Jun 13<span>th</span>, 2014</time>
+<time datetime="2014-10-10T10:17:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>Redis Sentinel  HA自动切换</h2>
+<div class="entry-content"><h2>自动化部署配置文件</h2>
 
-<h3>redis 2.8.11 下载</h3>
+<h4>/etc/resolv.conf</h4>
 
-<p><a href="http://redis.io/download">http://redis.io/download</a>  <br/>
-<a href="http://download.redis.io/releases/redis-2.8.11.tar.gz">http://download.redis.io/releases/redis-2.8.11.tar.gz</a></p>
+<p>对所有/etc/resolv.conf进行部署,指定nameserver和search  <br/>
+angel01是DNS SERVER,angel02是客户端,我们做一个让angel01的resolv.conf中nameserver为127.0.0.1,其他nameserver ip是192.168.0.210</p>
+
+<!-- more -->
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -208,189 +211,97 @@
 <span class='line-number'>86</span>
 <span class='line-number'>87</span>
 <span class='line-number'>88</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>master 192.168.0.210
-</span><span class='line'>slave 192.168.0.211
-</span><span class='line'>slave 192.168.0.213
+<span class='line-number'>89</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#首先设置pillar需要区分的数据
+</span><span class='line'>vim /mnt/config/salt/pillar/top.sls
+</span><span class='line'>base:
+</span><span class='line'>  '*':
+</span><span class='line'>   - base.resolv
+</span><span class='line'>mkdir /mnt/config/salt/pillar/base/
+</span><span class='line'>vim /mnt/config/salt/pillar/base/resolv.sls
 </span><span class='line'>
-</span><span class='line'>#安装redis 2.8.11
-</span><span class='line'>cd /srv/
-</span><span class='line'>tar xf redis-2.8.11.tar.gz
-</span><span class='line'>cd redis-2.8.11
-</span><span class='line'>make && make install 
-</span><span class='line'>
-</span><span class='line'>#复制启动文件
-</span><span class='line'>cp -rp /srv/redis-2.8.11/utils/redis_init_script  /etc/init.d/redis
-</span><span class='line'>chmod +x /etc/init.d/redis
+</span><span class='line'>nameserver: ['192.168.0.210','202.96.209.133']
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>#master 配置文件
-</span><span class='line'>/etc/redis/redis.conf
-</span><span class='line'>####
-</span><span class='line'>daemonize yes
-</span><span class='line'>pidfile /var/run/redis/redis.pid
-</span><span class='line'>port 6379
-</span><span class='line'>bind 0.0.0.0
-</span><span class='line'>timeout 0
-</span><span class='line'>loglevel notice
-</span><span class='line'>logfile /var/log/redis/redis.log
-</span><span class='line'>databases 16
-</span><span class='line'>save 900 1
-</span><span class='line'>save 300 10
-</span><span class='line'>save 60 10000
-</span><span class='line'>rdbcompression yes
-</span><span class='line'>dbfilename dump.rdb
-</span><span class='line'>dir /var/lib/redis/
-</span><span class='line'>slave-serve-stale-data yes
-</span><span class='line'>appendonly no
-</span><span class='line'>appendfsync everysec
-</span><span class='line'>no-appendfsync-on-rewrite no
-</span><span class='line'>auto-aof-rewrite-percentage 100
-</span><span class='line'>auto-aof-rewrite-min-size 64mb
-</span><span class='line'>slowlog-log-slower-than 10000
-</span><span class='line'>slowlog-max-len 1024
-</span><span class='line'>list-max-ziplist-entries 512
-</span><span class='line'>list-max-ziplist-value 64
-</span><span class='line'>set-max-intset-entries 512
-</span><span class='line'>zset-max-ziplist-entries 128
-</span><span class='line'>zset-max-ziplist-value 64
-</span><span class='line'>activerehashing yes
-</span><span class='line'>requirepass angel01
-</span><span class='line'>slave-read-only yes
-</span><span class='line'>maxmemory 1G
-</span><span class='line'>########
+</span><span class='line'>vim /mnt/config/salt/top.sls
+</span><span class='line'>base:
+</span><span class='line'>  '*':
+</span><span class='line'>  - base.resolv
+</span><span class='line'>mkdir -p /mnt/config/salt/base/
+</span><span class='line'>vim /mnt/config/salt/base/resolv.sls
+</span><span class='line'>/etc/resolv.conf:                                   #文件路径
+</span><span class='line'>  file.managed:                                     #sls函数,修改添加文件
+</span><span class='line'>  - source:  salt://base/jinja/resolv.conf.jinja    #jinja的文件位置
+</span><span class='line'>  - user: root                                      #用户属性
+</span><span class='line'>  - group: root                                     #用户组属性
+</span><span class='line'>  - mode: 644                                       #用户权限
+</span><span class='line'>  - backup: minion                                  #minion客户端本地备份/var/cach/salt/
+</span><span class='line'>  - template: jinja                                 #使用jinja模板
 </span><span class='line'>
+</span><span class='line'>vim /mnt/config/salt/base/jinja/resolv.conf.jinja
+</span><span class='line'>search i.fdmdns.com
+</span><span class='line'>nameserver 
+</span><span class='line'>nameserver 
 </span><span class='line'>
-</span><span class='line'>#slave配置
-</span><span class='line'>########
-</span><span class='line'>daemonize yes
-</span><span class='line'>pidfile /var/run/redis/redis.pid
-</span><span class='line'>port 6379
-</span><span class='line'>bind 0.0.0.0
-</span><span class='line'>timeout 0
-</span><span class='line'>loglevel notice
-</span><span class='line'>logfile /var/log/redis/redis.log
-</span><span class='line'>databases 16
-</span><span class='line'>save 900 1
-</span><span class='line'>save 300 10
-</span><span class='line'>save 60 10000
-</span><span class='line'>rdbcompression yes
-</span><span class='line'>dbfilename dump.rdb
-</span><span class='line'>dir /var/lib/redis/
-</span><span class='line'>slave-serve-stale-data yes
-</span><span class='line'>appendonly yes
-</span><span class='line'>appendfsync everysec
-</span><span class='line'>no-appendfsync-on-rewrite no
-</span><span class='line'>auto-aof-rewrite-percentage 100
-</span><span class='line'>auto-aof-rewrite-min-size 64mb
-</span><span class='line'>slowlog-log-slower-than 10000
-</span><span class='line'>slowlog-max-len 1024
-</span><span class='line'>list-max-ziplist-entries 512
-</span><span class='line'>list-max-ziplist-value 64
-</span><span class='line'>set-max-intset-entries 512
-</span><span class='line'>zset-max-ziplist-entries 128
-</span><span class='line'>zset-max-ziplist-value 64
-</span><span class='line'>activerehashing yes
-</span><span class='line'>slave-serve-stale-data yes
-</span><span class='line'>slaveof 192.168.0.210 6379
-</span><span class='line'>masterauth angel01
-</span><span class='line'>slave-read-only yes
-</span><span class='line'>maxmemory 1G
-</span><span class='line'>#############
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>#使用命令测试
+</span><span class='line'>[root@angel01 salt]# salt '*' pillar.item nameserver
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    nameserver:
+</span><span class='line'>        - 127.0.0.1
+</span><span class='line'>        - 202.96.209.133
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>    ----------
+</span><span class='line'>    nameserver:
+</span><span class='line'>        - 192.168.0.210
+</span><span class='line'>        - 202.96.209.133
+</span><span class='line'>#pillar已经有我们属性了,然后同步写入文件内容
+</span><span class='line'>[root@angel01 salt]# salt '*' state.highstate -v
+</span><span class='line'>Executing job with jid 20141010150603492444
+</span><span class='line'>-------------------------------------------
+</span><span class='line'>
+</span><span class='line'>angel01.i.fdmdns.com:
+</span><span class='line'>----------
+</span><span class='line'>          ID: /etc/resolv.conf
+</span><span class='line'>    Function: file.managed
+</span><span class='line'>      Result: True
+</span><span class='line'>     Comment: File /etc/resolv.conf updated
+</span><span class='line'>     Changes:   
+</span><span class='line'>              ----------
+</span><span class='line'>              diff:
+</span><span class='line'>                  New file
+</span><span class='line'>              mode:
+</span><span class='line'>                  0644
+</span><span class='line'>
+</span><span class='line'>Summary
+</span><span class='line'>------------
+</span><span class='line'>Succeeded: 1
+</span><span class='line'>Failed:    0
+</span><span class='line'>------------
+</span><span class='line'>Total:     1
+</span><span class='line'>angel02.i.fdmdns.com:
+</span><span class='line'>----------
+</span><span class='line'>          ID: /etc/resolv.conf
+</span><span class='line'>    Function: file.managed
+</span><span class='line'>      Result: True
+</span><span class='line'>     Comment: File /etc/resolv.conf updated
+</span><span class='line'>     Changes:   
+</span><span class='line'>              ----------
+</span><span class='line'>              diff:
+</span><span class='line'>                  New file
+</span><span class='line'>              mode:
+</span><span class='line'>                  0644
+</span><span class='line'>
+</span><span class='line'>Summary
+</span><span class='line'>------------
+</span><span class='line'>Succeeded: 1
+</span><span class='line'>Failed:    0
+</span><span class='line'>------------
+</span><span class='line'>Total:     1
+</span><span class='line'>#查看文件，如果符合则完成</span></code></pre></td></tr></table></div></figure>
 
 
-<!-- more -->
-
-
-<p>可以通过以下2种方式查看是否主从<br/>
-方案1</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>redis-cli -a angel01 -h 192.168.0.210 info Replication
-</span><span class='line'># Replication
-</span><span class='line'>role:master
-</span><span class='line'>connected_slaves:2
-</span><span class='line'>slave0:ip=192.168.0.211,port=6379,state=online,offset=21327,lag=1
-</span><span class='line'>slave1:ip=192.168.0.213,port=6379,state=online,offset=21327,lag=1
-</span><span class='line'>master_repl_offset:21327
-</span><span class='line'>repl_backlog_active:1
-</span><span class='line'>repl_backlog_size:1048576
-</span><span class='line'>repl_backlog_first_byte_offset:2
-</span><span class='line'>repl_backlog_histlen:21326</span></code></pre></td></tr></table></div></figure>
-
-
-<p>方案2</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>master 上操作
-</span><span class='line'>redis-cli -a angel01
-</span><span class='line'>set leon good
-</span><span class='line'>slave 上操作
-</span><span class='line'>redis-cli -a angel01
-</span><span class='line'>get leon
-</span><span class='line'>"good"
-</span><span class='line'>即可成功</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>slave-read-only yes</code> 从只有只读权限<br/>
-<code>maxmemory 1G</code>        最大使用内存1G<br/>
-<code>appendonly yes</code>      slave 上，开启aof备份，路径在dir /var/lib/redis/下面</p>
-
-<p>这边需要注意的是，AOF和RDB的备份，在主上只开启RDB，在SLAVE上2个都开启，但在故障转移的时候slave升成master时，压力会比原来的master大，那是因为RDB和AOF是不会自动转移的。
-到此说明redis正常工作了，接下来开始使用哨兵sentinel进行监控以及主从切换</p>
-
-<p>如下操作</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cp -rp /srv/redis-2.8.11/sentinel.conf /etc/redis/
-</span><span class='line'>vim /etc/redis/sentinel.conf
-</span><span class='line'>port 26379
-</span><span class='line'>dir /var/lib/redis
-</span><span class='line'>sentinel monitor mymaster 192.168.0.210 6379 2
-</span><span class='line'>sentinel down-after-milliseconds mymaster 30000
-</span><span class='line'>sentinel parallel-syncs mymaster 1
-</span><span class='line'>sentinel failover-timeout mymaster 180000
-</span><span class='line'>sentinel auth-pass mymaster angel01
-</span><span class='line'>/etc/init.d/redis-sentinel /etc/sentinel.conf --sentinel  #启动命令</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>故障演示</h3>
-
-<p>3台机器都启动查看<br/>
-redis-cli -h 192.168.0.210 -p 26379 info Sentinel 可以查看信息<br/>
-关闭slave<br/>
-没有任何响应</p>
-
-<p>关闭master<br/>
-<img src="/images/blog_img/redis1.png" alt="stop_master" />
-可以看到213接替了210成了master<br/>
-到此完成切换</p>
+<p>未完待续。。。。。</p>
 </div>
 
 
@@ -413,12 +324,12 @@ redis-cli -h 192.168.0.210 -p 26379 info Sentinel 可以查看信息<br/>
   
 
 
-<time datetime="2014-06-13T17:11:00+08:00" pubdate data-updated="true">Jun 13<span>th</span>, 2014</time>
+<time datetime="2014-10-10T10:17:00+08:00" pubdate data-updated="true">Oct 10<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/database/'>Database</a>
+    <a class='category' href='/blog/categories/automation/'>Automation</a>
   
 </span>
 
@@ -455,10 +366,8 @@ redis-cli -h 192.168.0.210 -p 26379 info Sentinel 可以查看信息<br/>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/06/06/python-optionparser/" title="Previous Post: python OptionParser">&laquo; python OptionParser</a>
+        <a class="basic-alignment left" href="/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/" title="Previous Post: saltstack grains,pillar,sls模板,jinja模板 (四)">&laquo; saltstack grains,pillar,sls模板,jinja模板 (四)</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/" title="Next Post: maptail展现中国地图">maptail展现中国地图 &raquo;</a>
       
     </p>
   </footer>

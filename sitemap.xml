@@ -105,6 +105,12 @@
         <lastmod>2014-10-09T17:53:28+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://leon8693.github.io/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05/
+        </loc>
+        <lastmod>2014-10-10T15:41:04+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://leon8693.github.io/lol/</loc>
         <lastmod>2013-11-18T17:26:57+08:00</lastmod>
     </url>
@@ -118,7 +124,7 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/blog/archives/</loc>
-        <lastmod>2014-10-09T17:53:28+08:00</lastmod>
+        <lastmod>2014-10-10T15:41:04+08:00</lastmod>
     </url>
     <url>
         <loc>http://leon8693.github.io/huangli/</loc>
@@ -126,6 +132,6 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/</loc>
-        <lastmod>2014-10-09T17:53:28+08:00</lastmod>
+        <lastmod>2014-10-10T15:41:04+08:00</lastmod>
     </url>
 </urlset>
