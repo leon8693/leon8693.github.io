@@ -173,6 +173,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+
+
+<!-- more -->
+
+
 <h2>编辑spec</h2>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -261,6 +266,7 @@
 <span class='line-number'>84</span>
 <span class='line-number'>85</span>
 <span class='line-number'>86</span>
+<span class='line-number'>87</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>%define version 5.3.10
 </span><span class='line'>%define so_version 5
 </span><span class='line'>%define release 0
@@ -287,6 +293,7 @@
 </span><span class='line'>
 </span><span class='line'>%install
 </span><span class='line'><span class="c">#make DESTDIR=$RPM_BUILD_ROOT install</span>
+</span><span class='line'><span class="c">#DESTDIR是Makefile文件中定义的一个安装路径的变量，根据实际情况修改，比如mysql和nginx的是DESTDIR，而php的是INSTALL_ROOT。</span>
 </span><span class='line'>make <span class="nv">INSTALL_ROOT</span><span class="o">=</span><span class="nv">$RPM_BUILD_ROOT</span> install
 </span><span class='line'>mkdir -p <span class="nv">$RPM_BUILD_ROOT</span>/usr/local/php-fpm/init/
 </span><span class='line'>cp -rp <span class="nv">$RPM_BUILD_DIR</span>/php-fdm-5.3.10/sapi/fpm/init.d.php-fpm <span class="nv">$RPM_BUILD_ROOT</span>/usr/local/php-fpm/init/php-fpm
