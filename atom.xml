@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-15T14:33:47+08:00</updated>
+  <updated>2014-10-15T16:37:52+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,101 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[yum 私有源]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/15/yum-si-you-yuan/"/>
+    <updated>2014-10-15T16:17:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/15/yum-si-you-yuan</id>
+    <content type="html"><![CDATA[<h2>yum私有源</h2>
+
+<p>当自己制作RPM包后发现还需要一个私有的yum源 <br/>
+下面就自己搭建一个</p>
+
+<!-- more -->
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#安装需要的包
+</span><span class='line'>yum -y install createrepo 
+</span><span class='line'>
+</span><span class='line'>#创建需要存放RPM包的目录
+</span><span class='line'>mkdir -p /mnt/rpm/centos6
+</span><span class='line'>
+</span><span class='line'>#放入自定义的包
+</span><span class='line'>cp -rp php-leon-5.3.10-0.x86_64.rpm /mnt/rpm/centos6/
+</span><span class='line'>
+</span><span class='line'>#创建yum使用的createrepo索引
+</span><span class='line'>createrepo /mnt/rpm/centos6/
+</span><span class='line'>
+</span><span class='line'>#这里使用nginx中的http模式,所以编辑nginx
+</span><span class='line'>vim /etc/nginx/conf.d/yum.conf
+</span><span class='line'>server  {
+</span><span class='line'>        listen 80;
+</span><span class='line'>        server_name yum.leon.com;
+</span><span class='line'>        index  idex.html;
+</span><span class='line'>        autoindex on;
+</span><span class='line'>        root /mnt/rpm/;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>/etc/init.d/nginx reload
+</span><span class='line'>
+</span><span class='line'>#增加repo
+</span><span class='line'>vim /etc/yum.repos.d/leon.repo
+</span><span class='line'>[leon-centos6]
+</span><span class='line'>name=Extra Packages for Enterprise Linux 6 - $basearch
+</span><span class='line'>baseurl=http://yum.leon.com/rpm/
+</span><span class='line'>enabled=1
+</span><span class='line'>gpgcheck=0
+</span><span class='line'>keepcache=1
+</span><span class='line'>gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
+</span><span class='line'>
+</span><span class='line'>#yum makecache内容
+</span><span class='line'>yum makecache
+</span><span class='line'>
+</span><span class='line'>yum install php-leon -y</span></code></pre></td></tr></table></div></figure>
+
+
+<p>大功告成！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rpmbuild 打包rpm实战]]></title>
@@ -4138,108 +4233,6 @@ Axel下载</p>
 <a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a>  <br/>
 <a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
 <a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress新浪微博侧边栏]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/"/>
-    <updated>2013-11-13T15:26:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan</id>
-    <content type="html"><![CDATA[<h3>增加新浪微博侧边栏</h3>
-
-<h4>先通过微博秀</h4>
-
-<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
-找到自己的代码</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;iframe
-</span><span class='line'><span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
-</span><span class='line'><span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
-</span><span class='line'> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
-</span><span class='line'> <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
-</span><span class='line'><span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
-</span><span class='line'><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://widget.weibo.com/weiboshow/index.php?language=&amp;width=0&amp;height=550&amp;fansRow=2&amp;ptype=1&amp;speed=0&amp;skin=1&amp;isTitle=1&amp;noborder=1&amp;isWeibo=1&amp;isFans=1&amp;uid=xxxxxxxx&amp;verifier=xxxxxxxx&quot;</span>&gt;
-</span><span class='line'>&lt;/iframe&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!-- more -->
-
-
-<h4>将上面的代码转换成HTML</h4>
-
-<p>octopress/source/_includes/asides/weibo.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="o">{</span>% <span class="k">if </span>site.weibo_uid %<span class="o">}</span>
-</span><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;新浪微博&lt;/h1&gt;
-</span><span class='line'>  &lt;ul <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;weibo&quot;</span>&gt;
-</span><span class='line'>    &lt;li&gt;
-</span><span class='line'>      &lt;iframe
-</span><span class='line'>        <span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
-</span><span class='line'>        <span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
-</span><span class='line'>        <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
-</span><span class='line'>        <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
-</span><span class='line'>        <span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
-</span><span class='line'>        <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;&quot;</span>http://widget.weibo.com/weiboshow/index.php?width<span class="o">=</span>0&amp;height<span class="o">=</span>550&amp;ptype<span class="o">={</span>% <span class="k">if </span>site.weibo_pic %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;speed<span class="o">=</span>0&amp;skin<span class="o">=</span>&amp;isTitle<span class="o">=</span>0&amp;noborder<span class="o">=</span>1&amp;isWeibo<span class="o">={</span>% <span class="k">if </span>site.weibo_show %<span class="o">}</span>1<span class="o">{</span>% <span class="k">else</span> %<span class="o">}</span>0<span class="o">{</span>% endif %<span class="o">}</span>&amp;isFans<span class="o">=</span>&amp;uid<span class="o">=</span>&amp;verifier<span class="o">=</span><span class="err">&quot;</span>&gt;
-</span><span class='line'>      &lt;/iframe&gt;
-</span><span class='line'>    &lt;/li&gt;
-</span><span class='line'>  &lt;/ul&gt;
-</span><span class='line'>&lt;/section&gt;
-</span><span class='line'><span class="o">{</span>% endif %<span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>配置文件中增加参数</h4>
-
-<p>octopress/source/_config.yml</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html<span class="o">]</span>
-</span><span class='line'>
-</span><span class='line'>weibo_uid: xxxx     <span class="c">#微博中的uid，从微博秀中获得</span>
-</span><span class='line'>weibo_verifier: xxxx     <span class="c">#微博中的verifier 从微博秀中获得</span>
-</span><span class='line'>weibo_fansline: 1     <span class="c">#显示粉丝的数量，1行</span>
-</span><span class='line'>weibo_show: <span class="nb">true</span>     <span class="c">#是否显示内容</span>
-</span><span class='line'>weibo_pic: <span class="nb">true</span>         <span class="c">#是否显示图片</span>
-</span><span class='line'>weibo_skin: 10          <span class="c">#使用哪种风格的10为序号10的风格</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
