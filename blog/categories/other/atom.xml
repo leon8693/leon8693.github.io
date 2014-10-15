@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Other | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/other/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-10T15:41:12+08:00</updated>
+  <updated>2014-10-15T14:22:32+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,198 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rpmbuild 打包rpm实战]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/14/rpmbuild-da-bao-rpmshi-zhan/"/>
+    <updated>2014-10-14T15:49:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/14/rpmbuild-da-bao-rpmshi-zhan</id>
+    <content type="html"><![CDATA[<h2>基本信息</h2>
+
+<p>CentOS release 6.4 (Final) <br/>
+2.6.32-358.el6.x86_64</p>
+
+<h2>rpmbuild目录设置</h2>
+
+<p>```bash</p>
+
+<h1>自定义编译的目录</h1>
+
+<p>vim ~/.rpmmacros
+%<em>topdir /root/rpmbuild
+%</em>tmppath /root/rpmbuild/tmp
+%buildroot /root/rpmbuild/BUILDROOT
+%_prefix  /</p>
+
+<h1>创建自定义目录</h1>
+
+<p>mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}</p>
+
+<h1>存放目录状态</h1>
+
+<p>[root@angel02 rpmbuild]# tree
+.
+├── BUILD
+├── RPMS
+├── SOURCES
+│   └── php-5.3.10.tar.gz
+├── SPECS
+│   └── php5.spec
+├── SRPMS
+└── tmp</p>
+
+<p>vim /usr/lib/rpm/macros
+%<em>topdir                %{getenv:HOME}/rpmbuild #注释掉
+%</em>topdir                %{_usrsrc}/</p>
+
+<p>```</p>
+
+<h2>编辑spec</h2>
+
+<p>```bash
+%define version 5.3.10
+%define so_version 5
+%define release 0</p>
+
+<p>Name: php-fdm
+Summary: PHP: Hypertext Preprocessor
+Group: Development/Languages
+Version: %{version}
+Release: %{release}
+Source: php-5.3.10.tar.gz
+URL: <a href="http://www.php.net/">http://www.php.net/</a>
+Packager: <a href="&#109;&#97;&#x69;&#108;&#x74;&#x6f;&#58;&#98;&#x6f;&#x6c;&#x61;&#116;&#117;&#x6c;&#101;&#x6f;&#x6e;&#64;&#104;&#x6f;&#x74;&#109;&#x61;&#105;&#x6c;&#46;&#99;&#111;&#x6d;">&#98;&#111;&#x6c;&#97;&#x74;&#x75;&#x6c;&#101;&#x6f;&#x6e;&#x40;&#104;&#x6f;&#116;&#109;&#97;&#105;&#108;&#x2e;&#x63;&#111;&#109;</a>
+License: GPL
+BuildRoot: /var/tmp/php-%{version}</p>
+
+<p>%description
+Leon php5 package</p>
+
+<p>%prep
+%setup -q
+./configure  &mdash;prefix=/usr/local/php-fpm &mdash;with-libdir=lib64 &mdash;enable-cgi &mdash;enable-fpm &mdash;with-imap=/usr &mdash;with-imap-ssl &mdash;enable-bcmath &mdash;with-kerberos &mdash;with-bz2 &mdash;enable-calendar &mdash;enable-ctype &mdash;with-curl &mdash;enable-dom &mdash;enable-exif &mdash;enable-fileinfo &mdash;enable-filter &mdash;enable-ftp &mdash;with-gd &mdash;with-gmp &mdash;enable-hash &mdash;with-iconv &mdash;enable-json &mdash;enable-libxml &mdash;enable-mbstring &mdash;with-mcrypt &mdash;with-mysql &mdash;with-mysqli &mdash;with-openssl &mdash;enable-pcntl &mdash;enable-PDO &mdash;with-pdo_mysql &mdash;with-pdo_sqlite &mdash;enable-Phar &mdash;enable-posix &mdash;enable-session &mdash;enable-shmop &mdash;enable-SimpleXML &mdash;enable-sockets &mdash;with-sqlite3 &mdash;enable-sysvmsg &mdash;enable-sysvsem &mdash;enable-tokenizer &mdash;enable-wddx &mdash;enable-xml &mdash;enable-xmlreader &mdash;enable-xmlwriter &mdash;with-xsl &mdash;enable-zip &mdash;with-zlib</p>
+
+<p>make</p>
+
+<p>%install</p>
+
+<h1>make DESTDIR=$RPM_BUILD_ROOT install</h1>
+
+<p>make INSTALL_ROOT=$RPM_BUILD_ROOT install
+mkdir -p $RPM_BUILD_ROOT/usr/local/php-fpm/init/
+cp -rp $RPM_BUILD_DIR/php-fdm-5.3.10/sapi/fpm/init.d.php-fpm $RPM_BUILD_ROOT/usr/local/php-fpm/init/php-fpm
+cp -rp $RPM_BUILD_DIR/php-fdm-5.3.10/php.ini-production $RPM_BUILD_ROOT/usr/local/php-fpm/lib/php.ini</p>
+
+<p>%clean
+[ &ldquo;$RPM_BUILD_ROOT&rdquo; != &ldquo;/&rdquo; ] &amp;&amp; rm -rf &ldquo;$RPM_BUILD_ROOT&rdquo;
+make clean</p>
+
+<p>%post
+ln -s /usr/local/php-fpm/bin/<em> /usr/local/bin/
+mkdir -p /mnt/data1/logs/php-fpm/
+cat &lt;&lt; EOF > /etc/logrotate.d/php-fpm
+/mnt/data1/logs/php-fpm/</em>.log {</p>
+
+<pre><code>    daily
+    missingok
+    rotate 7
+    compress
+    notifempty
+    sharedscripts
+    dateext
+    postrotate
+            [ -f /var/run/php-fpm.pid ] &amp;&amp; kill -USR1 \`cat /var/run/php-fpm.pid\`
+    endscript
+</code></pre>
+
+<p>}
+EOF</p>
+
+<p>cp -rp /usr/local/php-fpm/init/php-fpm /etc/init.d/php-fpm
+chmod +x /etc/init.d/php-fpm
+sed -i &ldquo;s/php_opts=\&rdquo;&mdash;fpm-config \$php_fpm_CONF\&ldquo;/php_opts=\&rdquo;&mdash;fpm-config \$php_fpm_CONF -g \$php_fpm_PID\&ldquo;/g&rdquo; /etc/init.d/php-fpm</p>
+
+<p>%postun
+rm -rf /usr/local/bin/pear /usr/local/bin/peardev /usr/local/bin/pecl /usr/local/bin/phar /usr/local/bin/phar.phar /usr/local/bin/php /usr/local/bin/php-config /usr/local/bin/phpize
+rm -rf /etc/logrotate.d/php-fpm
+rm -rf /etc/init.d/php-fpm</p>
+
+<p>%files
+%defattr (&ndash;,root,root)
+/usr/local/php-fpm/
+/usr/local/php-fpm/init/php-fpm
+/usr/local/php-fpm/lib/php.ini
+/.channels/.alias/pear.txt
+/.channels/.alias/pecl.txt
+/.channels/.alias/phpdocs.txt
+/.channels/__uri.reg
+/.channels/doc.php.net.reg
+/.channels/pear.php.net.reg
+/.channels/pecl.php.net.reg
+/.depdb
+/.depdblock
+/.filemap
+/.lock
+```</p>
+
+<h2>开始制作包</h2>
+
+<p>```</p>
+
+<h1>安装需要的依赖包</h1>
+
+<p>yum install libc-client.x86_64 curl-devel openssl-devel.x86_64 libpng-devel.x86_64 libjpeg-devel mysql.x86_64 mysql-devel.x86_64 libc-client-devel bzip2-devel.x86_64 gmp-devel.x86_64 libmcrypt-devel.x86_64 libxslt-devel.x86_64 libtool-ltdl-devel.x86_64 -y</p>
+
+<h1>制作src和rpm包</h1>
+
+<p>rpmbuild -ba ~/rpmbuild/SPECS/php5.spec</p>
+
+<h1>经过一连串的编译过程之后如下</h1>
+
+<p>[root@angel02 php-fpm]# ls /root/rpmbuild/RPMS/x86_64/
+php-fdm-5.3.10-0.x86_64.rpm
+[root@angel02 php-fpm]# ls /root/rpmbuild/SRPMS/
+php-fdm-5.3.10-0.src.rpm</p>
+
+<h1>分别获得了这2个包,安装一下rpm包是否有问题,自行调试</h1>
+
+<p>```</p>
+
+<h2>问题合集</h2>
+
+<p>1.error: Installed (but unpackaged) file(s) found:  <br/>
+解决如下 <br/>
+<code>
+在%file中将文件全部加入
+%files
+%defattr (-,root,root)
+/usr/local/php/
+/.channels/.alias/pear.txt
+/.channels/.alias/pecl.txt
+/.channels/.alias/phpdocs.txt
+/.channels/__uri.reg
+/.channels/doc.php.net.reg
+/.channels/pear.php.net.reg
+/.channels/pecl.php.net.reg
+/.depdb
+/.depdblock
+/.filemap
+/.lock
+或者
+进入文件/usr/lib/rpm/macros,找到
+%__check_files         %{_rpmconfigdir}/check-files %{buildroot}
+这一行，把这一行注释掉，然后重新编译
+</code></p>
+
+<p>2.error: License field must be present in package: (main package) <br/>
+解决如下
+<code>
+vim php5.spec
+添加
+License: GPL #一般都是GPL这个自行判断
+</code></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[maptail展现中国地图]]></title>

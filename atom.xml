@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-10T15:41:12+08:00</updated>
+  <updated>2014-10-15T14:22:32+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,341 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rpmbuild 打包rpm实战]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/14/rpmbuild-da-bao-rpmshi-zhan/"/>
+    <updated>2014-10-14T15:49:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/14/rpmbuild-da-bao-rpmshi-zhan</id>
+    <content type="html"><![CDATA[<h2>基本信息</h2>
+
+<p>CentOS release 6.4 (Final) <br/>
+2.6.32-358.el6.x86_64</p>
+
+<h2>rpmbuild目录设置</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#自定义编译的目录</span>
+</span><span class='line'>vim ~/.rpmmacros
+</span><span class='line'>%_topdir /root/rpmbuild
+</span><span class='line'>%_tmppath /root/rpmbuild/tmp
+</span><span class='line'>%buildroot /root/rpmbuild/BUILDROOT
+</span><span class='line'>%_prefix  /
+</span><span class='line'>
+</span><span class='line'><span class="c">#创建自定义目录</span>
+</span><span class='line'>mkdir -p ~/rpmbuild/<span class="o">{</span>BUILD,RPMS,SOURCES,SPECS,SRPMS<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#存放目录状态</span>
+</span><span class='line'><span class="o">[</span>root@angel02 rpmbuild<span class="o">]</span><span class="c"># tree</span>
+</span><span class='line'>.
+</span><span class='line'>├── BUILD
+</span><span class='line'>├── RPMS
+</span><span class='line'>├── SOURCES
+</span><span class='line'>│   └── php-5.3.10.tar.gz
+</span><span class='line'>├── SPECS
+</span><span class='line'>│   └── php5.spec
+</span><span class='line'>├── SRPMS
+</span><span class='line'>└── tmp
+</span><span class='line'>
+</span><span class='line'>vim /usr/lib/rpm/macros
+</span><span class='line'>%_topdir                %<span class="o">{</span>getenv:HOME<span class="o">}</span>/rpmbuild <span class="c">#注释掉</span>
+</span><span class='line'>%_topdir                %<span class="o">{</span>_usrsrc<span class="o">}</span>/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>编辑spec</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>%define version 5.3.10
+</span><span class='line'>%define so_version 5
+</span><span class='line'>%define release 0
+</span><span class='line'>
+</span><span class='line'>Name: php-fdm
+</span><span class='line'>Summary: PHP: Hypertext Preprocessor
+</span><span class='line'>Group: Development/Languages
+</span><span class='line'>Version: %<span class="o">{</span>version<span class="o">}</span>
+</span><span class='line'>Release: %<span class="o">{</span>release<span class="o">}</span>
+</span><span class='line'>Source: php-5.3.10.tar.gz
+</span><span class='line'>URL: http://www.php.net/
+</span><span class='line'>Packager: bolatuleon@hotmail.com
+</span><span class='line'>License: GPL
+</span><span class='line'>BuildRoot: /var/tmp/php-%<span class="o">{</span>version<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>%description
+</span><span class='line'>Leon php5 package
+</span><span class='line'>
+</span><span class='line'>%prep
+</span><span class='line'>%setup -q
+</span><span class='line'>./configure  --prefix<span class="o">=</span>/usr/local/php-fpm --with-libdir<span class="o">=</span>lib64 --enable-cgi --enable-fpm --with-imap<span class="o">=</span>/usr --with-imap-ssl --enable-bcmath --with-kerberos --with-bz2 --enable-calendar --enable-ctype --with-curl --enable-dom --enable-exif --enable-fileinfo --enable-filter --enable-ftp --with-gd --with-gmp --enable-hash --with-iconv --enable-json --enable-libxml --enable-mbstring --with-mcrypt --with-mysql --with-mysqli --with-openssl --enable-pcntl --enable-PDO --with-pdo_mysql --with-pdo_sqlite --enable-Phar --enable-posix --enable-session --enable-shmop --enable-SimpleXML --enable-sockets --with-sqlite3 --enable-sysvmsg --enable-sysvsem --enable-tokenizer --enable-wddx --enable-xml --enable-xmlreader --enable-xmlwriter --with-xsl --enable-zip --with-zlib
+</span><span class='line'>
+</span><span class='line'>make
+</span><span class='line'>
+</span><span class='line'>%install
+</span><span class='line'><span class="c">#make DESTDIR=$RPM_BUILD_ROOT install</span>
+</span><span class='line'>make <span class="nv">INSTALL_ROOT</span><span class="o">=</span><span class="nv">$RPM_BUILD_ROOT</span> install
+</span><span class='line'>mkdir -p <span class="nv">$RPM_BUILD_ROOT</span>/usr/local/php-fpm/init/
+</span><span class='line'>cp -rp <span class="nv">$RPM_BUILD_DIR</span>/php-fdm-5.3.10/sapi/fpm/init.d.php-fpm <span class="nv">$RPM_BUILD_ROOT</span>/usr/local/php-fpm/init/php-fpm
+</span><span class='line'>cp -rp <span class="nv">$RPM_BUILD_DIR</span>/php-fdm-5.3.10/php.ini-production <span class="nv">$RPM_BUILD_ROOT</span>/usr/local/php-fpm/lib/php.ini
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>%clean
+</span><span class='line'><span class="o">[</span> <span class="s2">&quot;$RPM_BUILD_ROOT&quot;</span> !<span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="s2">&quot;$RPM_BUILD_ROOT&quot;</span>
+</span><span class='line'>make clean
+</span><span class='line'>
+</span><span class='line'>%post
+</span><span class='line'>ln -s /usr/local/php-fpm/bin/* /usr/local/bin/
+</span><span class='line'>mkdir -p /mnt/data1/logs/php-fpm/
+</span><span class='line'>cat <span class="s">&lt;&lt; EOF &gt; /etc/logrotate.d/php-fpm</span>
+</span><span class='line'><span class="s">/mnt/data1/logs/php-fpm/*.log {</span>
+</span><span class='line'><span class="s">        daily</span>
+</span><span class='line'><span class="s">        missingok</span>
+</span><span class='line'><span class="s">        rotate 7</span>
+</span><span class='line'><span class="s">        compress</span>
+</span><span class='line'><span class="s">        notifempty</span>
+</span><span class='line'><span class="s">        sharedscripts</span>
+</span><span class='line'><span class="s">        dateext</span>
+</span><span class='line'><span class="s">        postrotate</span>
+</span><span class='line'><span class="s">                [ -f /var/run/php-fpm.pid ] &amp;&amp; kill -USR1 \`cat /var/run/php-fpm.pid\`</span>
+</span><span class='line'><span class="s">        endscript</span>
+</span><span class='line'><span class="s">}</span>
+</span><span class='line'><span class="s">EOF</span>
+</span><span class='line'>
+</span><span class='line'>cp -rp /usr/local/php-fpm/init/php-fpm /etc/init.d/php-fpm
+</span><span class='line'>chmod +x /etc/init.d/php-fpm
+</span><span class='line'>sed -i <span class="s2">&quot;s/php_opts=\&quot;--fpm-config \$php_fpm_CONF\&quot;/php_opts=\&quot;--fpm-config \$php_fpm_CONF -g \$php_fpm_PID\&quot;/g&quot;</span> /etc/init.d/php-fpm
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>%postun
+</span><span class='line'>rm -rf /usr/local/bin/pear /usr/local/bin/peardev /usr/local/bin/pecl /usr/local/bin/phar /usr/local/bin/phar.phar /usr/local/bin/php /usr/local/bin/php-config /usr/local/bin/phpize
+</span><span class='line'>rm -rf /etc/logrotate.d/php-fpm
+</span><span class='line'>rm -rf /etc/init.d/php-fpm
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>%files
+</span><span class='line'>%defattr <span class="o">(</span>-,root,root<span class="o">)</span>
+</span><span class='line'>/usr/local/php-fpm/
+</span><span class='line'>/usr/local/php-fpm/init/php-fpm
+</span><span class='line'>/usr/local/php-fpm/lib/php.ini
+</span><span class='line'>/.channels/.alias/pear.txt
+</span><span class='line'>/.channels/.alias/pecl.txt
+</span><span class='line'>/.channels/.alias/phpdocs.txt
+</span><span class='line'>/.channels/__uri.reg
+</span><span class='line'>/.channels/doc.php.net.reg
+</span><span class='line'>/.channels/pear.php.net.reg
+</span><span class='line'>/.channels/pecl.php.net.reg
+</span><span class='line'>/.depdb
+</span><span class='line'>/.depdblock
+</span><span class='line'>/.filemap
+</span><span class='line'>/.lock
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>开始制作包</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#安装需要的依赖包</span>
+</span><span class='line'>yum install libc-client.x86_64 curl-devel openssl-devel.x86_64 libpng-devel.x86_64 libjpeg-devel mysql.x86_64 mysql-devel.x86_64 libc-client-devel bzip2-devel.x86_64 gmp-devel.x86_64 libmcrypt-devel.x86_64 libxslt-devel.x86_64 libtool-ltdl-devel.x86_64 -y
+</span><span class='line'>
+</span><span class='line'><span class="c">#制作src和rpm包</span>
+</span><span class='line'>rpmbuild -ba ~/rpmbuild/SPECS/php5.spec
+</span><span class='line'>
+</span><span class='line'><span class="c">#经过一连串的编译过程之后如下</span>
+</span><span class='line'><span class="o">[</span>root@angel02 php-fpm<span class="o">]</span><span class="c"># ls /root/rpmbuild/RPMS/x86_64/</span>
+</span><span class='line'>php-fdm-5.3.10-0.x86_64.rpm
+</span><span class='line'><span class="o">[</span>root@angel02 php-fpm<span class="o">]</span><span class="c"># ls /root/rpmbuild/SRPMS/</span>
+</span><span class='line'>php-fdm-5.3.10-0.src.rpm
+</span><span class='line'>
+</span><span class='line'><span class="c">#分别获得了这2个包,安装一下rpm包是否有问题,自行调试</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>问题合集</h2>
+
+<p>1.error: Installed (but unpackaged) file(s) found:  <br/>
+解决如下</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>在%file中将文件全部加入
+</span><span class='line'>%files
+</span><span class='line'>%defattr <span class="o">(</span>-,root,root<span class="o">)</span>
+</span><span class='line'>/usr/local/php/
+</span><span class='line'>/.channels/.alias/pear.txt
+</span><span class='line'>/.channels/.alias/pecl.txt
+</span><span class='line'>/.channels/.alias/phpdocs.txt
+</span><span class='line'>/.channels/__uri.reg
+</span><span class='line'>/.channels/doc.php.net.reg
+</span><span class='line'>/.channels/pear.php.net.reg
+</span><span class='line'>/.channels/pecl.php.net.reg
+</span><span class='line'>/.depdb
+</span><span class='line'>/.depdblock
+</span><span class='line'>/.filemap
+</span><span class='line'>/.lock
+</span><span class='line'>或者
+</span><span class='line'>进入文件/usr/lib/rpm/macros,找到
+</span><span class='line'>%__check_files         %<span class="o">{</span>_rpmconfigdir<span class="o">}</span>/check-files %<span class="o">{</span>buildroot<span class="o">}</span>
+</span><span class='line'>这一行，把这一行注释掉，然后重新编译
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>2.error: License field must be present in package: (main package) <br/>
+解决如下</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>vim php5.spec
+</span><span class='line'>添加
+</span><span class='line'>License: GPL <span class="c">#一般都是GPL这个自行判断</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[saltstack 自动化配置管理实战 (五)]]></title>
@@ -3898,46 +4233,6 @@ Axel下载</p>
 </span><span class='line'>weibo_skin: 10          <span class="c">#使用哪种风格的10为序号10的风格</span>
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress 404公益页面]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/13/qq-404/"/>
-    <updated>2013-11-13T15:06:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/13/qq-404</id>
-    <content type="html"><![CDATA[<h3>404公益页面</h3>
-
-<p>访问QQ 404公益页面，获取需要的代码<br/>
-www.qq.com/404<br/>
-将代码放入Nginx制定的目录中，并配置nginx即可</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>server  {
-</span><span class='line'>        listen 80;
-</span><span class='line'>        server_name _;
-</span><span class='line'>        root /octopress/public/;
-</span><span class='line'>                location /{
-</span><span class='line'>                index index.html;
-</span><span class='line'>                }
-</span><span class='line'>        error_page 404 "http://leon8693.github.io/404/404.html";
-</span><span class='line'>        error_page 403 "http://leon8693.github.io/404/404.html";
-</span><span class='line'>        access_log /data1/logs/nginx/access.log gzip;
-</span><span class='line'>        }</span></code></pre></td></tr></table></div></figure>
-
-
-<p>效果如下<br/>
-<a href="http://leon8693.github.io/404/404.html">http://leon8693.github.io/404/404.html</a></p>
 ]]></content>
   </entry>
   
