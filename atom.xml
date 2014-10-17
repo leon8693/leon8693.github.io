@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-15T16:37:52+08:00</updated>
+  <updated>2014-10-17T16:38:17+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,400 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 安装 （一）]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/16/zabbix-2-dot-4-1-install-1/"/>
+    <updated>2014-10-16T15:09:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/16/zabbix-2-dot-4-1-install-1</id>
+    <content type="html"><![CDATA[<h2>下载zabbix 2.4.1</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/2.4.1/zabbix-2.4.1.tar.gz/download -O zabbix-2.4.1.tar.gz
+</span><span class='line'>yum install libc-client.x86_64 curl-devel.x86_64 openssl-devel.x86_64 libpng-devel.x86_64 libjpeg-devel.x86_64 mysql.x86_64 mysql-devel.x86_64 libc-client-devel bzip2-devel.x86_64 gmp-devel.x86_64 libmcrypt-devel.x86_64 libxslt-devel.x86_64 libtool-ltdl-devel.x86_64 freetype-devel freetype -y
+</span><span class='line'>yum install php-leon -y    #这个包可以参考rpm制作篇</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置PHP</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#修改几个配置
+</span><span class='line'>vim /usr/local/php-fpm/lib/php.ini
+</span><span class='line'>max_execution_time = 300
+</span><span class='line'>max_input_time=300
+</span><span class='line'>date.timezone = Asia/Shanghai
+</span><span class='line'>post_max_size = 32M
+</span><span class='line'>memory_limit = 128M
+</span><span class='line'>error_reporting = E_ALL & ~E_NOTICE
+</span><span class='line'>short_open_tag = On
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#修改php-fpm配置
+</span><span class='line'>[global]
+</span><span class='line'>pid = /usr/local/php-fpm/var/run/php-fpm.pid
+</span><span class='line'>error_log = /mnt/data1/logs/php-fpm/php-fpm.log
+</span><span class='line'>log_level = notice
+</span><span class='line'>emergency_restart_threshold = 20
+</span><span class='line'>emergency_restart_interval = 10m
+</span><span class='line'>process_control_timeout = 10s
+</span><span class='line'>events.mechanism = epoll
+</span><span class='line'>[php-1]
+</span><span class='line'>user = nobody
+</span><span class='line'>group = nobody
+</span><span class='line'>listen = /usr/local/php-fpm/php-fpm.sock
+</span><span class='line'>listen.backlog = -1
+</span><span class='line'>pm = dynamic
+</span><span class='line'>pm.max_children = 80
+</span><span class='line'>pm.start_servers = 10
+</span><span class='line'>pm.min_spare_servers = 5
+</span><span class='line'>pm.max_spare_servers = 20
+</span><span class='line'>pm.max_requests = 500
+</span><span class='line'>pm.status_path = /status
+</span><span class='line'>access.log = /mnt/data1/logs/php-fpm/php-access.log
+</span><span class='line'>access.format = %m - [%u %t] " "%n"   ""%r%Q%q""    "%s"   "%{mili}d"   "%{kilobytes}M" "%C%%
+</span><span class='line'>slowlog = /mnt/data1/logs/php-fpm/php_slow.log
+</span><span class='line'>request_slowlog_timeout = 1s
+</span><span class='line'>request_terminate_timeout = 120s
+</span><span class='line'>rlimit_files = 65535
+</span><span class='line'>rlimit_core = unlimited
+</span><span class='line'>catch_workers_output = yes
+</span><span class='line'>env[HOSTNAME] = $HOSTNAME
+</span><span class='line'>env[TMP] = /tmp
+</span><span class='line'>env[TMPDIR] = /tmp
+</span><span class='line'>env[TEMP] = /tmp
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#php添加gettext模块,jpeg模块,FreeType模块
+</span><span class='line'>yum install autoconf m4 -y
+</span><span class='line'>cd php-5.3.10/ext/gettext/
+</span><span class='line'>/usr/local/php-fpm/bin/phpize
+</span><span class='line'>./configure && make && make install
+</span><span class='line'>
+</span><span class='line'>cd php-5.3.10/ext/gd/   #我打的php包中没有使用默认gd,这边可以方便一起添加jpeg和freetype,不然需要重新编译
+</span><span class='line'>./configure --with-jpeg-dir=/usr/lib64/ --with-freetype-dir=/usr/lib64/
+</span><span class='line'>make && make install 
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#在php.ini配置文件中增加
+</span><span class='line'>vim /usr/local/php-fpm/lib/php.ini
+</span><span class='line'>[getext]
+</span><span class='line'>extension=gettext.so
+</span><span class='line'>[gd]
+</span><span class='line'>extension=gd.so
+</span><span class='line'>/usr/local/php-fpm/bin/php -m |grep "gettext" #存在说明完成
+</span><span class='line'>/etc/init.d/php-fpm start</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<h2>配置nginx</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /etc/nginx/conf.d/zabbix.conf
+</span><span class='line'>server {
+</span><span class='line'>    listen 80;
+</span><span class='line'>    server_name  _;
+</span><span class='line'>    root  /var/www/html/;
+</span><span class='line'>    error_log /mnt/data1/logs/nginx/localhost_error.log debug;
+</span><span class='line'>    index index.php;
+</span><span class='line'>        location  / {
+</span><span class='line'>        root /var/www/html/;
+</span><span class='line'>        index index.php index.html index.htm;
+</span><span class='line'>  }
+</span><span class='line'>        location ~ \.php$ {
+</span><span class='line'>        include fastcgi_params;
+</span><span class='line'>        fastcgi_pass unix:/usr/local/php-fpm/php-fpm.sock;
+</span><span class='line'>        fastcgi_index index.php;
+</span><span class='line'>        fastcgi_param SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+</span><span class='line'>        fastcgi_temp_path /tmp/temp;
+</span><span class='line'>    }
+</span><span class='line'>    access_log /mnt/data1/logs/nginx/localhost.log gzip;
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>vim /var/www/html/index.php
+</span><span class='line'>&lt;?php
+</span><span class='line'>phpinfo();
+</span><span class='line'>?&gt;
+</span><span class='line'>
+</span><span class='line'>/etc/init.d/nginx restart</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如出现下图说明nginx+php部署完成 <br/>
+<img src="http://leon8693.github.io/images/blog_img/phpinfo.png" alt="phpinfo" /></p>
+
+<h2>install zabbix</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#创建zabbix用户
+</span><span class='line'>groupadd zabbix
+</span><span class='line'>useradd -g zabbix -s /sbin/nologin zabbix
+</span><span class='line'>
+</span><span class='line'>yum install net-snmp net-snmp-devel -y
+</span><span class='line'>cd zabbix-2.4.1
+</span><span class='line'>./configure --prefix=/mnt/www/zabbix/ --enable-server --enable-agent --with-mysql=/usr/lib64/mysql/mysql_config --with-net-snmp  --with-curl
+</span><span class='line'>make && make install
+</span><span class='line'>
+</span><span class='line'>#添加services中zabbix端口规划
+</span><span class='line'>vim /etc/services
+</span><span class='line'>zabbix-agent    10050/tcp               #Zabbix Agent
+</span><span class='line'>zabbix-agent    10050/udp               #Zabbix Agent
+</span><span class='line'>zabbix-trapper  10051/tcp               #Zabbix Trapper
+</span><span class='line'>zabbix-trapper  10051/udp               #Zabbix Trapper
+</span><span class='line'>
+</span><span class='line'>#修改配置
+</span><span class='line'>mkdir -p  /mnt/data1/logs/zabbix/
+</span><span class='line'>mkdir -p /var/run/zabbix/
+</span><span class='line'>mkdir -p /mnt/www/zabbix/web
+</span><span class='line'>cp -rp /srv/zabbix-2.4.1/frontends/php/* /mnt/www/zabbix/web/
+</span><span class='line'>chown zabbix.zabbix -R /mnt/www/zabbix/
+</span><span class='line'>chown zabbix.zabbix /var/run/zabbix/
+</span><span class='line'>chown zabbix.zabbix -R /mnt/data1/logs/zabbix/
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>vim /mnt/www/zabbix/etc/zabbix_server.conf
+</span><span class='line'>LogFile=/mnt/data1/logs/zabbix/zabbix_server.log
+</span><span class='line'>PidFile=/var/run/zabbix/zabbix.pid
+</span><span class='line'>DBHost=192.168.0.210
+</span><span class='line'>DBName=zabbix
+</span><span class='line'>DBUser=zabbix
+</span><span class='line'>DBPassword=zabbix
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#增加zabbix库
+</span><span class='line'>mysql -uroot -p
+</span><span class='line'>mysql&gt; create database zabbix;
+</span><span class='line'>mysql&gt; GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@'192.168.0.%' IDENTIFIED BY 'zabbix';
+</span><span class='line'>mysql&gt; flush privileges;
+</span><span class='line'>
+</span><span class='line'>#将安装包里的库文件导入到zabbix库
+</span><span class='line'>mysql -uroot -p zabbix -h192.168.0.210 &lt; /srv/zabbix-2.4.1/database/mysql/schema.sql
+</span><span class='line'>mysql -uroot -p zabbix -h192.168.0.210 &lt; /srv/zabbix-2.4.1/database/mysql/images.sql
+</span><span class='line'>mysql -uroot -p zabbix -h192.168.0.210 &lt; /srv/zabbix-2.4.1/database/mysql/data.sql
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#复制修改zabbix启动脚本
+</span><span class='line'>\cp -rp /srv/zabbix-2.4.1/misc/init.d/tru64/zabbix_* /etc/init.d/
+</span><span class='line'>chmod +x /etc/init.d/zabbix*
+</span><span class='line'>sed -i "s/DAEMON=.*/DAEMON=\/mnt\/www\/zabbix\/sbin\/zabbix_server/g" /etc/init.d/zabbix_server
+</span><span class='line'>sed -i "s/PIDFILE=.*/PIDFILE=\/var\/run\/zabbix\/zabbix.pid/g" /etc/init.d/zabbix_server
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#启动server
+</span><span class='line'>/etc/init.d/zabbix_server start</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>web配置</h2>
+
+<p>查看需要的依赖是否解决 <br/>
+<a href="http://192.168.0.212/">http://192.168.0.212/</a> <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbix01.png" alt="zabbix01" /></p>
+
+<p>设置zabbix数据库配置 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbix02.png" alt="zabbix02" /></p>
+
+<p>设置web配置 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbix03.png" alt="zabbix03" /></p>
+
+<p>如果设置出现问题也可以通过配置文件直接修改如下</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">cp</span> <span class="o">-</span><span class="nx">rp</span>  <span class="o">/</span><span class="nx">mnt</span><span class="o">/</span><span class="nx">www</span><span class="o">/</span><span class="nx">zabbix</span><span class="o">/</span><span class="nx">web</span><span class="o">/</span><span class="nx">conf</span><span class="o">/</span><span class="nx">zabbix</span><span class="o">.</span><span class="nx">conf</span><span class="o">.</span><span class="nx">php</span><span class="o">.</span><span class="nx">example</span> <span class="o">/</span><span class="nx">mnt</span><span class="o">/</span><span class="nx">www</span><span class="o">/</span><span class="nx">zabbix</span><span class="o">/</span><span class="nx">web</span><span class="o">/</span><span class="nx">conf</span><span class="o">/</span><span class="nx">zabbix</span><span class="o">.</span><span class="nx">conf</span><span class="o">.</span><span class="nx">php</span>
+</span><span class='line'><span class="nx">vim</span> <span class="o">/</span><span class="nx">mnt</span><span class="o">/</span><span class="nx">www</span><span class="o">/</span><span class="nx">zabbix</span><span class="o">/</span><span class="nx">web</span><span class="o">/</span><span class="nx">conf</span><span class="o">/</span><span class="nx">zabbix</span><span class="o">.</span><span class="nx">conf</span><span class="o">.</span><span class="nx">php</span>
+</span><span class='line'><span class="o">&lt;?</span><span class="nx">php</span>
+</span><span class='line'><span class="c1">// Zabbix GUI configuration file</span>
+</span><span class='line'><span class="k">global</span> <span class="nv">$DB</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$DB</span><span class="p">[</span><span class="s2">&quot;TYPE&quot;</span><span class="p">]</span>                     <span class="o">=</span> <span class="s1">&#39;MYSQL&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$DB</span><span class="p">[</span><span class="s2">&quot;SERVER&quot;</span><span class="p">]</span>                   <span class="o">=</span> <span class="s1">&#39;192.168.0.210&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$DB</span><span class="p">[</span><span class="s2">&quot;PORT&quot;</span><span class="p">]</span>                     <span class="o">=</span> <span class="s1">&#39;3306&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$DB</span><span class="p">[</span><span class="s2">&quot;DATABASE&quot;</span><span class="p">]</span>                 <span class="o">=</span> <span class="s1">&#39;zabbix&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$DB</span><span class="p">[</span><span class="s2">&quot;USER&quot;</span><span class="p">]</span>                     <span class="o">=</span> <span class="s1">&#39;zabbix&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$DB</span><span class="p">[</span><span class="s2">&quot;PASSWORD&quot;</span><span class="p">]</span>                 <span class="o">=</span> <span class="s1">&#39;zabbix&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="c1">// SCHEMA is relevant only for IBM_DB2 database</span>
+</span><span class='line'><span class="nv">$DB</span><span class="p">[</span><span class="s2">&quot;SCHEMA&quot;</span><span class="p">]</span>                   <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$ZBX_SERVER</span>                     <span class="o">=</span> <span class="s1">&#39;192.168.0.212&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$ZBX_SERVER_PORT</span>                <span class="o">=</span> <span class="s1">&#39;10051&#39;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$ZBX_SERVER_NAME</span>                <span class="o">=</span> <span class="s1">&#39;zabbix&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$IMAGE_FORMAT_DEFAULT</span>   <span class="o">=</span> <span class="nx">IMAGE_FORMAT_PNG</span><span class="p">;</span>
+</span><span class='line'><span class="cp">?&gt;</span><span class="x"></span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可以访问后输入默认用户名密码进入,就大功告成了<br/>
+username: Admin<br/>
+password: zabbix</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[yum 私有源]]></title>
@@ -4188,50 +4582,6 @@ Axel下载</p>
 <p>参考文章
 <a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
 <a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
-<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress访客地图]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu/"/>
-    <updated>2013-11-13T16:10:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu</id>
-    <content type="html"><![CDATA[<h3>Octopress访客地图</h3>
-
-<p>效果如我的博客右侧那个精美的3D旋转地球所示，它可以显示访客数量，访客来自的 地域，既有装饰作用，又有统计作用。它也有2D效果版，可以根据自己喜欢进行设置，地址在这里，然后获得代码。<br/>
-<a href="http://www.revolvermaps.com/?target=setup">http://www.revolvermaps.com/?target=setup</a></p>
-
-<p>source/_includes/asides/earth.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;访客地图&lt;/h1&gt;
-</span><span class='line'>        &lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://jg.revolvermaps.com/2/1.js?i=6mb2spkrv1j&amp;amp;s=220&amp;amp;m=0&amp;amp;v=false&amp;amp;r=false&amp;amp;b=000000&amp;amp;n=false&amp;amp;c=ff0000&quot;</span> <span class="nv">async</span><span class="o">=</span><span class="s2">&quot;async&quot;</span>&gt;&lt;/script&gt;
-</span><span class='line'>&lt;/section&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<!-- more -->
-
-
-<h4>修改主配置增加参数</h4>
-
-<p>octopress/_config.yml</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html,asides/earth.html<span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<p>参考文章 <br/>
-<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a>  <br/>
-<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
 <a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
 ]]></content>
   </entry>

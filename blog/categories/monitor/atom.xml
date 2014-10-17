@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Monitor | 唯一的真理]]></title>
+  <link href="http://leon8693.github.io/blog/categories/monitor/atom.xml" rel="self"/>
+  <link href="http://leon8693.github.io/"/>
+  <updated>2014-10-17T16:38:17+08:00</updated>
+  <id>http://leon8693.github.io/</id>
+  <author>
+    <name><![CDATA[leon]]></name>
+    <email><![CDATA[bolatuleon@hotmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 安装 （一）]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/16/zabbix-2-dot-4-1-install-1/"/>
+    <updated>2014-10-16T15:09:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/16/zabbix-2-dot-4-1-install-1</id>
+    <content type="html"><![CDATA[<h2>下载zabbix 2.4.1</h2>
+
+<p><code>
+wget http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/2.4.1/zabbix-2.4.1.tar.gz/download -O zabbix-2.4.1.tar.gz
+yum install libc-client.x86_64 curl-devel.x86_64 openssl-devel.x86_64 libpng-devel.x86_64 libjpeg-devel.x86_64 mysql.x86_64 mysql-devel.x86_64 libc-client-devel bzip2-devel.x86_64 gmp-devel.x86_64 libmcrypt-devel.x86_64 libxslt-devel.x86_64 libtool-ltdl-devel.x86_64 freetype-devel freetype -y
+yum install php-leon -y    #这个包可以参考rpm制作篇
+</code></p>
+
+<h2>配置PHP</h2>
+
+<p>```</p>
+
+<h1>修改几个配置</h1>
+
+<p>vim /usr/local/php-fpm/lib/php.ini
+max_execution_time = 300
+max_input_time=300
+date.timezone = Asia/Shanghai
+post_max_size = 32M
+memory_limit = 128M
+error_reporting = E_ALL &amp; ~E_NOTICE
+short_open_tag = On</p>
+
+<h1>修改php-fpm配置</h1>
+
+<p>[global]
+pid = /usr/local/php-fpm/var/run/php-fpm.pid
+error_log = /mnt/data1/logs/php-fpm/php-fpm.log
+log_level = notice
+emergency_restart_threshold = 20
+emergency_restart_interval = 10m
+process_control_timeout = 10s
+events.mechanism = epoll
+[php-1]
+user = nobody
+group = nobody
+listen = /usr/local/php-fpm/php-fpm.sock
+listen.backlog = -1
+pm = dynamic
+pm.max_children = 80
+pm.start_servers = 10
+pm.min_spare_servers = 5
+pm.max_spare_servers = 20
+pm.max_requests = 500
+pm.status_path = /status
+access.log = /mnt/data1/logs/php-fpm/php-access.log
+access.format = %m &ndash; [%u %t] &ldquo; &rdquo;%n"   &ldquo;&rdquo;%r%Q%q"&ldquo;    &rdquo;%s"   &ldquo;%{mili}d&rdquo;   &ldquo;%{kilobytes}M&rdquo; &ldquo;%C%%
+slowlog = /mnt/data1/logs/php-fpm/php_slow.log
+request_slowlog_timeout = 1s
+request_terminate_timeout = 120s
+rlimit_files = 65535
+rlimit_core = unlimited
+catch_workers_output = yes
+env[HOSTNAME] = $HOSTNAME
+env[TMP] = /tmp
+env[TMPDIR] = /tmp
+env[TEMP] = /tmp</p>
+
+<h1>php添加gettext模块,jpeg模块,FreeType模块</h1>
+
+<p>yum install autoconf m4 -y
+cd php-5.3.10/ext/gettext/
+/usr/local/php-fpm/bin/phpize
+./configure &amp;&amp; make &amp;&amp; make install</p>
+
+<p>cd php-5.3.10/ext/gd/   #我打的php包中没有使用默认gd,这边可以方便一起添加jpeg和freetype,不然需要重新编译
+./configure &mdash;with-jpeg-dir=/usr/lib64/ &mdash;with-freetype-dir=/usr/lib64/
+make &amp;&amp; make install</p>
+
+<h1>在php.ini配置文件中增加</h1>
+
+<p>vim /usr/local/php-fpm/lib/php.ini
+[getext]
+extension=gettext.so
+[gd]
+extension=gd.so
+/usr/local/php-fpm/bin/php -m |grep &ldquo;gettext&rdquo; #存在说明完成
+/etc/init.d/php-fpm start
+```</p>
+
+<!-- more -->
+
+
+<h2>配置nginx</h2>
+
+<p>```
+vim /etc/nginx/conf.d/zabbix.conf
+server {</p>
+
+<pre><code>listen 80;
+server_name  _;
+root  /var/www/html/;
+error_log /mnt/data1/logs/nginx/localhost_error.log debug;
+index index.php;
+    location  / {
+    root /var/www/html/;
+    index index.php index.html index.htm;
+</code></pre>
+
+<p>  }</p>
+
+<pre><code>    location ~ \.php$ {
+    include fastcgi_params;
+    fastcgi_pass unix:/usr/local/php-fpm/php-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+    fastcgi_temp_path /tmp/temp;
+}
+access_log /mnt/data1/logs/nginx/localhost.log gzip;
+</code></pre>
+
+<p>}</p>
+
+<p>vim /var/www/html/index.php
+&lt;?php
+phpinfo();
+?></p>
+
+<p>/etc/init.d/nginx restart
+```
+如出现下图说明nginx+php部署完成 <br/>
+<img src="/images/blog_img/phpinfo.png" alt="phpinfo" /></p>
+
+<h2>install zabbix</h2>
+
+<p>```</p>
+
+<h1>创建zabbix用户</h1>
+
+<p>groupadd zabbix
+useradd -g zabbix -s /sbin/nologin zabbix</p>
+
+<p>yum install net-snmp net-snmp-devel -y
+cd zabbix-2.4.1
+./configure &mdash;prefix=/mnt/www/zabbix/ &mdash;enable-server &mdash;enable-agent &mdash;with-mysql=/usr/lib64/mysql/mysql_config &mdash;with-net-snmp  &mdash;with-curl
+make &amp;&amp; make install</p>
+
+<h1>添加services中zabbix端口规划</h1>
+
+<p>vim /etc/services
+zabbix-agent    10050/tcp               #Zabbix Agent
+zabbix-agent    10050/udp               #Zabbix Agent
+zabbix-trapper  10051/tcp               #Zabbix Trapper
+zabbix-trapper  10051/udp               #Zabbix Trapper</p>
+
+<h1>修改配置</h1>
+
+<p>mkdir -p  /mnt/data1/logs/zabbix/
+mkdir -p /var/run/zabbix/
+mkdir -p /mnt/www/zabbix/web
+cp -rp /srv/zabbix-2.4.1/frontends/php/* /mnt/www/zabbix/web/
+chown zabbix.zabbix -R /mnt/www/zabbix/
+chown zabbix.zabbix /var/run/zabbix/
+chown zabbix.zabbix -R /mnt/data1/logs/zabbix/</p>
+
+<p>vim /mnt/www/zabbix/etc/zabbix_server.conf
+LogFile=/mnt/data1/logs/zabbix/zabbix_server.log
+PidFile=/var/run/zabbix/zabbix.pid
+DBHost=192.168.0.210
+DBName=zabbix
+DBUser=zabbix
+DBPassword=zabbix</p>
+
+<h1>增加zabbix库</h1>
+
+<p>mysql -uroot -p
+mysql> create database zabbix;
+mysql> GRANT ALL PRIVILEGES ON zabbix.* TO zabbix@&lsquo;192.168.0.%&rsquo; IDENTIFIED BY &lsquo;zabbix&rsquo;;
+mysql> flush privileges;</p>
+
+<h1>将安装包里的库文件导入到zabbix库</h1>
+
+<p>mysql -uroot -p zabbix -h192.168.0.210 &lt; /srv/zabbix-2.4.1/database/mysql/schema.sql
+mysql -uroot -p zabbix -h192.168.0.210 &lt; /srv/zabbix-2.4.1/database/mysql/images.sql
+mysql -uroot -p zabbix -h192.168.0.210 &lt; /srv/zabbix-2.4.1/database/mysql/data.sql</p>
+
+<h1>复制修改zabbix启动脚本</h1>
+
+<p>\cp -rp /srv/zabbix-2.4.1/misc/init.d/tru64/zabbix_<em> /etc/init.d/
+chmod +x /etc/init.d/zabbix</em>
+sed -i &ldquo;s/DAEMON=.<em>/DAEMON=\/mnt\/www\/zabbix\/sbin\/zabbix_server/g&rdquo; /etc/init.d/zabbix_server
+sed -i &ldquo;s/PIDFILE=.</em>/PIDFILE=\/var\/run\/zabbix\/zabbix.pid/g&rdquo; /etc/init.d/zabbix_server</p>
+
+<h1>启动server</h1>
+
+<p>/etc/init.d/zabbix_server start
+```</p>
+
+<h2>web配置</h2>
+
+<p>查看需要的依赖是否解决 <br/>
+<a href="http://192.168.0.212/">http://192.168.0.212/</a> <br/>
+<img src="/images/blog_img/zabbix01.png" alt="zabbix01" /></p>
+
+<p>设置zabbix数据库配置 <br/>
+<img src="/images/blog_img/zabbix02.png" alt="zabbix02" /></p>
+
+<p>设置web配置 <br/>
+<img src="/images/blog_img/zabbix03.png" alt="zabbix03" /></p>
+
+<p>如果设置出现问题也可以通过配置文件直接修改如下 <br/>
+```php
+cp -rp  /mnt/www/zabbix/web/conf/zabbix.conf.php.example /mnt/www/zabbix/web/conf/zabbix.conf.php
+vim /mnt/www/zabbix/web/conf/zabbix.conf.php
+&lt;?php
+// Zabbix GUI configuration file
+global $DB;</p>
+
+<p>$DB[&ldquo;TYPE&rdquo;]                     = &lsquo;MYSQL&rsquo;;
+$DB[&ldquo;SERVER&rdquo;]                   = &lsquo;192.168.0.210&rsquo;;
+$DB[&ldquo;PORT&rdquo;]                     = &lsquo;3306&rsquo;;
+$DB[&ldquo;DATABASE&rdquo;]                 = &lsquo;zabbix&rsquo;;
+$DB[&ldquo;USER&rdquo;]                     = &lsquo;zabbix&rsquo;;
+$DB[&ldquo;PASSWORD&rdquo;]                 = &lsquo;zabbix&rsquo;;
+// SCHEMA is relevant only for IBM_DB2 database
+$DB[&ldquo;SCHEMA&rdquo;]                   = &lsquo;&rsquo;;</p>
+
+<p>$ZBX_SERVER                     = &lsquo;192.168.0.212&rsquo;;
+$ZBX_SERVER_PORT                = &lsquo;10051&rsquo;;
+$ZBX_SERVER_NAME                = &lsquo;zabbix&rsquo;;</p>
+
+<p>$IMAGE_FORMAT_DEFAULT   = IMAGE_FORMAT_PNG;
+?>
+```</p>
+
+<p>可以访问后输入默认用户名密码进入,就大功告成了<br/>
+username: Admin<br/>
+password: zabbix</p>
+]]></content>
+  </entry>
+  
+</feed>
