@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-17T16:38:17+08:00</updated>
+  <updated>2014-10-20T10:08:53+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,63 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 汉化界面和图 (二)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/17/zabbix-2-dot-4-1-yi-hua-jie-mian-he-tu-2/"/>
+    <updated>2014-10-17T16:52:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/17/zabbix-2-dot-4-1-yi-hua-jie-mian-he-tu-2</id>
+    <content type="html"><![CDATA[<h2>界面修改中文</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/www/zabbix/web/include/locales.inc.php 
+</span><span class='line'>'zh_CN' =&gt; array('name' =&gt; _('Chinese (zh_CN)'),        'display' =&gt; false),
+</span><span class='line'>修改成
+</span><span class='line'>'zh_CN' =&gt; array('name' =&gt; _('Chinese (zh_CN)'),        'display' =&gt; true),</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>图画中文显示</h2>
+
+<p>在没有处理的情况下,图片中的文字是乱码,如下 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixcn01.png" alt="zabbixcn01" /></p>
+
+<!-- more -->
+
+
+<p>随后我们需要改变他,首先复制windows中的字库 <br/>
+这个是我虚拟机中的XP字库,其他版本windows路径都一样如下<br/>
+控制面板->字体->楷体(我复制的这个) <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixcn02.png" alt="zabbixcn02" /></p>
+
+<p>复制出来的名字如图<br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixcn03.png" alt="zabbixcn03" /></p>
+
+<p>我们将他复制到下面这个目录,并且修改配置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cp -rp simkai.ttf /mnt/www/zabbix/web/fonts/
+</span><span class='line'>
+</span><span class='line'>vim /mnt/www/zabbix/web/include/defines.inc.php
+</span><span class='line'>//define('ZBX_GRAPH_FONT_NAME',         'DejaVuSans'); // font file name
+</span><span class='line'>define('ZBX_GRAPH_FONT_NAME',           'simkai'); // font file name
+</span><span class='line'>#保存退出
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>刷新页面查看<br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixcn04.png" alt="zabbixcn04" /></p>
+
+<p>OK,大功告成!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 安装 （一）]]></title>
@@ -4480,106 +4537,6 @@ Axel下载</p>
 <hr />
 
 <p>参考文章  <br/>
-<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
-<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
-<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress最新评论及友情链接]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/"/>
-    <updated>2013-11-13T16:35:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie</id>
-    <content type="html"><![CDATA[<h3>最新评论，热评</h3>
-
-<p>这边我使用的是友言，友言提供了很多组件，最新评论，热评等等 <br/>
-我们可以将他们 做成侧边栏进行展示，或在首页文章列表中，显示每篇文章的评论数目<br/>
-首先登入友言页面，并注册 <br/>
-<a href="http://uyan.cc/  ">http://uyan.cc/  </a>
-后台管理&mdash;>进入&mdash;>安装设置&mdash;>嵌入组件</p>
-
-<h4>创建文件</h4>
-
-<p>source/_includes/asides/uyan_hotcmt.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
-</span><span class='line'>&lt;h1&gt;评论热榜&lt;/h1&gt;
-</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;uyan_hotcmt_unit&quot;</span>&gt;&lt;/div&gt;
-</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v2.uyan.cc/code/uyan.js?uid=xxxxxx&quot;</span>&gt;&lt;/script&gt; &lt;!-- 如果已经过加载此行JS，即可不用重复加载 --&gt;
-</span><span class='line'>&lt;/section&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!-- more -->
-
-
-<p>source/_includes/asides/uyan_newcmt.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
-</span><span class='line'>&lt;h1&gt;最新评论&lt;/h1&gt;
-</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;uyan_newcmt_unit&quot;</span>&gt;&lt;/div&gt;
-</span><span class='line'>&lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://v2.uyan.cc/code/uyan.js?uid=xxxxxx&quot;</span>&gt;&lt;/script&gt; &lt;!-- 如果已经过加载此行JS，即可不用重复加载 --&gt;
-</span><span class='line'>&lt;/section&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>修改主配置文件</h4>
-
-<p>octopress/_config.yml</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html,asides/earth.html,asides/uyan_hotcmt.html,asides/uyan_newcmt.html<span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>友情链接</h3>
-
-<p>source/_includes/asides/blog_link.html</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
-</span><span class='line'>&lt;h1&gt;友情链接&lt;/h1&gt;
-</span><span class='line'>&lt;ul&gt;
-</span><span class='line'>        &lt;li&gt;
-</span><span class='line'>        &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;http://plumj.com/&quot;</span>&gt;plumj的博客&lt;/a&gt;
-</span><span class='line'>        &lt;/li&gt;
-</span><span class='line'>&lt;/ul&gt;
-</span><span class='line'>&lt;/section&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>修改主配置</h4>
-
-<p>octopress/_config.yml</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html,asides/earth.html,asides/uyan_hotcmt.html,asides/uyan_newcmt.html,asides/blog_link.html<span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<p>参考文章
 <a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
 <a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
 <a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>

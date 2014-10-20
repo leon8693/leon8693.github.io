@@ -93,6 +93,73 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/11/13/octopressdi-san-fang-ping-lun/">Octopress第三方评论</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-13T11:12:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>Octopress第三方评论添加</h3>
+
+<p>初始的Octopress只有一些twitter之类的评论可以使用，对于国内普遍使用微博，人人，QQ的人来说极其不方便的。
+还好Octopress也可以增加第三方评论，这样可以使我们的Octopress符合我们所需要的。</p>
+
+<h4>配置文件中添加需要的参数</h4>
+
+<p>octopress/_config.yml</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># Weibo Like
+</span><span class='line'>weibo_share: true</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>增加代码</h4>
+
+<p>octopress/source/_includes/post/sharing.html</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>  <span class="o">{</span>% <span class="k">if </span>site.weibo_share %<span class="o">}</span>
+</span><span class='line'>     <span class="o">{</span>% include post/weibo.html %<span class="o">}</span>
+</span><span class='line'>  <span class="o">{</span>% endif %<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/13/octopressdi-san-fang-ping-lun/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/11/octopressfen-lei/">Octopress分类</a></h1>
     
     
@@ -334,7 +401,7 @@ Nginx 1.4.3</p>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
-<li class='category'><a href='/blog/categories/monitor/'>Monitor (1)</a></li>
+<li class='category'><a href='/blog/categories/monitor/'>Monitor (2)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>

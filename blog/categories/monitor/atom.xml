@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Monitor | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/monitor/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-17T16:38:17+08:00</updated>
+  <updated>2014-10-20T10:08:53+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 汉化界面和图 (二)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/17/zabbix-2-dot-4-1-yi-hua-jie-mian-he-tu-2/"/>
+    <updated>2014-10-17T16:52:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/17/zabbix-2-dot-4-1-yi-hua-jie-mian-he-tu-2</id>
+    <content type="html"><![CDATA[<h2>界面修改中文</h2>
+
+<p><code>
+vim /mnt/www/zabbix/web/include/locales.inc.php
+'zh_CN' =&gt; array('name' =&gt; _('Chinese (zh_CN)'),        'display' =&gt; false),
+修改成
+'zh_CN' =&gt; array('name' =&gt; _('Chinese (zh_CN)'),        'display' =&gt; true),
+</code></p>
+
+<h2>图画中文显示</h2>
+
+<p>在没有处理的情况下,图片中的文字是乱码,如下 <br/>
+<img src="/images/blog_img/zabbixcn01.png" alt="zabbixcn01" /></p>
+
+<!-- more -->
+
+
+<p>随后我们需要改变他,首先复制windows中的字库 <br/>
+这个是我虚拟机中的XP字库,其他版本windows路径都一样如下<br/>
+控制面板->字体->楷体(我复制的这个) <br/>
+<img src="/images/blog_img/zabbixcn02.png" alt="zabbixcn02" /></p>
+
+<p>复制出来的名字如图<br/>
+<img src="/images/blog_img/zabbixcn03.png" alt="zabbixcn03" /></p>
+
+<p>我们将他复制到下面这个目录,并且修改配置<br/>
+```
+cp -rp simkai.ttf /mnt/www/zabbix/web/fonts/</p>
+
+<p>vim /mnt/www/zabbix/web/include/defines.inc.php
+//define(&lsquo;ZBX_GRAPH_FONT_NAME&rsquo;,         &lsquo;DejaVuSans&rsquo;); // font file name
+define(&lsquo;ZBX_GRAPH_FONT_NAME&rsquo;,           &lsquo;simkai&rsquo;); // font file name</p>
+
+<h1>保存退出</h1>
+
+<p>```
+刷新页面查看<br/>
+<img src="/images/blog_img/zabbixcn04.png" alt="zabbixcn04" /></p>
+
+<p>OK,大功告成!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 安装 （一）]]></title>

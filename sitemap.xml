@@ -123,6 +123,12 @@
         <lastmod>2014-10-17T16:38:09+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://leon8693.github.io/blog/2014/10/17/zabbix-2-dot-4-1-yi-hua-jie-mian-he-tu-2/
+        </loc>
+        <lastmod>2014-10-20T10:08:42+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://leon8693.github.io/lol/</loc>
         <lastmod>2013-11-18T17:26:57+08:00</lastmod>
     </url>
@@ -136,7 +142,7 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/blog/archives/</loc>
-        <lastmod>2014-10-17T16:38:09+08:00</lastmod>
+        <lastmod>2014-10-20T10:08:42+08:00</lastmod>
     </url>
     <url>
         <loc>http://leon8693.github.io/huangli/</loc>
@@ -144,6 +150,6 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/</loc>
-        <lastmod>2014-10-17T16:38:09+08:00</lastmod>
+        <lastmod>2014-10-20T10:08:42+08:00</lastmod>
     </url>
 </urlset>
