@@ -93,6 +93,174 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/06/06/python-optionparser/">Python OptionParser</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-06T15:28:00+08:00" pubdate data-updated="true">Jun 6<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>脚本原型</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#!/usr/bin/python</span>
+</span><span class='line'><span class="c">#-*- coding:utf-8 -*</span>
+</span><span class='line'><span class="c">#django添加数据库用户密码</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">sys</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">os</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">optparse</span> <span class="kn">import</span> <span class="n">OptionParser</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span> <span class="s">&quot;DJANGO_SETTINGS_MODULE&quot;</span><span class="p">,</span> <span class="s">&quot;mysite.settings&quot;</span> <span class="p">)</span>
+</span><span class='line'><span class="kn">from</span> <span class="nn">accounts.models</span> <span class="kn">import</span> <span class="n">User</span>
+</span><span class='line'><span class="kn">import</span> <span class="nn">hashlib</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">###编码转移,可以输出中文####</span>
+</span><span class='line'><span class="nb">reload</span><span class="p">(</span><span class="n">sys</span><span class="p">)</span>
+</span><span class='line'><span class="n">sys</span><span class="o">.</span><span class="n">setdefaultencoding</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">###%prog表示脚本本身</span>
+</span><span class='line'><span class="n">MSG_USAGE</span> <span class="o">=</span> <span class="s">&quot;%prog [ -u &lt;username&gt;][-p &lt;password&gt;][-t &lt;user_type&gt;][-h &lt;help&gt;]&quot;</span>
+</span><span class='line'><span class="n">MSG_VERSION</span> <span class="o">=</span> <span class="s">&quot;%prog 20140529&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">###usage打印用法,version输出版本信息</span>
+</span><span class='line'><span class="n">optParser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">MSG_USAGE</span><span class="p">,</span><span class="n">version</span><span class="o">=</span><span class="n">MSG_VERSION</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">###对optParser增加选项</span>
+</span><span class='line'><span class="n">optParser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-u&quot;</span><span class="p">,</span><span class="s">&quot;--username&quot;</span><span class="p">,</span><span class="n">action</span> <span class="o">=</span> <span class="s">&quot;store&quot;</span><span class="p">,</span><span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;string&quot;</span><span class="p">,</span><span class="n">dest</span> <span class="o">=</span> <span class="s">&quot;UserName&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">&quot;添加数据库用户名(必填)&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">optParser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-p&quot;</span><span class="p">,</span><span class="s">&quot;--password&quot;</span><span class="p">,</span><span class="n">action</span> <span class="o">=</span> <span class="s">&quot;store&quot;</span><span class="p">,</span><span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;string&quot;</span><span class="p">,</span><span class="n">dest</span> <span class="o">=</span> <span class="s">&quot;Password&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">&quot;添加数据库密码(必填)&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="n">optParser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-t&quot;</span><span class="p">,</span><span class="s">&quot;--user_type&quot;</span><span class="p">,</span><span class="n">action</span> <span class="o">=</span> <span class="s">&quot;store&quot;</span><span class="p">,</span><span class="nb">type</span> <span class="o">=</span> <span class="s">&quot;string&quot;</span><span class="p">,</span><span class="n">dest</span> <span class="o">=</span> <span class="s">&quot;User_Type&quot;</span><span class="p">,</span><span class="n">default</span><span class="o">=</span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s">&quot;添加用户权限,0为管理员,1为普通,默认为1&quot;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#fakeArgs = [&#39;-u&#39;,&#39;leon&#39;,&#39;-p&#39;,&#39;123456&#39;,&#39;-t&#39;,&#39;a&#39;]</span>
+</span><span class='line'><span class="n">options</span><span class="p">,</span><span class="n">args</span> <span class="o">=</span> <span class="n">optParser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">TYPE</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">User_Type</span>
+</span><span class='line'><span class="n">USERNAME</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">UserName</span>
+</span><span class='line'><span class="n">PASSWORD</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">Password</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#User_Type返回不是1或者0则退出</span>
+</span><span class='line'><span class="k">if</span> <span class="n">TYPE</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;1&#39;</span><span class="p">,</span><span class="s">&#39;0&#39;</span><span class="p">):</span>
+</span><span class='line'>    <span class="n">optParser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+</span><span class='line'>    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#判断参数-u,-p是否为空,返回帮助</span>
+</span><span class='line'><span class="n">args_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">USERNAME</span><span class="p">,</span><span class="n">PASSWORD</span><span class="p">]</span>
+</span><span class='line'><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">args_list</span><span class="p">:</span>
+</span><span class='line'>    <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&#39;请使用(-h,--help)来获得帮助&#39;</span>
+</span><span class='line'>        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#User是在accounts中models.py的类,定义了数据库的一些信息,插入用户</span>
+</span><span class='line'><span class="c">#判断用户是否存在</span>
+</span><span class='line'><span class="k">def</span> <span class="nf">init</span><span class="p">():</span>
+</span><span class='line'>    <span class="n">CHECK_NAME</span><span class="o">=</span><span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">USERNAME</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">CHECK_NAME</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s"> 用户已经存在&quot;</span> <span class="o">%</span> <span class="n">USERNAME</span>
+</span><span class='line'>    <span class="k">else</span><span class="p">:</span>
+</span><span class='line'>        <span class="n">u</span> <span class="o">=</span> <span class="n">User</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">USERNAME</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">PASSWORD</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(),</span> <span class="n">user_type</span><span class="o">=</span><span class="n">TYPE</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">u</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="s">&#39;__main__&#39;</span> <span class="o">==</span> <span class="n">__name__</span><span class="p">:</span>
+</span><span class='line'>    <span class="n">init</span><span class="p">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/06/06/python-optionparser/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/05/15/djangoji-chu/">Django 基础</a></h1>
     
     
@@ -294,79 +462,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/12/09/fastdfs-plus-nginx-plus-lua-plus-graphicsmagickshi-shi-suo-lue-tu/">Fastdfs Nginx Lua GraphicsMagick 实时缩略图</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-12-09T14:50:00+08:00" pubdate data-updated="true">Dec 9<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本</span>
-</span><span class='line'>Centos 2.6.32-358.el6.x86_64
-</span><span class='line'>FastDFS 4.06
-</span><span class='line'>Nginx 1.4.1
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c">#官网下载地址</span>
-</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>安装FastDFS</h3>
-
-<p>参考<a href="http://leon8693.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
-
-<h3>安装需要的包</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install readline readline-devel perl-ExtUtils-Embed  <span class="c">#lua所需要的包以及后面编译需要的其他模块和库</span>
-</span><span class='line'>yum install libjpeg libjpeg-devel libpng libpng-devel giflib giflib-devel freetype freetype-devel  openjpeg openjpeg-devel <span class="c">#gm需要的图库</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/12/09/fastdfs-plus-nginx-plus-lua-plus-graphicsmagickshi-shi-suo-lue-tu/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -386,7 +481,7 @@
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
-<li class='category'><a href='/blog/categories/monitor/'>Monitor (2)</a></li>
+<li class='category'><a href='/blog/categories/monitor/'>Monitor (3)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>

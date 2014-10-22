@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Monitor | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/monitor/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-20T10:08:53+08:00</updated>
+  <updated>2014-10-22T16:52:30+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 自动发现 (三)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/22/zabbix-2-dot-4-1-zi-dong-fa-xian-3/"/>
+    <updated>2014-10-22T16:22:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/22/zabbix-2-dot-4-1-zi-dong-fa-xian-3</id>
+    <content type="html"><![CDATA[<p>zabbix有个很有用的特性,就是自动发现,可以自动找已经启用zabbix agent的服务器并且对这些服务器进行添加监控以及分组等工作</p>
+
+<h2>自动发现</h2>
+
+<p>首先添加发现规则 <br/>
+点击&mdash;组态&mdash;探索<br/>
+<img src="/images/blog_img/zabbixat01.png" alt="zabbixat01" /></p>
+
+<!-- more -->
+
+
+<p>点击右侧的创建发现规则<br/>
+<img src="/images/blog_img/zabbixat02.png" alt="zabbixat02" /></p>
+
+<p>根据图片进行匹配IP范围,并且设定通过zabbix代理进行验证<br/>
+<img src="/images/blog_img/zabbixat03.png" alt="zabbixat03" /></p>
+
+<p>增加发现的主机后的操作 <br/>
+<img src="/images/blog_img/zabbixat04.png" alt="zabbixat04" /></p>
+
+<p>事件源选择探索&mdash;>点击创建动作&mdash;>取名称&mdash;>选择匹配范围&mdash;>选择动作操作 <br/>
+<img src="/images/blog_img/zabbixat05.png" alt="zabbixat05" />
+<img src="/images/blog_img/zabbixat06.png" alt="zabbixat06" />
+<img src="/images/blog_img/zabbixat07.png" alt="zabbixat07" /></p>
+
+<p>点击检测中查看最下面探索状态<br/>
+<img src="/images/blog_img/zabbixat07.png" alt="zabbixat07" /></p>
+
+<p>看到如图所示说明已经成功！<br/>
+PS:网卡流量和磁盘空间需要等一段时间agent会推送给server<br/>
+<img src="/images/blog_img/zabbixat08.png" alt="zabbixat08" />
+<img src="/images/blog_img/zabbixat09.png" alt="zabbixat09" />
+<img src="/images/blog_img/zabbixat10.png" alt="zabbixat10" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 汉化界面和图 (二)]]></title>

@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Octopress访客地图 - 唯一的真理</title>
+  <title>唯一的真理</title>
   <meta name="author" content="leon">
 
   
-  <meta name="description" content="Octopress访客地图">
-  <meta name="keywords" content="Octopress">
+  <meta name="description" content="世界唯一的真理">
+  <meta name="keywords" content="Asp.Net,C#">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://leon8693.github.io/blog/2013/11/13/octopressfang-ke-di-tu">
+  <link rel="canonical" href="http://leon8693.github.io/blog/page/8">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="唯一的真理" type="application/atom+xml">
@@ -85,12 +85,15 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article class="hentry" role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
     
-      <h1 class="entry-title">Octopress访客地图</h1>
+      <h1 class="entry-title"><a href="/blog/2013/11/03/FastDFS-install/">FastDFS Install</a></h1>
     
     
       <p class="meta">
@@ -106,124 +109,72 @@
   
 
 
-<time datetime="2013-11-13T16:10:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
+<time datetime="2013-11-03T16:11:00+08:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h3>Octopress访客地图</h3>
+  <div class="entry-content"><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本     </span>
+</span><span class='line'>Centos 2.6.32-358.el6.x86_64
+</span><span class='line'>FastDFS 4.06
+</span><span class='line'>Nginx 1.4.3
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c">#官网下载地址</span>
+</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
+</span><span class='line'>
+</span><span class='line'><span class="c">#测试服务器</span>
+</span><span class='line'>test1 172.16.3.212     <span class="o">(</span>tracker,storage<span class="o">)</span>
+</span><span class='line'>test2 172.16.3.213     <span class="o">(</span>tracker,storage<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>效果如我的博客右侧那个精美的3D旋转地球所示，它可以显示访客数量，访客来自的 地域，既有装饰作用，又有统计作用。它也有2D效果版，可以根据自己喜欢进行设置，地址在这里，然后获得代码。<br/>
-<a href="http://www.revolvermaps.com/?target=setup">http://www.revolvermaps.com/?target=setup</a></p>
 
-<p>source/_includes/asides/earth.html</p>
+<h3>安装FastDFS</h3>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;section&gt;
-</span><span class='line'>  &lt;h1&gt;访客地图&lt;/h1&gt;
-</span><span class='line'>        &lt;script <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span> <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://jg.revolvermaps.com/2/1.js?i=6mb2spkrv1j&amp;amp;s=220&amp;amp;m=0&amp;amp;v=false&amp;amp;r=false&amp;amp;b=000000&amp;amp;n=false&amp;amp;c=ff0000&quot;</span> <span class="nv">async</span><span class="o">=</span><span class="s2">&quot;async&quot;</span>&gt;&lt;/script&gt;
-</span><span class='line'>&lt;/section&gt;
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#安装需要的包</span>
+</span><span class='line'>yum groupinstall -y <span class="s2">&quot;Development Tools&quot;</span>
+</span><span class='line'>yum install -y libevent-devel pcre-devel zlib-devel
 </span></code></pre></td></tr></table></div></figure>
 
 
-<!-- more -->
 
 
-<h4>修改主配置增加参数</h4>
-
-<p>octopress/_config.yml</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>default_asides: <span class="o">[</span>asides/category_list.html,asides/weibo.html,asides/earth.html<span class="o">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<hr />
-
-<p>参考文章 <br/>
-<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a>  <br/>
-<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
-<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
 </div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">leon</span></span>
-
-      
-
-
-
-
-
-
-
-
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/03/FastDFS-install/">继续阅读 &rarr;</a>
+    </footer>
   
 
 
-<time datetime="2013-11-13T16:10:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
-      
-
-<span class="categories">
+    </article>
   
-    <a class='category' href='/blog/categories/octopress/'>Octopress</a>
-  
-</span>
-
-
-    </p>
+  <div class="pagination">
     
-      <div class="sharing">
-  
-  
-  
-  
-     <!-- JiaThis Button BEGIN -->
-<div class="jiathis_style_32x32">
-	<a class="jiathis_button_qzone"></a>
-	<a class="jiathis_button_tsina"></a>
-	<a class="jiathis_button_tqq"></a>
-	<a class="jiathis_button_weixin"></a>
-	<a class="jiathis_button_renren"></a>
-	<a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	<a class="jiathis_counter_style"></a>
-</div>
-<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
-<!-- JiaThis Button END -->
-
-<!-- UY BEGIN -->
-<div id="uyan_frame"></div>
-<script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=1863487"></script>
-<!-- UY END -->
-
-
-  
-</div>
-
+    <a href="/blog/archives">Blog Archives</a>
     
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/" title="Previous Post: Octopress新浪微博侧边栏">&laquo; Octopress新浪微博侧边栏</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2013/11/13/octopresszui-xin-ping-lun-ji-you-qing-lian-jie/" title="Next Post: Octopress最新评论及友情链接">Octopress最新评论及友情链接 &raquo;</a>
-      
-    </p>
-  </footer>
-</article>
-
+    <a class="next" href="/blog/page/7/">Newer &rarr;</a>
+    
+  </div>
 </div>
-
 <aside class="sidebar">
   
     <section>
@@ -277,17 +228,16 @@
 <h1>友情链接</h1>
 <ul>
         <li>
-        <a href="http://plumj.com/">Plum.J's blog</a>
+        <a href="http://plumj.com/">Plum.J&#8217;s blog</a>
 	</li>
 	<li>
-        <a href="http://shzhangji.com/">Ji ZHANG's Blog</a>
+        <a href="http://shzhangji.com/">Ji ZHANG&#8217;s Blog</a>
         </li>
 </ul>
 </section>
 
   
 </aside>
-
 
     </div>
   </div>

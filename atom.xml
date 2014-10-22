@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-20T10:08:53+08:00</updated>
+  <updated>2014-10-22T16:52:30+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,47 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 自动发现 (三)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/22/zabbix-2-dot-4-1-zi-dong-fa-xian-3/"/>
+    <updated>2014-10-22T16:22:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/22/zabbix-2-dot-4-1-zi-dong-fa-xian-3</id>
+    <content type="html"><![CDATA[<p>zabbix有个很有用的特性,就是自动发现,可以自动找已经启用zabbix agent的服务器并且对这些服务器进行添加监控以及分组等工作</p>
+
+<h2>自动发现</h2>
+
+<p>首先添加发现规则 <br/>
+点击&mdash;组态&mdash;探索<br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixat01.png" alt="zabbixat01" /></p>
+
+<!-- more -->
+
+
+<p>点击右侧的创建发现规则<br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixat02.png" alt="zabbixat02" /></p>
+
+<p>根据图片进行匹配IP范围,并且设定通过zabbix代理进行验证<br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixat03.png" alt="zabbixat03" /></p>
+
+<p>增加发现的主机后的操作 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixat04.png" alt="zabbixat04" /></p>
+
+<p>事件源选择探索&mdash;>点击创建动作&mdash;>取名称&mdash;>选择匹配范围&mdash;>选择动作操作 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixat05.png" alt="zabbixat05" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixat06.png" alt="zabbixat06" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixat07.png" alt="zabbixat07" /></p>
+
+<p>点击检测中查看最下面探索状态<br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixat07.png" alt="zabbixat07" /></p>
+
+<p>看到如图所示说明已经成功！<br/>
+PS:网卡流量和磁盘空间需要等一段时间agent会推送给server<br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixat08.png" alt="zabbixat08" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixat09.png" alt="zabbixat09" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixat10.png" alt="zabbixat10" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 汉化界面和图 (二)]]></title>
@@ -4461,84 +4502,6 @@ Axel下载</p>
 <p>参考文章<br/>
 <a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a><br/>
 <a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
-<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress添加统计]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/14/octopresstian-jia-tong-ji/"/>
-    <updated>2013-11-14T14:06:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/14/octopresstian-jia-tong-ji</id>
-    <content type="html"><![CDATA[<p>搭建了Octopress发现自己不会js,css以及各类代码，要美化Octopress真的很难，所以只有谷哥，度娘，东找找，西找找,看一些大牛的文章,照搬过来，统一放到自己的博客里面，方便自己看，也方便其他人不需要频繁的在网上各种搜索。</p>
-
-<p>首先可以通过各类搜索引擎将自己的网站放入进去,这样大家在使用这些搜索引擎的时候方便搜索到自己的博客，网站。  <br/>
-<a href="http://tool.lusongsong.com/addurl.html">http://tool.lusongsong.com/addurl.html</a> <br/>
-<a href="http://urlc.cn/tool/addurl.html">http://urlc.cn/tool/addurl.html</a></p>
-
-<h3>添加关键字</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>---
-</span><span class='line'>layout: post
-</span><span class='line'>title: <span class="s2">&quot;Octopress添加统计&quot;</span>
-</span><span class='line'>date: 2013-11-14 14:06
-</span><span class='line'>comments: <span class="nb">true</span>
-</span><span class='line'>categories: Octopress
-</span><span class='line'>description: <span class="s2">&quot;Octopress添加统计&quot;</span>
-</span><span class='line'>tags: <span class="o">[</span>octopress,博客,统计<span class="o">]</span>
-</span><span class='line'>keywords: octopress,统计,关键字
-</span><span class='line'>---
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!-- more -->
-
-
-<h3>统计工具</h3>
-
-<p>octopress模板里面默认带了<code>Google Analytics</code>工具,需要注册<a href="http://www.google.com/analytics/">Google Analytics</a>获得一个<code>google_analytics_tracking_id</code>， 添加到<code>_config.yml</code>中对应位置,网站之后进行验证即可，然后可以通过<code>Google Analytics</code>分析网站的流量了。而且可以使用<a href="https://www.google.com/webmasters/tools/home?hl=zh-CN">Google站长工具</a>，对网站进行更全面的分析，进行SEO。
-对自己的网站进行验证，只需将网站提供的用于验证的代码添加到<code>source/_includes/head.html</code>的<code>&lt;head&gt;</code>标签之间，网站部署到网上后，过几分钟即可验证通过，其他 需要验证的也同样操作。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>  &lt;script&gt;
-</span><span class='line'>  <span class="o">(</span><span class="k">function</span><span class="o">(</span>i,s,o,g,r,a,m<span class="o">){</span>i<span class="o">[</span><span class="s1">&#39;GoogleAnalyticsObject&#39;</span><span class="o">]=</span>r;i<span class="o">[</span>r<span class="o">]=</span>i<span class="o">[</span>r<span class="o">]||</span><span class="k">function</span><span class="o">(){</span>
-</span><span class='line'>  <span class="o">(</span>i<span class="o">[</span>r<span class="o">]</span>.q<span class="o">=</span>i<span class="o">[</span>r<span class="o">]</span>.q||<span class="o">[])</span>.push<span class="o">(</span>arguments<span class="o">)}</span>,i<span class="o">[</span>r<span class="o">]</span>.l<span class="o">=</span>1*new Date<span class="o">()</span>;<span class="nv">a</span><span class="o">=</span>s.createElement<span class="o">(</span>o<span class="o">)</span>,
-</span><span class='line'>  <span class="nv">m</span><span class="o">=</span>s.getElementsByTagName<span class="o">(</span>o<span class="o">)[</span>0<span class="o">]</span>;a.async<span class="o">=</span>1;a.src<span class="o">=</span>g;m.parentNode.insertBefore<span class="o">(</span>a,m<span class="o">)</span>
-</span><span class='line'>  <span class="o">})(</span>window,document,<span class="s1">&#39;script&#39;</span>,<span class="s1">&#39;//www.google-analytics.com/analytics.js&#39;</span>,<span class="s1">&#39;ga&#39;</span><span class="o">)</span>;
-</span><span class='line'>  ga<span class="o">(</span><span class="s1">&#39;create&#39;</span>, <span class="s1">&#39;xxxxxxxx&#39;</span>, <span class="s1">&#39;leonbb.com&#39;</span><span class="o">)</span>;
-</span><span class='line'>  ga<span class="o">(</span><span class="s1">&#39;send&#39;</span>, <span class="s1">&#39;pageview&#39;</span><span class="o">)</span>;
-</span><span class='line'>  &lt;/script&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>文章部分显示</h3>
-
-<p>如果想让文章在首页只显示一部分，需要在文章相应的位置添加<code>&lt;!-- more --&gt;</code>，在<code>_config.yml</code>中修改<code>excerpt_link: "继续阅读 &amp;rarr;"</code>来修改继续阅读 按钮的显示内容。</p>
-
-<hr />
-
-<p>参考文章  <br/>
-<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a> <br/>
-<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a>  <br/>
 <a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
 ]]></content>
   </entry>

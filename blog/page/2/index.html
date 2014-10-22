@@ -93,6 +93,107 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/10/14/rpmbuild-da-bao-rpmshi-zhan/">Rpmbuild 打包rpm实战</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-14T15:49:00+08:00" pubdate data-updated="true">Oct 14<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>基本信息</h2>
+
+<p>CentOS release 6.4 (Final) <br/>
+2.6.32-358.el6.x86_64</p>
+
+<h2>rpmbuild目录设置</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#自定义编译的目录</span>
+</span><span class='line'>vim ~/.rpmmacros
+</span><span class='line'>%_topdir /root/rpmbuild
+</span><span class='line'>%_tmppath /root/rpmbuild/tmp
+</span><span class='line'>%buildroot /root/rpmbuild/BUILDROOT
+</span><span class='line'>%_prefix  /
+</span><span class='line'>
+</span><span class='line'><span class="c">#创建自定义目录</span>
+</span><span class='line'>mkdir -p ~/rpmbuild/<span class="o">{</span>BUILD,RPMS,SOURCES,SPECS,SRPMS<span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">#存放目录状态</span>
+</span><span class='line'><span class="o">[</span>root@angel02 rpmbuild<span class="o">]</span><span class="c"># tree</span>
+</span><span class='line'>.
+</span><span class='line'>├── BUILD
+</span><span class='line'>├── RPMS
+</span><span class='line'>├── SOURCES
+</span><span class='line'>│   └── php-5.3.10.tar.gz
+</span><span class='line'>├── SPECS
+</span><span class='line'>│   └── php5.spec
+</span><span class='line'>├── SRPMS
+</span><span class='line'>└── tmp
+</span><span class='line'>
+</span><span class='line'>vim /usr/lib/rpm/macros
+</span><span class='line'>%_topdir                %<span class="o">{</span>getenv:HOME<span class="o">}</span>/rpmbuild <span class="c">#注释掉</span>
+</span><span class='line'>%_topdir                %<span class="o">{</span>_usrsrc<span class="o">}</span>/
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/14/rpmbuild-da-bao-rpmshi-zhan/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/10/10/saltstack-zi-dong-hua-pei-zhi-guan-li-shi-zhan-05/">Saltstack 自动化配置管理实战 (五)</a></h1>
     
     
@@ -342,134 +443,6 @@ PS:必须在MASTER上操作</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/29/saltstack-config-2/">Saltstack Config (二)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-29T17:08:00+08:00" pubdate data-updated="true">Sep 29<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>原文出处:<a href="http://blog.coocla.org/301.html">http://blog.coocla.org/301.html</a></p>
-
-<p>配置文件/etc/salt/master</p>
-
-<p>interface  <br/>
-默认接口：0.0.0.0（所有的网络地址接口）  <br/>
-绑定到本地的某个网络接口</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ginterface: 192.168.0.1</span></code></pre></td></tr></table></div></figure>
-
-
-<p>publish_port  <br/>
-默认值：4505  <br/>
-设置master与minion的认证通信端口</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gpublish_port: 4505</span></code></pre></td></tr></table></div></figure>
-
-
-<p>user  <br/>
-默认值：root  <br/>
-运行salt进程的用户</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>user: root</span></code></pre></td></tr></table></div></figure>
-
-
-<p>max_open_files  <br/>
-每一个minion连接到master，至少要使用一个文件描述符，如果足够多的minion连接到master上，你将会从控制台上看到</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gsalt-master crashes：
-</span><span class='line'>Too many open files (tcp_listener.cpp:335)
-</span><span class='line'>Aborted (core dumped)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>默认值这个值取决于ulimit -Hn的值，即系统的对打开文件描述符的硬限制   <br/>
-如果你希望重新设置改值或者取消设置，记住这个值不能超过硬限制，提高硬限制取决于你的操作系统或分配，一个好的方法是internet找到对应操作系统的硬限制设置，比如这样搜索：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>graise max open files hard limit debian
-</span><span class='line'>max_open_files: 100000
-</span><span class='line'>worker_threads</span></code></pre></td></tr></table></div></figure>
-
-
-<p>默认值：5   <br/>
-启动用来接收或应答minion的线程数。如果你有很多minion，而且minion延迟你的应答，你可以适度的提高该值. 在点对点的系统环境中使用时，该值不要被设置为3以下，但是可以将其设置为1</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gworker_threads: 5</span></code></pre></td></tr></table></div></figure>
-
-
-<p>gret_port  <br/>
-默认值：4506  <br/>
-这个端口是master用来发送命令或者接收minions的命令执行返回信息</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>gret_port: 4506</span></code></pre></td></tr></table></div></figure>
-
-
-<p>pidfile  <br/>
-默认值：/var/run/salt-master.pid <br/>
-指定master的pid文件位置</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pidfile: /var/run/salt-master.pid</span></code></pre></td></tr></table></div></figure>
-
-
-<p>root_dir  <br/>
-默认值：/  <br/>
-指定该目录为salt运行的根目录，改变它可以使salt从另外一个目录开始运行，好比chroot</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>root_dir: /</span></code></pre></td></tr></table></div></figure>
-
-
-<p>pki_dir  <br/>
-默认值：/etc/salt/pki  <br/>
-这个目录是用来存放pki认证秘钥</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pki_dir: /etc/salt/pki</span></code></pre></td></tr></table></div></figure>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/29/saltstack-config-2/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -489,7 +462,7 @@ PS:必须在MASTER上操作</p>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
-<li class='category'><a href='/blog/categories/monitor/'>Monitor (2)</a></li>
+<li class='category'><a href='/blog/categories/monitor/'>Monitor (3)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>
