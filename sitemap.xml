@@ -133,6 +133,12 @@
         <lastmod>2014-10-22T16:51:53+08:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://leon8693.github.io/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4/
+        </loc>
+        <lastmod>2014-10-24T17:21:59+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://leon8693.github.io/lol/</loc>
         <lastmod>2013-11-18T17:26:57+08:00</lastmod>
     </url>
@@ -146,7 +152,7 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/blog/archives/</loc>
-        <lastmod>2014-10-22T16:51:53+08:00</lastmod>
+        <lastmod>2014-10-24T17:21:59+08:00</lastmod>
     </url>
     <url>
         <loc>http://leon8693.github.io/huangli/</loc>
@@ -154,6 +160,6 @@
     </url>
     <url>
         <loc>http://leon8693.github.io/</loc>
-        <lastmod>2014-10-22T16:51:53+08:00</lastmod>
+        <lastmod>2014-10-24T17:21:59+08:00</lastmod>
     </url>
 </urlset>

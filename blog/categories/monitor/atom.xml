@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Monitor | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/monitor/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-22T16:52:30+08:00</updated>
+  <updated>2014-10-24T17:24:55+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 自定义邮件报警 (四)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4/"/>
+    <updated>2014-10-24T16:31:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4</id>
+    <content type="html"><![CDATA[<h2>自定义邮件报警</h2>
+
+<p>前面几步完成后,发现报警机制没有,本章开始说报警,这边我取一个最简单的方式而且又方便</p>
+
+<h4>创建报警邮件脚本</h4>
+
+<p>下载<a href="http://caspian.dotconf.net/menu/Software/SendEmail/sendEmail-v1.55.tar.gz">SendEmail</a>
+```</p>
+
+<h1>将sendEmail复制到/usr/local/bin/下</h1>
+
+<h1>编写邮件脚本</h1>
+
+<p>vim /mnt/www/zabbix/share/zabbix/alertscripts/sendEmail.sh</p>
+
+<h1>!/bin/bash</h1>
+
+<p>MAIL=&ldquo;/usr/local/bin/sendEmail&rdquo;
+USER_LIST=&ldquo;$1&rdquo;          #收件人列表
+SUBJECT=&ldquo;$2&rdquo;            #主题
+MESSAGE=&ldquo;$3&rdquo;            #内容
+SMTP=&ldquo;smtp.gmail.com&rdquo;
+USERNAME=&ldquo;<a href="&#x6d;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#97;&#x61;&#97;&#64;&#x67;&#109;&#97;&#x69;&#x6c;&#x2e;&#x63;&#x6f;&#109;">&#97;&#97;&#x61;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#46;&#99;&#111;&#109;</a>&rdquo;
+USERPASSWD=&ldquo;123456&rdquo;
+$MAIL -f <a href="&#109;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x61;&#x61;&#97;&#x40;&#103;&#x6d;&#97;&#x69;&#x6c;&#46;&#x63;&#x6f;&#109;">&#97;&#x61;&#x61;&#x40;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#x6d;</a> -t $USER_LIST -u $SUBJECT -m $MESSAGE -s $SMTP -xu $USERNAME -xp $USERPASSWD
+```</p>
+
+<!-- more -->
+
+
+<h4>添加脚本邮件</h4>
+
+<p>选择管理&mdash;>示警媒介类型&mdash;>创建媒体类型&mdash;>如图将脚本名称加入类型选择脚本 <br/>
+<img src="/images/blog_img/zabbixmail01.png" alt="zabbixmail01" />
+<img src="/images/blog_img/zabbixmail02.png" alt="zabbixmail02" /></p>
+
+<h4>添加用户邮件设置</h4>
+
+<p>设置用户关联,管理&mdash;>用户 <br/>
+<img src="/images/blog_img/zabbixmail03.png" alt="zabbixmail03" />
+选择使用的用户并且编辑设置 <br/>
+<img src="/images/blog_img/zabbixmail04.png" alt="zabbixmail04" />
+<img src="/images/blog_img/zabbixmail05.png" alt="zabbixmail05" />
+<img src="/images/blog_img/zabbixmail06.png" alt="zabbixmail06" /></p>
+
+<h4>报警动作</h4>
+
+<p>组态&mdash;>动作&mdash;创建动作(根据图片进行设置) <br/>
+<img src="/images/blog_img/zabbixmail07.png" alt="zabbixmail07" />
+<img src="/images/blog_img/zabbixmail08.png" alt="zabbixmail08" /></p>
+
+<p>PS:900指邮件发送的间隔,1-0指发送邮件的步骤,我这边设置的是无限次,并且自己添加需要发送的用户组或者用户 <br/>
+<img src="/images/blog_img/zabbixmail09.png" alt="zabbixmail09" /></p>
+
+<h4>测试</h4>
+
+<p>PS:动作1黄色代表正在操作中,当变成绿色则代表发送成功 <br/>
+<img src="/images/blog_img/zabbixmail10.png" alt="zabbixmail10" />
+<img src="/images/blog_img/zabbixmail11.png" alt="zabbixmail11" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 自动发现 (三)]]></title>

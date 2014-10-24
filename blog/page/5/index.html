@@ -93,6 +93,80 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/04/25/python/">Python Class</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-25T13:55:00+08:00" pubdate data-updated="true">Apr 25<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Class</h2>
+
+<h4>1.典型类的调用方法</h4>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='python'><span class='line'><span class="c">#简单类的方式</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">myclass</span><span class="p">:</span>                          <span class="c">#定义一个类的名称为myclass</span>
+</span><span class='line'>    <span class="s">&quot;this is myclass&quot;</span>                   <span class="c">#定义一个类的说明文档</span>
+</span><span class='line'>    <span class="n">a</span><span class="o">=</span><span class="mi">100</span>                               <span class="c">#类的属性,a是成员,可以用类名直接访问</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>                 <span class="c">#定义类初始化</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;alex&quot;</span>              <span class="c">#定义name和age属性,并定义方法，必须由类的实例来调用</span>
+</span><span class='line'>        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="s">&quot;23&quot;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="n">myclass</span><span class="o">.</span><span class="n">a</span>
+</span><span class='line'><span class="n">A</span> <span class="o">=</span> <span class="n">myclass</span><span class="p">()</span>                           <span class="c">#实例化类</span>
+</span><span class='line'><span class="k">print</span> <span class="n">A</span><span class="o">.</span><span class="n">name</span>                            <span class="c">#类实例化后调用name属性</span>
+</span><span class='line'><span class="k">print</span> <span class="n">A</span><span class="o">.</span><span class="n">age</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>python中<code>self</code>只有在类的方法中才会有，<code>self</code>在定义类的方法时必须有，不需要传入相应参数，<code>self</code>名称也不是必须的，将上面self替换成myname或是任何其他名称也是可以的</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/04/25/python/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/12/09/fastdfs-plus-nginx-plus-lua-plus-graphicsmagickshi-shi-suo-lue-tu/">Fastdfs Nginx Lua GraphicsMagick 实时缩略图</a></h1>
     
     
@@ -322,96 +396,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/19/octopressyang-shi-xiu-gai/">Octopress样式修改</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-19T14:39:00+08:00" pubdate data-updated="true">Nov 19<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>样式修改</h3>
-
-<p>添加或修改控制样式，需编辑<code>sass/custom/_styles.scss</code>，博客的所有颜色控制在<code>/sass/base/_theme.scss</code>中进行设置。定制自己的配色，编辑<code>sass/custom/_colors.scss</code>。查看<a href="http://hslpicker.com/#e1ff00">HSL COLOR PICKER</a>，帮你挑选喜欢的颜色。 <br/>
-修改布局，需要编辑<code>sass/base/_layout.scss</code>，可以修改各部分的宽度等。</p>
-
-<h3>添加背景图片</h3>
-
-<p>在<code>sass/custom/_styles.scss</code>中添加</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>html <span class="o">{</span>
-</span><span class='line'>        background: <span class="c">#555555 url(&quot;/images/lol.jpg&quot;);</span>
-</span><span class='line'>        //background: <span class="c">#555555;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>body &gt; div <span class="o">{</span>
-</span><span class='line'>        background-image: none;
-</span><span class='line'>        //background: <span class="c">#F5F5D5</span>
-</span><span class='line'><span class="o">}</span> //侧边栏
-</span><span class='line'>
-</span><span class='line'>body &gt; div &gt; div <span class="o">{</span> //文章内容
-</span><span class='line'>        background-image: none;
-</span><span class='line'>        //background: <span class="c">#F5F5D5;</span>
-</span><span class='line'>        //background: url<span class="o">(</span><span class="s2">&quot;/images/bg.jpg&quot;</span><span class="o">)</span>;
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将背景图片放入<code>source/images/</code>中，修改上述代码中的路径指向想要的图片，即可 更改博客、侧边栏或文章的背景图片。博客使用背景图片后，与Header区不太和谐，所以我在<code>/sass/base/_theme.scss</code>中将<code>header-bg</code>设置成透明色了。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$header</span>-bg: hsla<span class="o">(</span>0, 0%, 15%, 0<span class="o">)</span>  !default;
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/19/octopressyang-shi-xiu-gai/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -431,7 +415,7 @@
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
-<li class='category'><a href='/blog/categories/monitor/'>Monitor (3)</a></li>
+<li class='category'><a href='/blog/categories/monitor/'>Monitor (4)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>

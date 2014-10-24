@@ -93,6 +93,73 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/">Octopress新浪微博侧边栏</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-13T15:26:00+08:00" pubdate data-updated="true">Nov 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>增加新浪微博侧边栏</h3>
+
+<h4>先通过微博秀</h4>
+
+<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
+找到自己的代码</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;iframe
+</span><span class='line'><span class="nv">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span>
+</span><span class='line'><span class="nv">height</span><span class="o">=</span><span class="s2">&quot;550&quot;</span>
+</span><span class='line'> <span class="nv">class</span><span class="o">=</span><span class="s2">&quot;share_self&quot;</span>
+</span><span class='line'> <span class="nv">frameborder</span><span class="o">=</span><span class="s2">&quot;0&quot;</span>
+</span><span class='line'><span class="nv">scrolling</span><span class="o">=</span><span class="s2">&quot;no&quot;</span>
+</span><span class='line'><span class="nv">src</span><span class="o">=</span><span class="s2">&quot;http://widget.weibo.com/weiboshow/index.php?language=&amp;width=0&amp;height=550&amp;fansRow=2&amp;ptype=1&amp;speed=0&amp;skin=1&amp;isTitle=1&amp;noborder=1&amp;isWeibo=1&amp;isFans=1&amp;uid=xxxxxxxx&amp;verifier=xxxxxxxx&quot;</span>&gt;
+</span><span class='line'>&lt;/iframe&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/11/13/qq-404/">Octopress 404公益页面</a></h1>
     
     
@@ -299,79 +366,6 @@ www.qq.com/404<br/>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/11/octopress-install/">Octopress Install</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-11T00:46:00+08:00" pubdate data-updated="true">Nov 11<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h1>信息版本</h1>
-
-<p>CentOS release 6.2<br/>
-Ruby 1.9.3<br/>
-Nginx 1.4.3</p>
-
-<h3>安装需要的包</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install -y git gcc-c++ patch readline readline-devel zlib zlib-devel libyaml-devel libffi-devel openssl-devel make bzip2 autoconf automake libtool bison iconv-devel
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>安装ruby</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -L https://get.rvm.io | bash -s stable --ruby
-</span><span class='line'><span class="c">#curl -L 表示允许跳转</span>
-</span><span class='line'><span class="c">#bash -s 模拟标准输入</span>
-</span><span class='line'><span class="c">#安装位置/usr/local/rvm/scripts/rvm</span>
-</span><span class='line'>
-</span><span class='line'>vim /etc/bashrc <span class="c">#增加环境变量</span>
-</span><span class='line'><span class="nb">source</span> /usr/local/rvm/scripts/rvm
-</span><span class='line'><span class="nb">source</span> /usr/local/rvm/scripts/completion
-</span></code></pre></td></tr></table></div></figure>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/11/octopress-install/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -391,7 +385,7 @@ Nginx 1.4.3</p>
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
-<li class='category'><a href='/blog/categories/monitor/'>Monitor (3)</a></li>
+<li class='category'><a href='/blog/categories/monitor/'>Monitor (4)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>

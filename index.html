@@ -93,6 +93,79 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4/">Zabbix 2.4.1 自定义邮件报警 (四)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-24T16:31:00+08:00" pubdate data-updated="true">Oct 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>自定义邮件报警</h2>
+
+<p>前面几步完成后,发现报警机制没有,本章开始说报警,这边我取一个最简单的方式而且又方便</p>
+
+<h4>创建报警邮件脚本</h4>
+
+<p>下载<a href="http://caspian.dotconf.net/menu/Software/SendEmail/sendEmail-v1.55.tar.gz">SendEmail</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#将sendEmail复制到/usr/local/bin/下
+</span><span class='line'>#编写邮件脚本
+</span><span class='line'>vim /mnt/www/zabbix/share/zabbix/alertscripts/sendEmail.sh
+</span><span class='line'>#!/bin/bash
+</span><span class='line'>MAIL="/usr/local/bin/sendEmail"
+</span><span class='line'>USER_LIST="$1"          #收件人列表
+</span><span class='line'>SUBJECT="$2"            #主题
+</span><span class='line'>MESSAGE="$3"            #内容
+</span><span class='line'>SMTP="smtp.gmail.com"
+</span><span class='line'>USERNAME="aaa@gmail.com"
+</span><span class='line'>USERPASSWD="123456"
+</span><span class='line'>$MAIL -f aaa@gmail.com -t $USER_LIST -u $SUBJECT -m $MESSAGE -s $SMTP -xu $USERNAME -xp $USERPASSWD</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/10/22/zabbix-2-dot-4-1-zi-dong-fa-xian-3/">Zabbix 2.4.1 自动发现 (三)</a></h1>
     
     
@@ -374,50 +447,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/15/yum-si-you-yuan/">Yum 私有源</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-15T16:17:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>yum私有源</h2>
-
-<p>当自己制作RPM包后发现还需要一个私有的yum源 <br/>
-下面就自己搭建一个</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/10/15/yum-si-you-yuan/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -435,7 +464,7 @@
 <li class='category'><a href='/blog/categories/database/'>Database (1)</a></li>
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
-<li class='category'><a href='/blog/categories/monitor/'>Monitor (3)</a></li>
+<li class='category'><a href='/blog/categories/monitor/'>Monitor (4)</a></li>
 <li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>

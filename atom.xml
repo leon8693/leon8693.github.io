@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-10-22T16:52:30+08:00</updated>
+  <updated>2014-10-24T17:24:55+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,80 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 自定义邮件报警 (四)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4/"/>
+    <updated>2014-10-24T16:31:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4</id>
+    <content type="html"><![CDATA[<h2>自定义邮件报警</h2>
+
+<p>前面几步完成后,发现报警机制没有,本章开始说报警,这边我取一个最简单的方式而且又方便</p>
+
+<h4>创建报警邮件脚本</h4>
+
+<p>下载<a href="http://caspian.dotconf.net/menu/Software/SendEmail/sendEmail-v1.55.tar.gz">SendEmail</a></p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#将sendEmail复制到/usr/local/bin/下
+</span><span class='line'>#编写邮件脚本
+</span><span class='line'>vim /mnt/www/zabbix/share/zabbix/alertscripts/sendEmail.sh
+</span><span class='line'>#!/bin/bash
+</span><span class='line'>MAIL="/usr/local/bin/sendEmail"
+</span><span class='line'>USER_LIST="$1"          #收件人列表
+</span><span class='line'>SUBJECT="$2"            #主题
+</span><span class='line'>MESSAGE="$3"            #内容
+</span><span class='line'>SMTP="smtp.gmail.com"
+</span><span class='line'>USERNAME="aaa@gmail.com"
+</span><span class='line'>USERPASSWD="123456"
+</span><span class='line'>$MAIL -f aaa@gmail.com -t $USER_LIST -u $SUBJECT -m $MESSAGE -s $SMTP -xu $USERNAME -xp $USERPASSWD</span></code></pre></td></tr></table></div></figure>
+
+
+<!-- more -->
+
+
+<h4>添加脚本邮件</h4>
+
+<p>选择管理&mdash;>示警媒介类型&mdash;>创建媒体类型&mdash;>如图将脚本名称加入类型选择脚本 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail01.png" alt="zabbixmail01" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail02.png" alt="zabbixmail02" /></p>
+
+<h4>添加用户邮件设置</h4>
+
+<p>设置用户关联,管理&mdash;>用户 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail03.png" alt="zabbixmail03" />
+选择使用的用户并且编辑设置 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail04.png" alt="zabbixmail04" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail05.png" alt="zabbixmail05" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail06.png" alt="zabbixmail06" /></p>
+
+<h4>报警动作</h4>
+
+<p>组态&mdash;>动作&mdash;创建动作(根据图片进行设置) <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail07.png" alt="zabbixmail07" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail08.png" alt="zabbixmail08" /></p>
+
+<p>PS:900指邮件发送的间隔,1-0指发送邮件的步骤,我这边设置的是无限次,并且自己添加需要发送的用户组或者用户 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail09.png" alt="zabbixmail09" /></p>
+
+<h4>测试</h4>
+
+<p>PS:动作1黄色代表正在操作中,当变成绿色则代表发送成功 <br/>
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail10.png" alt="zabbixmail10" />
+<img src="http://leon8693.github.io/images/blog_img/zabbixmail11.png" alt="zabbixmail11" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 自动发现 (三)]]></title>
@@ -4257,252 +4331,6 @@ Axel下载</p>
 <img src="http://leon8693.github.io/images/blog_img/wget4.png" alt="wget" /></p>
 
 <p>还是很大的差距的，但是建议不要用axel开太多的进程，控制在100以内。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress样式修改]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/19/octopressyang-shi-xiu-gai/"/>
-    <updated>2013-11-19T14:39:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/19/octopressyang-shi-xiu-gai</id>
-    <content type="html"><![CDATA[<h3>样式修改</h3>
-
-<p>添加或修改控制样式，需编辑<code>sass/custom/_styles.scss</code>，博客的所有颜色控制在<code>/sass/base/_theme.scss</code>中进行设置。定制自己的配色，编辑<code>sass/custom/_colors.scss</code>。查看<a href="http://hslpicker.com/#e1ff00">HSL COLOR PICKER</a>，帮你挑选喜欢的颜色。 <br/>
-修改布局，需要编辑<code>sass/base/_layout.scss</code>，可以修改各部分的宽度等。</p>
-
-<h3>添加背景图片</h3>
-
-<p>在<code>sass/custom/_styles.scss</code>中添加</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>html <span class="o">{</span>
-</span><span class='line'>        background: <span class="c">#555555 url(&quot;/images/lol.jpg&quot;);</span>
-</span><span class='line'>        //background: <span class="c">#555555;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>body &gt; div <span class="o">{</span>
-</span><span class='line'>        background-image: none;
-</span><span class='line'>        //background: <span class="c">#F5F5D5</span>
-</span><span class='line'><span class="o">}</span> //侧边栏
-</span><span class='line'>
-</span><span class='line'>body &gt; div &gt; div <span class="o">{</span> //文章内容
-</span><span class='line'>        background-image: none;
-</span><span class='line'>        //background: <span class="c">#F5F5D5;</span>
-</span><span class='line'>        //background: url<span class="o">(</span><span class="s2">&quot;/images/bg.jpg&quot;</span><span class="o">)</span>;
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>将背景图片放入<code>source/images/</code>中，修改上述代码中的路径指向想要的图片，即可 更改博客、侧边栏或文章的背景图片。博客使用背景图片后，与Header区不太和谐，所以我在<code>/sass/base/_theme.scss</code>中将<code>header-bg</code>设置成透明色了。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$header</span>-bg: hsla<span class="o">(</span>0, 0%, 15%, 0<span class="o">)</span>  !default;
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!-- more -->
-
-
-<h3>LOGO图片</h3>
-
-<p>LOGO图片我所说的logo图片有两种，一个是打开一个网页时，标签栏上显示的小图片。还有一个 是标题栏主标题旁的图片。 <br/>
-首先针对于第一种可以选择你喜欢的图片（大小适中），替换source目录下的 favicon.png即可。<br/>
-或者将logo图片放入<code>source/images</code>中，然后修改<code>source/_includes/head.html</code>，找到favicon.png，修改其路径指向你的图片即可。<br/>
-对于主标题旁的图片需要在<code>sass/custom/_styles.scss</code>中填入如下语句:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>//Blog logo pic
-</span><span class='line'>@media only screen and <span class="o">(</span>min-width: 550px<span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>        body &gt; header h1<span class="o">{</span>
-</span><span class='line'>                background: url<span class="o">(</span><span class="s2">&quot;/images/logo1.png&quot;</span><span class="o">)</span> no-repeat 0 1px;
-</span><span class='line'>                padding-left: 65px;
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        body &gt; header h2 <span class="o">{</span> padding-left: 65px; <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>根据自己情况进行修改即可。</p>
-
-<h3>导航栏倒圆角</h3>
-
-<p>我设置的header区背景色透明，所以导航栏的直角有些尖锐，在<code>sass/custom/_styles.scss</code>中添加如下语句，将其修改为圆角:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>//倒圆角
-</span><span class='line'>@media only screen and <span class="o">(</span>min-width: 1040px<span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        body &gt; nav <span class="o">{</span>
-</span><span class='line'>                @include border-top-radius<span class="o">(</span>.4em<span class="o">)</span>;
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>        body &gt; footer <span class="o">{</span>
-</span><span class='line'>                @include border-bottom-radius<span class="o">(</span>.4em<span class="o">)</span>;
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>滑动返回顶部按钮</h3>
-
-<p>当文章较长，通常希望有一个返回顶部的按钮，如下方法实现了在页面右下方添加一个 返回顶部的图片按钮，点击后可以滑动的返回顶部。
-首先创建<code>source/javascripts/top.js</code>，实现滑动返回顶部效果，添加如下代码：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="k">function </span>goTop<span class="o">(</span>acceleration, <span class="nb">time</span><span class="o">)</span>
-</span><span class='line'><span class="o">{</span>
-</span><span class='line'>        <span class="nv">acceleration</span> <span class="o">=</span> acceleration <span class="o">||</span> 0.1;
-</span><span class='line'>        <span class="nb">time</span> <span class="o">=</span> <span class="nb">time</span> <span class="o">||</span> 16;
-</span><span class='line'>
-</span><span class='line'>        var <span class="nv">x1</span> <span class="o">=</span> 0;
-</span><span class='line'>        var <span class="nv">y1</span> <span class="o">=</span> 0;
-</span><span class='line'>        var <span class="nv">x2</span> <span class="o">=</span> 0;
-</span><span class='line'>        var <span class="nv">y2</span> <span class="o">=</span> 0;
-</span><span class='line'>        var <span class="nv">x3</span> <span class="o">=</span> 0;
-</span><span class='line'>        var <span class="nv">y3</span> <span class="o">=</span> 0;
-</span><span class='line'>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span>document.documentElement<span class="o">)</span>
-</span><span class='line'>        <span class="o">{</span>
-</span><span class='line'>                <span class="nv">x1</span> <span class="o">=</span> document.documentElement.scrollLeft <span class="o">||</span> 0;
-</span><span class='line'>                <span class="nv">y1</span> <span class="o">=</span> document.documentElement.scrollTop <span class="o">||</span> 0;
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(</span>document.body<span class="o">)</span>
-</span><span class='line'>        <span class="o">{</span>
-</span><span class='line'>                <span class="nv">x2</span> <span class="o">=</span> document.body.scrollLeft <span class="o">||</span> 0;
-</span><span class='line'>                <span class="nv">y2</span> <span class="o">=</span> document.body.scrollTop <span class="o">||</span> 0;
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>        var <span class="nv">x3</span> <span class="o">=</span> window.scrollX <span class="o">||</span> 0;
-</span><span class='line'>        var <span class="nv">y3</span> <span class="o">=</span> window.scrollY <span class="o">||</span> 0;
-</span><span class='line'>
-</span><span class='line'>        var <span class="nv">x</span> <span class="o">=</span> Math.max<span class="o">(</span>x1, Math.max<span class="o">(</span>x2, x3<span class="o">))</span>;
-</span><span class='line'>        var <span class="nv">y</span> <span class="o">=</span> Math.max<span class="o">(</span>y1, Math.max<span class="o">(</span>y2, y3<span class="o">))</span>;
-</span><span class='line'>
-</span><span class='line'>        var <span class="nv">speed</span> <span class="o">=</span> 1 + acceleration;
-</span><span class='line'>        window.scrollTo<span class="o">(</span>Math.floor<span class="o">(</span>x / speed<span class="o">)</span>, Math.floor<span class="o">(</span>y / speed<span class="o">))</span>;
-</span><span class='line'>
-</span><span class='line'>        <span class="k">if</span><span class="o">(</span>x &gt; 0 <span class="o">||</span> y &gt; 0<span class="o">)</span>
-</span><span class='line'>        <span class="o">{</span>
-</span><span class='line'>                var <span class="nv">invokeFunction</span> <span class="o">=</span> <span class="s2">&quot;goTop(&quot;</span> + acceleration + <span class="s2">&quot;, &quot;</span> + <span class="nb">time</span> + <span class="s2">&quot;)&quot;</span>;
-</span><span class='line'>                window.setTimeout<span class="o">(</span>invokeFunction, <span class="nb">time</span><span class="o">)</span>;
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>然后创建<code>source/_includes/custom/totop.html</code>,设置返回顶部按钮样式和位置,代码如下:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;!--返回顶部开始--&gt;
-</span><span class='line'>&lt;div <span class="nv">id</span><span class="o">=</span><span class="s2">&quot;full&quot;</span> <span class="nv">style</span><span class="o">=</span><span class="s2">&quot;width:0px; height:0px; position:fixed; right:180px; bottom:150px; z-index:100; text-align:center; background-color:transparent; cursor:pointer;&quot;</span>&gt;
-</span><span class='line'>        &lt;a <span class="nv">href</span><span class="o">=</span><span class="s2">&quot;#&quot;</span> <span class="nv">onclick</span><span class="o">=</span><span class="s2">&quot;goTop();return false;&quot;</span>&gt;&lt;img <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/images/top.png&quot;</span> <span class="nv">border</span><span class="o">=</span>0 <span class="nv">alt</span><span class="o">=</span><span class="s2">&quot;返回顶部&quot;</span>&gt;&lt;/a&gt;
-</span><span class='line'>&lt;/div&gt;
-</span><span class='line'>&lt;script <span class="nv">src</span><span class="o">=</span><span class="s2">&quot;/javascripts/top.js&quot;</span> <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;text/javascript&quot;</span>&gt;&lt;/script&gt;
-</span><span class='line'>&lt;!--返回顶部结束--&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>最后，还需要将返回顶部的图片放入<code>source/images</code>，命名为top.png(或修改totop.html中图片的路径)。<br/>
-在<code>source/_layouts/default.html</code>添加html样式。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>&lt;body&gt;
-</span><span class='line'>  ...
-</span><span class='line'>  <span class="o">{</span>% include custom/totop.html %<span class="o">}</span>
-</span><span class='line'>  ...
-</span><span class='line'>&lt;/body&gt;
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>感谢812lcl</h3>
-
-<p>他的博客讲解的很详细，我部分需求也是看了他的博客才会做，有些问题也是通过他来帮忙解决的。</p>
-
-<hr />
-
-<p>参考文章<br/>
-<a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a><br/>
-<a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
-<a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
 ]]></content>
   </entry>
   
