@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-11-07T11:48:17+08:00</updated>
+  <updated>2014-11-07T11:54:12+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -22,7 +22,7 @@
 
 <p>大家会发现搭建的Octopress访问的非常慢,除非翻墙才能访问的快<br/>
 其中原因就是googleapis.com相关的东西造成我们访问缓慢(GFW懂的入)<br/>
-这边感谢大神张吉给的意见<a href="https://github.com/jizhang/jizhang.github.com/commit/340817e45b1c3a0e6c0fcb09c5d153141358c59d">地址</a> <br/>
+这边感谢大神张吉给的意见<a href="https://github.com/jizhang/jizhang.github.com/commit/340817e45b1c3a0e6c0fcb09c5d153141358c59d">传送门</a> <br/>
 虽然大神写了,我这里还是补刀一下,自己记录一下</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
