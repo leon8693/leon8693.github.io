@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>yum 私有源 - 唯一的真理</title>
+  <title>octopress 加快博客访问速度 - 唯一的真理</title>
   <meta name="author" content="leon">
 
   
-  <meta name="description" content="yum,rpm,私有源,本地源">
-  <meta name="keywords" content="yum,rpm,私有源,本地源">
+  <meta name="description" content="Octopress 访问速度">
+  <meta name="keywords" content="Octopress">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://leon8693.github.io/blog/2014/10/15/yum-si-you-yuan">
+  <link rel="canonical" href="http://leon8693.github.io/blog/2014/11/07/octopress-jia-kuai-bo-ke-fang-wen-su-du">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="唯一的真理" type="application/atom+xml">
@@ -91,7 +91,7 @@
   
   <header>
     
-      <h1 class="entry-title">Yum 私有源</h1>
+      <h1 class="entry-title">Octopress 加快博客访问速度</h1>
     
     
       <p class="meta">
@@ -107,20 +107,19 @@
   
 
 
-<time datetime="2014-10-15T16:17:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2014</time>
+<time datetime="2014-11-07T11:08:00+08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><h2>yum私有源</h2>
+<div class="entry-content"><h2>增加Octopress访问速度</h2>
 
-<p>当自己制作RPM包后发现还需要一个私有的yum源 <br/>
-下面就自己搭建一个</p>
-
-<!-- more -->
-
+<p>大家会发现搭建的Octopress访问的非常慢,除非翻墙才能访问的快<br/>
+其中原因就是googleapis.com相关的东西造成我们访问缓慢(GFW懂的入)<br/>
+这边感谢大神张吉给的意见<a href="https://github.com/jizhang/jizhang.github.com/commit/340817e45b1c3a0e6c0fcb09c5d153141358c59d">地址</a> <br/>
+虽然大神写了,我这里还是补刀一下,自己记录一下</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -130,77 +129,32 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#安装需要的包
-</span><span class='line'>yum -y install createrepo 
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat source/_includes/head.html
 </span><span class='line'>
-</span><span class='line'>#创建需要存放RPM包的目录
-</span><span class='line'>mkdir -p /mnt/rpm/centos6
-</span><span class='line'>
-</span><span class='line'>#放入自定义的包
-</span><span class='line'>cp -rp php-leon-5.3.10-0.x86_64.rpm /mnt/rpm/centos6/
-</span><span class='line'>
-</span><span class='line'>#创建yum使用的createrepo索引
-</span><span class='line'>createrepo /mnt/rpm/centos6/
-</span><span class='line'>
-</span><span class='line'>#这里使用nginx中的http模式,所以编辑nginx
-</span><span class='line'>vim /etc/nginx/conf.d/yum.conf
-</span><span class='line'>server  {
-</span><span class='line'>        listen 80;
-</span><span class='line'>        server_name yum.leon.com;
-</span><span class='line'>        index  idex.html;
-</span><span class='line'>        autoindex on;
-</span><span class='line'>        root /mnt/rpm/;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>/etc/init.d/nginx reload
-</span><span class='line'>
-</span><span class='line'>#增加repo
-</span><span class='line'>vim /etc/yum.repos.d/leon.repo
-</span><span class='line'>[leon-centos6]
-</span><span class='line'>name=Extra Packages for Enterprise Linux 6 - $basearch
-</span><span class='line'>baseurl=http://yum.leon.com/rpm/
-</span><span class='line'>enabled=1
-</span><span class='line'>gpgcheck=0
-</span><span class='line'>keepcache=1
-</span><span class='line'>gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-6
-</span><span class='line'>
-</span><span class='line'>#yum makecache内容
-</span><span class='line'>yum makecache
-</span><span class='line'>
-</span><span class='line'>yum install php-leon -y</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>  &lt;script src="/javascripts/modernizr-2.0.js"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;!-- &lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"&gt;&lt;/script&gt;                                                                                                                           
+</span><span class='line'>  &lt;script&gt;!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))&lt;/script&gt; --&gt;
+</span><span class='line'>  &lt;script src="/javascripts/libs/jquery.min.js"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;script src="/javascripts/octopress.js" type="text/javascript"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;script&gt;
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>大功告成！</p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat source/_includes/custom/head.html
+</span><span class='line'>
+</span><span class='line'>&lt;!--Fonts from Google"s Web font directory at http://google.com/webfonts --&gt;
+</span><span class='line'>&lt;!-- &lt;link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"&gt;  --&gt;
+</span><span class='line'>&lt;!-- &lt;link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"&gt; --&gt;      </span></code></pre></td></tr></table></div></figure>
+
+
+<p>好了就到这,再访问一下blog是不是很快: )</p>
 </div>
 
 
@@ -223,12 +177,12 @@
   
 
 
-<time datetime="2014-10-15T16:17:00+08:00" pubdate data-updated="true">Oct 15<span>th</span>, 2014</time>
+<time datetime="2014-11-07T11:08:00+08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/other/'>Other</a>
+    <a class='category' href='/blog/categories/octopress/'>Octopress</a>
   
 </span>
 
@@ -265,10 +219,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2014/10/14/rpmbuild-da-bao-rpmshi-zhan/" title="Previous Post: rpmbuild 打包rpm实战">&laquo; rpmbuild 打包rpm实战</a>
+        <a class="basic-alignment left" href="/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4/" title="Previous Post: zabbix 2.4.1 自定义邮件报警 (四)">&laquo; zabbix 2.4.1 自定义邮件报警 (四)</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2014/10/16/zabbix-2-dot-4-1-install-1/" title="Next Post: zabbix 2.4.1 安装 （一）">zabbix 2.4.1 安装 （一） &raquo;</a>
       
     </p>
   </footer>

@@ -94,6 +94,71 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/">Maptail展现中国地图</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-08-01T16:29:00+08:00" pubdate data-updated="true">Aug 1<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>声明</h3>
+
+<p>本篇文章转自王强blog<br/>
+blog地址:<a href="http://qiangwang.github.io/2013/01/27/maptail-china-map.html">maptail展现中国地图</a> <br/>
+github地址:<a href="https://github.com/qiangwang/maptail">maptail-github</a></p>
+
+<h1>maptail</h1>
+
+<p><img src="http://qiangwang.github.io/img/maptail-china-map.png" border="0" /></p>
+
+<p>maptail is a realtime map view of GeoIP data. Attach it to your server to track visitors, tail a log, pipe to its stdin or use it as a library to build your own implementation. Just emit IP addresses to it from any source and you&rsquo;ll automagically get a cool map with yellow dots and stuff like that streamed in with websockets or whatever transport you&rsquo;d like to use.</p>
+
+<h2>Installing</h2>
+
+<p><code>npm install maptail -g</code></p>
+
+<p>Omit the <code>-g</code> to install as a module.</p>
+
+<h2>How to use</h2>
+
+<h3>The command line tool:</h3>
+
+<p><code>$ maptail -f nohup.out</code></p>
+
+<p><code>$ tail -f nohup.out | maptail -h my.host.com -p 3000</code></p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/08/01/maptailzhan-xian-zhong-guo-di-tu/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/06/13/redis-sentinel-hazi-dong-qie-huan/">Redis Sentinel HA自动切换</a></h1>
     
     
@@ -552,68 +617,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/05/awk-and-sed/">Awk and Sed</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-05T11:05:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h3>AWK</h3>
-
-<p>通过-F分割段落并将输出的内容，以一行2个组成2列</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#文本内容
-</span><span class='line'>cat test
-</span><span class='line'>"111" : "33333"
-</span><span class='line'>"222" : "44444"
-</span><span class='line'>"333" : "55555"
-</span><span class='line'>"444" : "66666"
-</span><span class='line'>
-</span><span class='line'>#结果
-</span><span class='line'>awk -F'[":]' 'NR%2{printf $5" ";next}{print $5}' test
-</span><span class='line'>33333 44444
-</span><span class='line'>55555 66666</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -634,7 +637,7 @@
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
 <li class='category'><a href='/blog/categories/monitor/'>Monitor (4)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (10)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>
 

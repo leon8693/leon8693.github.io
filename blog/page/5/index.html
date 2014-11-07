@@ -94,6 +94,68 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/05/05/awk-and-sed/">Awk and Sed</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-05T11:05:00+08:00" pubdate data-updated="true">May 5<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h3>AWK</h3>
+
+<p>通过-F分割段落并将输出的内容，以一行2个组成2列</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#文本内容
+</span><span class='line'>cat test
+</span><span class='line'>"111" : "33333"
+</span><span class='line'>"222" : "44444"
+</span><span class='line'>"333" : "55555"
+</span><span class='line'>"444" : "66666"
+</span><span class='line'>
+</span><span class='line'>#结果
+</span><span class='line'>awk -F'[":]' 'NR%2{printf $5" ";next}{print $5}' test
+</span><span class='line'>33333 44444
+</span><span class='line'>55555 66666</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/04/25/python/">Python Class</a></h1>
     
     
@@ -330,73 +392,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan/">Linux备份数据至百度网盘</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-11-20T14:59:00+08:00" pubdate data-updated="true">Nov 20<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>前阵同事说百度网盘可以升级到2TB级的空间，井底之蛙的我，才发现自己用的百度网盘才6G，弱爆了，果断升级，但是怎么大的空间如何利用呢？所以想定期对自己linux系统下的文件进行备份放入百度网盘，这时候谷哥，度娘发挥作用了，我将搜咯到的资料进行整合，写下这个篇文章。</p>
-
-<h3>下载安装bpcs_uploader百度pcs上传脚本</h3>
-
-<h4>下载安装</h4>
-
-<p>bpcs_uploader作者官网<br/>
-<a href="http://oott123.github.io/bpcs_uploader/">http://oott123.github.io/bpcs_uploader/</a></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget https://github.com/oott123/bpcs_uploader/zipball/master <span class="c">#下载zip文件</span>
-</span><span class='line'>unzip master  <span class="c">#解压</span>
-</span><span class='line'>mv oott123-bpcs_uploader-ecb07c3 bpcs_uploader <span class="c">#重命名</span>
-</span><span class='line'><span class="nb">cd </span>bpcs_uploader
-</span><span class='line'>chmod +x bpcs_uploader.php <span class="c">#赋予执行权限</span>
-</span><span class='line'>yum install php curl -y   <span class="c">#安装需要的软件包</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/6/">&larr; Older</a>
@@ -417,7 +412,7 @@
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
 <li class='category'><a href='/blog/categories/monitor/'>Monitor (4)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (10)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>
 

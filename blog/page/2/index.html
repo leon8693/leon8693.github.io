@@ -94,6 +94,189 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/10/16/zabbix-2-dot-4-1-install-1/">Zabbix 2.4.1 安装 （一）</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-10-16T15:09:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>下载zabbix 2.4.1</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/2.4.1/zabbix-2.4.1.tar.gz/download -O zabbix-2.4.1.tar.gz
+</span><span class='line'>yum install libc-client.x86_64 curl-devel.x86_64 openssl-devel.x86_64 libpng-devel.x86_64 libjpeg-devel.x86_64 mysql.x86_64 mysql-devel.x86_64 libc-client-devel bzip2-devel.x86_64 gmp-devel.x86_64 libmcrypt-devel.x86_64 libxslt-devel.x86_64 libtool-ltdl-devel.x86_64 freetype-devel freetype -y
+</span><span class='line'>yum install php-leon -y    #这个包可以参考rpm制作篇</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置PHP</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#修改几个配置
+</span><span class='line'>vim /usr/local/php-fpm/lib/php.ini
+</span><span class='line'>max_execution_time = 300
+</span><span class='line'>max_input_time=300
+</span><span class='line'>date.timezone = Asia/Shanghai
+</span><span class='line'>post_max_size = 32M
+</span><span class='line'>memory_limit = 128M
+</span><span class='line'>error_reporting = E_ALL & ~E_NOTICE
+</span><span class='line'>short_open_tag = On
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#修改php-fpm配置
+</span><span class='line'>[global]
+</span><span class='line'>pid = /usr/local/php-fpm/var/run/php-fpm.pid
+</span><span class='line'>error_log = /mnt/data1/logs/php-fpm/php-fpm.log
+</span><span class='line'>log_level = notice
+</span><span class='line'>emergency_restart_threshold = 20
+</span><span class='line'>emergency_restart_interval = 10m
+</span><span class='line'>process_control_timeout = 10s
+</span><span class='line'>events.mechanism = epoll
+</span><span class='line'>[php-1]
+</span><span class='line'>user = nobody
+</span><span class='line'>group = nobody
+</span><span class='line'>listen = /usr/local/php-fpm/php-fpm.sock
+</span><span class='line'>listen.backlog = -1
+</span><span class='line'>pm = dynamic
+</span><span class='line'>pm.max_children = 80
+</span><span class='line'>pm.start_servers = 10
+</span><span class='line'>pm.min_spare_servers = 5
+</span><span class='line'>pm.max_spare_servers = 20
+</span><span class='line'>pm.max_requests = 500
+</span><span class='line'>pm.status_path = /status
+</span><span class='line'>access.log = /mnt/data1/logs/php-fpm/php-access.log
+</span><span class='line'>access.format = %m - [%u %t] " "%n"   ""%r%Q%q""    "%s"   "%{mili}d"   "%{kilobytes}M" "%C%%
+</span><span class='line'>slowlog = /mnt/data1/logs/php-fpm/php_slow.log
+</span><span class='line'>request_slowlog_timeout = 1s
+</span><span class='line'>request_terminate_timeout = 120s
+</span><span class='line'>rlimit_files = 65535
+</span><span class='line'>rlimit_core = unlimited
+</span><span class='line'>catch_workers_output = yes
+</span><span class='line'>env[HOSTNAME] = $HOSTNAME
+</span><span class='line'>env[TMP] = /tmp
+</span><span class='line'>env[TMPDIR] = /tmp
+</span><span class='line'>env[TEMP] = /tmp
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#php添加gettext模块,jpeg模块,FreeType模块
+</span><span class='line'>yum install autoconf m4 -y
+</span><span class='line'>cd php-5.3.10/ext/gettext/
+</span><span class='line'>/usr/local/php-fpm/bin/phpize
+</span><span class='line'>./configure && make && make install
+</span><span class='line'>
+</span><span class='line'>cd php-5.3.10/ext/gd/   #我打的php包中没有使用默认gd,这边可以方便一起添加jpeg和freetype,不然需要重新编译
+</span><span class='line'>./configure --with-jpeg-dir=/usr/lib64/ --with-freetype-dir=/usr/lib64/
+</span><span class='line'>make && make install 
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>#在php.ini配置文件中增加
+</span><span class='line'>vim /usr/local/php-fpm/lib/php.ini
+</span><span class='line'>[getext]
+</span><span class='line'>extension=gettext.so
+</span><span class='line'>[gd]
+</span><span class='line'>extension=gd.so
+</span><span class='line'>/usr/local/php-fpm/bin/php -m |grep "gettext" #存在说明完成
+</span><span class='line'>/etc/init.d/php-fpm start</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/10/16/zabbix-2-dot-4-1-install-1/">继续阅读 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/10/15/yum-si-you-yuan/">Yum 私有源</a></h1>
     
     
@@ -280,119 +463,6 @@ angel01是DNS SERVER,angel02是客户端,我们做一个让angel01的resolv.conf
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/">Saltstack Grains,pillar,sls模板,jinja模板 (四)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-09-30T16:16:00+08:00" pubdate data-updated="true">Sep 30<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>grains</h2>
-
-<p>grains类似puppet的facter一样 负责采集客户端一些基本信息,也可以自定义</p>
-
-<h4>grains使用</h4>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>salt -E 'angel01' grains.ls   #查看有多少定义好的属性可以用
-</span><span class='line'>salt -E 'angel01' grains.items #查看所有属性返回的值
-</span><span class='line'>salt -E 'angel01' grains.item fqdn os #查看fqdn os 返回的值,以此类推</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>grains自定义</h4>
-
-<h5>服务端主动推送</h5>
-
-<p>master上操作</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vim /mnt/config/salt/master
-</span><span class='line'>增加默认目录
-</span><span class='line'>file_roots:
-</span><span class='line'>  base:
-</span><span class='line'>      - /mnt/config/salt/
-</span><span class='line'>
-</span><span class='line'>mkdir -p /mnt/config/salt/_grains/
-</span><span class='line'>vim /mnt/config/salt/_grains/test.py
-</span><span class='line'># -*- coding: utf-8 -*-
-</span><span class='line'>
-</span><span class='line'>'''
-</span><span class='line'>leon test
-</span><span class='line'>'''
-</span><span class='line'>import commands
-</span><span class='line'>import os
-</span><span class='line'>
-</span><span class='line'>def l_test():
-</span><span class='line'>    '''
-</span><span class='line'>    leon test
-</span><span class='line'>    '''
-</span><span class='line'>    grains={}
-</span><span class='line'>    a = commands.getoutput("hostname")
-</span><span class='line'>    grains['leon_test']=a
-</span><span class='line'>
-</span><span class='line'>    return grains</span></code></pre></td></tr></table></div></figure>
-
-
-<p>使用命令<code>saltutil.sync_all</code>进行推送</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/09/30/saltstack-grains-pillar-slsmo-ban-jinjamo-ban-4/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -413,7 +483,7 @@ angel01是DNS SERVER,angel02是客户端,我们做一个让angel01的resolv.conf
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
 <li class='category'><a href='/blog/categories/monitor/'>Monitor (4)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (10)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>
 

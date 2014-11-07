@@ -94,6 +94,82 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/11/07/octopress-jia-kuai-bo-ke-fang-wen-su-du/">Octopress 加快博客访问速度</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-11-07T11:08:00+08:00" pubdate data-updated="true">Nov 7<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>增加Octopress访问速度</h2>
+
+<p>大家会发现搭建的Octopress访问的非常慢,除非翻墙才能访问的快<br/>
+其中原因就是googleapis.com相关的东西造成我们访问缓慢(GFW懂的入)<br/>
+这边感谢大神张吉给的意见<a href="https://github.com/jizhang/jizhang.github.com/commit/340817e45b1c3a0e6c0fcb09c5d153141358c59d">地址</a> <br/>
+虽然大神写了,我这里还是补刀一下,自己记录一下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat source/_includes/head.html
+</span><span class='line'>
+</span><span class='line'>  &lt;script src="/javascripts/modernizr-2.0.js"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;!-- &lt;script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"&gt;&lt;/script&gt;                                                                                                                           
+</span><span class='line'>  &lt;script&gt;!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))&lt;/script&gt; --&gt;
+</span><span class='line'>  &lt;script src="/javascripts/libs/jquery.min.js"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;script src="/javascripts/octopress.js" type="text/javascript"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;script&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat source/_includes/custom/head.html
+</span><span class='line'>
+</span><span class='line'>&lt;!--Fonts from Google"s Web font directory at http://google.com/webfonts --&gt;
+</span><span class='line'>&lt;!-- &lt;link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"&gt;  --&gt;
+</span><span class='line'>&lt;!-- &lt;link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"&gt; --&gt;      </span></code></pre></td></tr></table></div></figure>
+
+
+<p>好了就到这,再访问一下blog是不是很快: )</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/10/24/zabbix-2-dot-4-1-zi-ding-yi-you-jian-bao-jing-4/">Zabbix 2.4.1 自定义邮件报警 (四)</a></h1>
     
     
@@ -265,189 +341,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/10/16/zabbix-2-dot-4-1-install-1/">Zabbix 2.4.1 安装 （一）</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-10-16T15:09:00+08:00" pubdate data-updated="true">Oct 16<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>下载zabbix 2.4.1</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/2.4.1/zabbix-2.4.1.tar.gz/download -O zabbix-2.4.1.tar.gz
-</span><span class='line'>yum install libc-client.x86_64 curl-devel.x86_64 openssl-devel.x86_64 libpng-devel.x86_64 libjpeg-devel.x86_64 mysql.x86_64 mysql-devel.x86_64 libc-client-devel bzip2-devel.x86_64 gmp-devel.x86_64 libmcrypt-devel.x86_64 libxslt-devel.x86_64 libtool-ltdl-devel.x86_64 freetype-devel freetype -y
-</span><span class='line'>yum install php-leon -y    #这个包可以参考rpm制作篇</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>配置PHP</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#修改几个配置
-</span><span class='line'>vim /usr/local/php-fpm/lib/php.ini
-</span><span class='line'>max_execution_time = 300
-</span><span class='line'>max_input_time=300
-</span><span class='line'>date.timezone = Asia/Shanghai
-</span><span class='line'>post_max_size = 32M
-</span><span class='line'>memory_limit = 128M
-</span><span class='line'>error_reporting = E_ALL & ~E_NOTICE
-</span><span class='line'>short_open_tag = On
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>#修改php-fpm配置
-</span><span class='line'>[global]
-</span><span class='line'>pid = /usr/local/php-fpm/var/run/php-fpm.pid
-</span><span class='line'>error_log = /mnt/data1/logs/php-fpm/php-fpm.log
-</span><span class='line'>log_level = notice
-</span><span class='line'>emergency_restart_threshold = 20
-</span><span class='line'>emergency_restart_interval = 10m
-</span><span class='line'>process_control_timeout = 10s
-</span><span class='line'>events.mechanism = epoll
-</span><span class='line'>[php-1]
-</span><span class='line'>user = nobody
-</span><span class='line'>group = nobody
-</span><span class='line'>listen = /usr/local/php-fpm/php-fpm.sock
-</span><span class='line'>listen.backlog = -1
-</span><span class='line'>pm = dynamic
-</span><span class='line'>pm.max_children = 80
-</span><span class='line'>pm.start_servers = 10
-</span><span class='line'>pm.min_spare_servers = 5
-</span><span class='line'>pm.max_spare_servers = 20
-</span><span class='line'>pm.max_requests = 500
-</span><span class='line'>pm.status_path = /status
-</span><span class='line'>access.log = /mnt/data1/logs/php-fpm/php-access.log
-</span><span class='line'>access.format = %m - [%u %t] " "%n"   ""%r%Q%q""    "%s"   "%{mili}d"   "%{kilobytes}M" "%C%%
-</span><span class='line'>slowlog = /mnt/data1/logs/php-fpm/php_slow.log
-</span><span class='line'>request_slowlog_timeout = 1s
-</span><span class='line'>request_terminate_timeout = 120s
-</span><span class='line'>rlimit_files = 65535
-</span><span class='line'>rlimit_core = unlimited
-</span><span class='line'>catch_workers_output = yes
-</span><span class='line'>env[HOSTNAME] = $HOSTNAME
-</span><span class='line'>env[TMP] = /tmp
-</span><span class='line'>env[TMPDIR] = /tmp
-</span><span class='line'>env[TEMP] = /tmp
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>#php添加gettext模块,jpeg模块,FreeType模块
-</span><span class='line'>yum install autoconf m4 -y
-</span><span class='line'>cd php-5.3.10/ext/gettext/
-</span><span class='line'>/usr/local/php-fpm/bin/phpize
-</span><span class='line'>./configure && make && make install
-</span><span class='line'>
-</span><span class='line'>cd php-5.3.10/ext/gd/   #我打的php包中没有使用默认gd,这边可以方便一起添加jpeg和freetype,不然需要重新编译
-</span><span class='line'>./configure --with-jpeg-dir=/usr/lib64/ --with-freetype-dir=/usr/lib64/
-</span><span class='line'>make && make install 
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>#在php.ini配置文件中增加
-</span><span class='line'>vim /usr/local/php-fpm/lib/php.ini
-</span><span class='line'>[getext]
-</span><span class='line'>extension=gettext.so
-</span><span class='line'>[gd]
-</span><span class='line'>extension=gd.so
-</span><span class='line'>/usr/local/php-fpm/bin/php -m |grep "gettext" #存在说明完成
-</span><span class='line'>/etc/init.d/php-fpm start</span></code></pre></td></tr></table></div></figure>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/10/16/zabbix-2-dot-4-1-install-1/">继续阅读 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -466,7 +359,7 @@
 <li class='category'><a href='/blog/categories/django/'>Django (1)</a></li>
 <li class='category'><a href='/blog/categories/fastdfs/'>FastDFS (3)</a></li>
 <li class='category'><a href='/blog/categories/monitor/'>Monitor (4)</a></li>
-<li class='category'><a href='/blog/categories/octopress/'>Octopress (9)</a></li>
+<li class='category'><a href='/blog/categories/octopress/'>Octopress (10)</a></li>
 <li class='category'><a href='/blog/categories/other/'>Other (5)</a></li>
 <li class='category'><a href='/blog/categories/python/'>Python (2)</a></li>
 

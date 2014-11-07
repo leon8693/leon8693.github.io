@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-11-07T10:39:23+08:00</updated>
+  <updated>2014-11-07T11:48:17+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[octopress 加快博客访问速度]]></title>
+    <link href="http://leon8693.github.io/blog/2014/11/07/octopress-jia-kuai-bo-ke-fang-wen-su-du/"/>
+    <updated>2014-11-07T11:08:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/11/07/octopress-jia-kuai-bo-ke-fang-wen-su-du</id>
+    <content type="html"><![CDATA[<h2>增加Octopress访问速度</h2>
+
+<p>大家会发现搭建的Octopress访问的非常慢,除非翻墙才能访问的快<br/>
+其中原因就是googleapis.com相关的东西造成我们访问缓慢(GFW懂的入)<br/>
+这边感谢大神张吉给的意见<a href="https://github.com/jizhang/jizhang.github.com/commit/340817e45b1c3a0e6c0fcb09c5d153141358c59d">地址</a> <br/>
+虽然大神写了,我这里还是补刀一下,自己记录一下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat source/_includes/head.html
+</span><span class='line'>
+</span><span class='line'>  &lt;script src="http://leon8693.github.io/javascripts/modernizr-2.0.js"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;!-- &lt;script src="http://leon8693.github.io//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"&gt;&lt;/script&gt;                                                                                                                           
+</span><span class='line'>  &lt;script&gt;!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))&lt;/script&gt; --&gt;
+</span><span class='line'>  &lt;script src="http://leon8693.github.io/javascripts/libs/jquery.min.js"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;script src="http://leon8693.github.io/javascripts/octopress.js" type="text/javascript"&gt;&lt;/script&gt;
+</span><span class='line'>  &lt;script&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cat source/_includes/custom/head.html
+</span><span class='line'>
+</span><span class='line'>&lt;!--Fonts from Google"s Web font directory at http://google.com/webfonts --&gt;
+</span><span class='line'>&lt;!-- &lt;link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"&gt;  --&gt;
+</span><span class='line'>&lt;!-- &lt;link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"&gt; --&gt;      </span></code></pre></td></tr></table></div></figure>
+
+
+<p>好了就到这,再访问一下blog是不是很快: )</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 自定义邮件报警 (四)]]></title>
@@ -4133,204 +4182,6 @@ ab 详细信息 <br/>
 <h6>T 参数按请求宽高比例按比例缩放/放大到指定尺寸（ 图片缩略图大小可能小于请求的宽高 )</h6>
 
 <h6>W 参数按请求宽高比例缩放/放大到指定尺寸，空白处填充白色背景颜色（ 图片缩略图大小等于请求的宽高 ）</h6>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Linux备份数据至百度网盘]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan/"/>
-    <updated>2013-11-20T14:59:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/20/linuxbei-fen-shu-ju-zhi-bai-du-wang-pan</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>前阵同事说百度网盘可以升级到2TB级的空间，井底之蛙的我，才发现自己用的百度网盘才6G，弱爆了，果断升级，但是怎么大的空间如何利用呢？所以想定期对自己linux系统下的文件进行备份放入百度网盘，这时候谷哥，度娘发挥作用了，我将搜咯到的资料进行整合，写下这个篇文章。</p>
-
-<h3>下载安装bpcs_uploader百度pcs上传脚本</h3>
-
-<h4>下载安装</h4>
-
-<p>bpcs_uploader作者官网<br/>
-<a href="http://oott123.github.io/bpcs_uploader/">http://oott123.github.io/bpcs_uploader/</a></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget https://github.com/oott123/bpcs_uploader/zipball/master <span class="c">#下载zip文件</span>
-</span><span class='line'>unzip master  <span class="c">#解压</span>
-</span><span class='line'>mv oott123-bpcs_uploader-ecb07c3 bpcs_uploader <span class="c">#重命名</span>
-</span><span class='line'><span class="nb">cd </span>bpcs_uploader
-</span><span class='line'>chmod +x bpcs_uploader.php <span class="c">#赋予执行权限</span>
-</span><span class='line'>yum install php curl -y   <span class="c">#安装需要的软件包</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<!-- more -->
-
-
-<h4>百度网盘申请应用</h4>
-
-<p>地址:<a href="http://developer.baidu.com/dev#/create  ">http://developer.baidu.com/dev#/create  </a>
-<img src="http://leon8693.github.io/images/blog_img/api3.png" alt="申请百度应用" /></p>
-
-<p>这个链接可以看到你有多少应用<br/>
-<a href="http://developer.baidu.com/console#app">http://developer.baidu.com/console#app</a>
-<img src="http://leon8693.github.io/images/blog_img/api4.png" alt="查看应用" /></p>
-
-<p>点击API管理<br/>
-<img src="http://leon8693.github.io/images/blog_img/api5.png" alt="API管理" /></p>
-
-<p>打开PCS API<br/>
-<img src="http://leon8693.github.io/images/blog_img/api6.png" alt="API PCS" /></p>
-
-<p>设置目录  <br/>
-<img src="http://leon8693.github.io/images/blog_img/api7.png" alt="API FILE" /></p>
-
-<p>记录KEY <br/>
-<img src="http://leon8693.github.io/images/blog_img/api8.png" alt="API KEY" /></p>
-
-<p>运行bpcs_uploader.php</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>./bpcs_uploader.php init <span class="c">#初始化</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://leon8693.github.io/images/blog_img/api.png" alt="bpcs init" />
-1. 初始化选择Y  <br/>
-2. 输入你前面API KEY值 <br/>
-3. 输入你前面API SECRET值 <br/>
-4. 输入开启API接口时创建的目录名称<br/>
-5. 登入链接输入KEY激活<br/>
-6. 成功则显示你所使用的容量和空余容量</p>
-
-<h3>使用bpcs_uploader上传测试</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>/root/scripts/bpcs_uploader/bpcs_uploader.php upload  /tmp/test.html /test/test.html
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://leon8693.github.io/images/blog_img/api10.png" alt="bpcs_uploader upload" /></p>
-
-<h4>查看网盘</h4>
-
-<p>登入自己的网盘发现居然有那个文件了！以此类推，就可以在linux下备份数据到百度网盘了。NICE！<br/>
-<img src="http://leon8693.github.io/images/blog_img/api11.png" alt="bpcs_uploader upload" /></p>
-
-<h3>bpcs_uploader基本命令</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">quota</span> <span class="c1">#查看配额</span>
-</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">upload</span> <span class="p">[</span><span class="nx">path_local</span><span class="p">]</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span> <span class="c1">#上传文件</span>
-</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">download</span> <span class="p">[</span><span class="nx">path_local</span><span class="p">]</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span>  <span class="c1">#下载文件</span>
-</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">delete</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span>  <span class="c1">#删除文件</span>
-</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">fetch</span> <span class="p">[</span><span class="nx">path_remote</span><span class="p">]</span> <span class="p">[</span><span class="nx">path_to_fetch</span><span class="p">]</span> <span class="c1">#离线下载</span>
-</span><span class='line'><span class="o">./</span><span class="nx">bpcs_uploader</span><span class="o">.</span><span class="nx">php</span> <span class="nx">init</span> <span class="c1">#初始化</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>bpcs_uploader配置解释</h3>
-
-<p>在<code>bpcs_uploader/_bpcs_files_/config</code>下注意几个文件</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="nx">bpcs_uploader</span><span class="o">/</span><span class="nx">_bpcs_files_</span><span class="o">/</span><span class="nx">config</span>
-</span><span class='line'><span class="err">├──</span> <span class="nx">access_token</span>
-</span><span class='line'><span class="err">├──</span> <span class="nx">appkey</span>     <span class="c1">#前面填入的appkey</span>
-</span><span class='line'><span class="err">├──</span> <span class="nx">appname</span>    <span class="c1">#百度网盘应用的目录</span>
-</span><span class='line'><span class="err">├──</span> <span class="nx">appsec</span> <span class="c1">#前面天如的appsec</span>
-</span><span class='line'><span class="err">├──</span> <span class="nx">config</span><span class="o">.</span><span class="nx">lock</span>
-</span><span class='line'><span class="err">├──</span> <span class="nx">readme</span><span class="o">.</span><span class="nx">txt</span>
-</span><span class='line'><span class="err">└──</span> <span class="nx">refresh_token</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>linux下载百度网盘</h3>
-
-<p>进入自己的网盘找到需要下载的文件<br/>
-创建分享链接<br/>
-<img src="http://leon8693.github.io/images/blog_img/wget1.png" alt="linke" /><br/>
-<img src="http://leon8693.github.io/images/blog_img/wget2.png" alt="linke" /> <br/>
-查看链接，firebug等工具查看<br/>
-<img src="http://leon8693.github.io/images/blog_img/wget3.png" alt="find" /></p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>wget -c -O leon.png <span class="s2">&quot;http://d.pcs.baidu.com/thumbnail/be04f0e3e6e96e2102ff9c376778915b?fid=1191379893-250528-3966810088&amp;time=1385030781&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-6tGvvJKsVQd%2FKXr5mscLmcGSFyQ%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=unknown&amp;r=984765212&amp;size=c710_u500&amp;quality=100&quot;</span>
-</span><span class='line'>-c <span class="c">#断点续传</span>
-</span><span class='line'>-O <span class="c">#指定下载下来的文件名称</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>就怎么简单！</p>
-
-<h3>多线程下载百度网盘</h3>
-
-<p>由于wget只能单线程,可是有些大文件单线程实在太慢了,所以需要找个能够多线程的下载工具<br/>
-Axel下载</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#Centos6.4 i686 i386</span>
-</span><span class='line'>wget http://pkgs.repoforge.org/axel/axel-2.4-1.el6.rf.i686.rpm
-</span><span class='line'>rpm -ivh axel-2.4-1.el6.rf.i686.rpm
-</span><span class='line'>
-</span><span class='line'><span class="c">#Ubuntu 12.04</span>
-</span><span class='line'>apt-get install axel
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>根据系统不一样下载相应的包,并安装</p>
-
-<p>使用axel下载百度网盘里的大文件,这里我下一个视频大小为188M</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#用9个线程下载</span>
-</span><span class='line'>axel -n 9 <span class="s2">&quot;http://d.pcs.baidu.com/file/2eab76d2c3fee9335378275313f18d40?fid=1191379893-250528-2944587601&amp;time=1385032735&amp;sign=FDTAER-DCb740ccc5511e5e8fedcff06b081203-WLdPSqPZBPH2ogqHIEfBTfYbWKk%3D&amp;rt=sh&amp;expires=8h&amp;sharesign=zOo3WfKU2OHg3ebqvI82xwvc2lHPOnXMCe3I8C9LQ8dveBIuprdikBzxxswmQru+GIgsZD9TtLI=&amp;r=553543714&amp;sh=1&amp;cflg=65535&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c">#axel常用参数</span>
-</span><span class='line'>-n <span class="c">#线程数</span>
-</span><span class='line'>-s <span class="c">#限速,如-s 10240即每秒10K</span>
-</span><span class='line'>-o <span class="c">#指定另存目录</span>
-</span><span class='line'>-q <span class="c">#静默模式</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><img src="http://leon8693.github.io/images/blog_img/axel1.png" alt="axel" /></p>
-
-<p>再看看单线程的wget <br/>
-<img src="http://leon8693.github.io/images/blog_img/wget4.png" alt="wget" /></p>
-
-<p>还是很大的差距的，但是建议不要用axel开太多的进程，控制在100以内。</p>
 ]]></content>
   </entry>
   

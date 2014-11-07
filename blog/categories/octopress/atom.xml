@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-11-07T10:39:23+08:00</updated>
+  <updated>2014-11-07T11:48:17+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,49 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[octopress 加快博客访问速度]]></title>
+    <link href="http://leon8693.github.io/blog/2014/11/07/octopress-jia-kuai-bo-ke-fang-wen-su-du/"/>
+    <updated>2014-11-07T11:08:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/11/07/octopress-jia-kuai-bo-ke-fang-wen-su-du</id>
+    <content type="html"><![CDATA[<h2>增加Octopress访问速度</h2>
+
+<p>大家会发现搭建的Octopress访问的非常慢,除非翻墙才能访问的快<br/>
+其中原因就是googleapis.com相关的东西造成我们访问缓慢(GFW懂的入)<br/>
+这边感谢大神张吉给的意见<a href="https://github.com/jizhang/jizhang.github.com/commit/340817e45b1c3a0e6c0fcb09c5d153141358c59d">地址</a> <br/>
+虽然大神写了,我这里还是补刀一下,自己记录一下</p>
+
+<p>```
+cat source/_includes/head.html</p>
+
+<p>  <script src="/javascripts/modernizr-2.0.js"></script>
+  <!-- <script src="http://leon8693.github.io//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>                                                                                                                         <br/>
+  <script>!window.jQuery &amp;&amp; document.write(unescape(&lsquo;%3Cscript src=&ldquo;./javascripts/lib/jquery.min.js&rdquo;%3E%3C/script%3E&rsquo;))</script> &mdash;>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <script></p>
+
+<p>```</p>
+
+<p>```
+cat source/_includes/custom/head.html</p>
+
+<!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+
+
+<!-- <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">  -->
+
+
+<!-- <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css"> -->
+
+
+<p>    <br/>
+```</p>
+
+<p>好了就到这,再访问一下blog是不是很快: )</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopress样式修改]]></title>
@@ -391,77 +434,6 @@ default_asides: [asides/category_list.html,asides/weibo.html,asides/earth.html]
 <a href="http://812lcl.github.io/blog/2013/10/29/octopresstian-jia-tong-ji-yu-seo/">Octopress添加统计与SEO</a>  <br/>
 <a href="http://812lcl.github.io/blog/2013/10/27/octopresszhu-ti-yang-shi-xiu-gai/">Octopress主题样式修改</a> <br/>
 <a href="http://812lcl.github.io/blog/2013/10/26/octopressce-bian-lan-ji-ping-lun-xi-tong-ding-zhi/">Octopress侧边栏及评论系统定制</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress新浪微博侧边栏]]></title>
-    <link href="http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan/"/>
-    <updated>2013-11-13T15:26:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/11/13/octopressxin-lang-wei-bo-ce-bian-lan</id>
-    <content type="html"><![CDATA[<h3>增加新浪微博侧边栏</h3>
-
-<h4>先通过微博秀</h4>
-
-<p><a href="http://app.weibo.com/tool/weiboshow">http://app.weibo.com/tool/weiboshow</a> <br/>
-找到自己的代码
-```bash</p>
-
-<iframe 
-width="100%" 
-height="550"
- class="share_self" 
- frameborder="0" 
-scrolling="no" 
-src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=xxxxxxxx&verifier=xxxxxxxx">
-</iframe>
-
-
-<p>```</p>
-
-<!-- more -->
-
-
-<h4>将上面的代码转换成HTML</h4>
-
-<p>octopress/source/_includes/asides/weibo.html
-```bash
-
-<section>
-  <h1>新浪微博</h1>
-  <ul id="weibo"></p>
-
-<pre><code>&lt;li&gt;
-  &lt;iframe
-    width="100%"
-    height="550"
-    class="share_self"
-    frameborder="0"
-    scrolling="no"
-    src=""http://widget.weibo.com/weiboshow/index.php?width=0&amp;height=550&amp;ptype=1&amp;speed=0&amp;skin=&amp;isTitle=0&amp;noborder=1&amp;isWeibo=1&amp;isFans=&amp;uid=1961590125&amp;verifier=9b2b2fd0&dpc=1"&gt;
-  &lt;/iframe&gt;
-&lt;/li&gt;
-</code></pre>
-
-<p>  </ul>
-</section>
-
-```</p>
-
-<h4>配置文件中增加参数</h4>
-
-<p>octopress/source/_config.yml</p>
-
-<p>```bash
-default_asides: [asides/category_list.html,asides/weibo.html]</p>
-
-<p>weibo_uid: xxxx     #微博中的uid，从微博秀中获得
-weibo_verifier: xxxx     #微博中的verifier 从微博秀中获得
-weibo_fansline: 1     #显示粉丝的数量，1行
-weibo_show: true     #是否显示内容
-weibo_pic: true         #是否显示图片
-weibo_skin: 10          #使用哪种风格的10为序号10的风格
-```</p>
 ]]></content>
   </entry>
   
