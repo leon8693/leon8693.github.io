@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Monitor | 唯一的真理]]></title>
   <link href="http://leon8693.github.io/blog/categories/monitor/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-11-07T11:54:12+08:00</updated>
+  <updated>2014-11-17T16:56:35+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 lld模板 (五)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/11/17/zabbix-2-dot-4-1-lldmo-ban-5/"/>
+    <updated>2014-11-17T16:21:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/11/17/zabbix-2-dot-4-1-lldmo-ban-5</id>
+    <content type="html"><![CDATA[<h2>lld模板</h2>
+
+<p>这里将收集lld各类模板</p>
+
+<blockquote><p>1.<a href="https://github.com/jizhang/zabbix-templates/tree/master/mysql-v2">Mysql</a> <br/>
+2.<a href="https://github.com/leon8693/zabbix_template/tree/master/Redis">Redis</a></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[zabbix 2.4.1 自定义邮件报警 (四)]]></title>
@@ -40,9 +54,9 @@ USER_LIST=&ldquo;$1&rdquo;          #收件人列表
 SUBJECT=&ldquo;$2&rdquo;            #主题
 MESSAGE=&ldquo;$3&rdquo;            #内容
 SMTP=&ldquo;smtp.gmail.com&rdquo;
-USERNAME=&ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#58;&#x61;&#x61;&#x61;&#x40;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#99;&#111;&#109;">&#97;&#97;&#97;&#64;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;</a>&rdquo;
+USERNAME=&ldquo;<a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#97;&#x61;&#97;&#64;&#x67;&#109;&#x61;&#x69;&#108;&#x2e;&#99;&#111;&#109;">&#97;&#97;&#x61;&#64;&#x67;&#109;&#97;&#105;&#x6c;&#x2e;&#x63;&#x6f;&#109;</a>&rdquo;
 USERPASSWD=&ldquo;123456&rdquo;
-$MAIL -f <a href="&#109;&#97;&#105;&#108;&#x74;&#111;&#x3a;&#97;&#x61;&#97;&#64;&#x67;&#109;&#97;&#x69;&#108;&#46;&#x63;&#111;&#109;">&#x61;&#x61;&#x61;&#x40;&#103;&#109;&#x61;&#x69;&#x6c;&#x2e;&#x63;&#111;&#109;</a> -t $USER_LIST -u $SUBJECT -m $MESSAGE -s $SMTP -xu $USERNAME -xp $USERPASSWD
+$MAIL -f <a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x61;&#97;&#97;&#x40;&#x67;&#x6d;&#x61;&#105;&#x6c;&#46;&#x63;&#111;&#109;">&#97;&#97;&#x61;&#x40;&#103;&#x6d;&#97;&#x69;&#108;&#x2e;&#99;&#111;&#x6d;</a> -t $USER_LIST -u $SUBJECT -m $MESSAGE -s $SMTP -xu $USERNAME -xp $USERPASSWD
 ```</p>
 
 <!-- more -->

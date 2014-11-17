@@ -4,7 +4,7 @@
   <title><![CDATA[唯一的真理]]></title>
   <link href="http://leon8693.github.io/atom.xml" rel="self"/>
   <link href="http://leon8693.github.io/"/>
-  <updated>2014-11-07T11:54:12+08:00</updated>
+  <updated>2014-11-17T16:56:35+08:00</updated>
   <id>http://leon8693.github.io/</id>
   <author>
     <name><![CDATA[leon]]></name>
@@ -12,6 +12,20 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[zabbix 2.4.1 lld模板 (五)]]></title>
+    <link href="http://leon8693.github.io/blog/2014/11/17/zabbix-2-dot-4-1-lldmo-ban-5/"/>
+    <updated>2014-11-17T16:21:00+08:00</updated>
+    <id>http://leon8693.github.io/blog/2014/11/17/zabbix-2-dot-4-1-lldmo-ban-5</id>
+    <content type="html"><![CDATA[<h2>lld模板</h2>
+
+<p>这里将收集lld各类模板</p>
+
+<blockquote><p>1.<a href="https://github.com/jizhang/zabbix-templates/tree/master/mysql-v2">Mysql</a> <br/>
+2.<a href="https://github.com/leon8693/zabbix_template/tree/master/Redis">Redis</a></p></blockquote>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[octopress 加快博客访问速度]]></title>
@@ -3991,197 +4005,6 @@ ab 详细信息 <br/>
 </span><span class='line'>  <span class="nv">LIBS</span>     <span class="o">=</span> -lfreetype -ljpeg -lpng12 -lXext -lSM -lICE -lX11 -lbz2 -lxml2 -lz -lm -lgomp -lpthread
 </span></code></pre></td></tr></table></div></figure>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Fastdfs Nginx ngx_image_thumb 实时图片缩略图]]></title>
-    <link href="http://leon8693.github.io/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu/"/>
-    <updated>2013-12-04T14:40:00+08:00</updated>
-    <id>http://leon8693.github.io/blog/2013/12/04/fastdfs-plus-nginx-plus-ngx-image-thumbshi-shi-tu-pian-suo-lue-tu</id>
-    <content type="html"><![CDATA[<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#信息版本</span>
-</span><span class='line'>Centos 2.6.32-358.el6.x86_64
-</span><span class='line'>FastDFS 4.06
-</span><span class='line'>Tengine 1.5.2
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c">#官网下载地址</span>
-</span><span class='line'>https://fastdfs.googlecode.com/files/FastDFS_v4.06.tar.gz
-</span><span class='line'>
-</span><span class='line'><span class="c">#oopul写的nginx模块ngx_image_thumb</span>
-</span><span class='line'>wget https://github.com/3078825/nginx-image/archive/master.zip
-</span><span class='line'>
-</span><span class='line'><span class="c">#Tengine 1.5.2 下载</span>
-</span><span class='line'>wget http://tengine.taobao.org/download/tengine-1.5.2.tar.gz
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>安装FastDFS</h3>
-
-<p>参考<a href="http://leon8693.github.io/blog/2013/11/03/FastDFS-install/">FastDFS install</a></p>
-
-<h3>安装需要的包</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>yum install gd-devel pcre-devel libcurl-devel gcc automake autoconf m4
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>安装Tengine并加载ngx_image_thumb模块</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>tar xf tengine-1.5.2.tar.gz
-</span><span class='line'><span class="nb">cd </span>tengine-1.5.2
-</span><span class='line'>./configure --add-module<span class="o">=</span>/srv/fastdfs-nginx-module/src/ --add-module<span class="o">=</span>/srv/ngx_image_thumb-master/
-</span><span class='line'>make <span class="o">&amp;&amp;</span> make install
-</span></code></pre></td></tr></table></div></figure>
-
-
-<!-- more -->
-
-
-<h3>Nginx配置</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>server <span class="o">{</span>
-</span><span class='line'>        listen  80;
-</span><span class='line'>        server_name     172.16.3.213;
-</span><span class='line'>        access_log      /data1/logs/nginx/fastdfs_access.log gzip;
-</span><span class='line'>        error_log       /data1/logs/nginx/fastdfs_error.log;
-</span><span class='line'>
-</span><span class='line'>        location /g1/M00        <span class="o">{</span>
-</span><span class='line'>                <span class="nb">alias</span> /data/images01/data;
-</span><span class='line'>                ngx_fastdfs_module;
-</span><span class='line'>                image on;
-</span><span class='line'>                image_output on;
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>测试</h3>
-
-<p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a> <br/>
-<img src="http://leon8693.github.io/images/blog_img/huonan.jpg" alt="huonan test" /></p>
-
-<p>输入地址<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!w300x300.jpg</a> <br/>
-<img src="http://leon8693.github.io/images/blog_img/huonan2.jpg" alt="huonan2 test" /></p>
-
-<h3>参数说明</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>image on/off 是否开启缩略图功能,默认关闭
-</span><span class='line'>
-</span><span class='line'>image_backend on/off 是否开启镜像服务，当开启该功能时，请求目录不存在的图片（判断原图），将自动从镜像服务器地址下载原图
-</span><span class='line'>
-</span><span class='line'>image_backend_server 镜像服务器地址
-</span><span class='line'>
-</span><span class='line'>image_output on/off 是否不生成图片而直接处理后输出 默认off
-</span><span class='line'>
-</span><span class='line'>image_jpeg_quality 75 生成JPEG图片的质量 默认值75
-</span><span class='line'>
-</span><span class='line'>image_water on/off 是否开启水印功能
-</span><span class='line'>
-</span><span class='line'>image_water_type 0/1 水印类型 0:图片水印 1:文字水印
-</span><span class='line'>
-</span><span class='line'>image_water_min 300 300 图片宽度 300 高度 300 的情况才添加水印
-</span><span class='line'>
-</span><span class='line'>image_water_pos 0-9 水印位置 默认值9 0为随机位置,1为顶端居左,2为顶端居中,3为顶端居右,4为中部居左,5为中部居中,6为中部居右,7为底端居左,8为底端居中,9为底端居右
-</span><span class='line'>
-</span><span class='line'>image_water_file 水印文件<span class="o">(</span>jpg/png/gif<span class="o">)</span>,绝对路径或者相对路径的水印图片
-</span><span class='line'>
-</span><span class='line'>image_water_transparent 水印透明度,默认20
-</span><span class='line'>
-</span><span class='line'>image_water_text 水印文字 <span class="s2">&quot;Power By Vampire&quot;</span>
-</span><span class='line'>
-</span><span class='line'>image_water_font_size 水印大小 默认 5
-</span><span class='line'>
-</span><span class='line'>image_water_font 文字水印字体文件路径
-</span><span class='line'>
-</span><span class='line'>image_water_color 水印文字颜色,默认 <span class="c">#000000</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>调用说明</h3>
-
-<h6>这里假设你的nginx 访问地址为<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg</a></h6>
-
-<h6>通过访问<a href="http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!t300x300.jpg">http://172.16.3.213/g1/M00/00/00/rBAD1FKgMQSAOJYaAAT4ktP-fyM783.jpg!t300x300.jpg</a></h6>
-
-<h6>其中t是生成图片缩略图的参数,300是生成缩略图的宽度,300是生成缩略图的高度</h6>
-
-<h6>可以生成四种不同类型的缩略图</h6>
-
-<h6>支持jpeg/png/gif(Gif生成后变成静态图片)</h6>
-
-<h6>C 参数按请求宽高比例从图片高度 10% 处开始截取图片，然后缩放/放大到指定尺寸（ 图片缩略图大小等于请求的宽高 ）</h6>
-
-<h6>M 参数按请求宽高比例居中截图图片，然后缩放/放大到指定尺寸（ 图片缩略图大小等于请求的宽高 ）</h6>
-
-<h6>T 参数按请求宽高比例按比例缩放/放大到指定尺寸（ 图片缩略图大小可能小于请求的宽高 )</h6>
-
-<h6>W 参数按请求宽高比例缩放/放大到指定尺寸，空白处填充白色背景颜色（ 图片缩略图大小等于请求的宽高 ）</h6>
 ]]></content>
   </entry>
   
